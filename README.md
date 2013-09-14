@@ -1,7 +1,7 @@
 #EAIntroView - simple iOS Introductions
 
-![BackgroundImage](http://imageshack.us/a/img560/33/s31z.png)
-![BackgroundImage](http://imageshack.us/a/img690/171/lzi.png)
+![BackgroundImage](https://raw.github.com/ealeksandrov/EAIntroView/master/1.png)
+![BackgroundImage](https://raw.github.com/ealeksandrov/EAIntroView/master/2.png)
 
 This is highly customizable drop-in solution for introduction views.
 Some features (all features are optional):
