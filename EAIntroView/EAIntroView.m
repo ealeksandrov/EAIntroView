@@ -8,10 +8,6 @@
 #import "EAIntroView.h"
 
 #define DEFAULT_BACKGROUND_COLOR [UIColor blackColor]
-#define TITLE_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.0]
-#define TITLE_TEXT_COLOR [UIColor whiteColor]
-#define DESCRIPTION_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0]
-#define DESCRIPTION_TEXT_COLOR [UIColor whiteColor]
 
 @interface EAIntroView() {
     NSArray *pages;
@@ -136,12 +132,12 @@
     }
     
     if([page.title length]) {
-        CGRect titleLabelFrame = CGRectMake(10, self.frame.size.height - page.titlePositionY, self.scrollView.frame.size.width - 20, [page.title sizeWithFont:TITLE_FONT constrainedToSize:CGSizeMake(self.scrollView.frame.size.width - 20, 100) lineBreakMode:NSLineBreakByWordWrapping].height);
+        CGRect titleLabelFrame = CGRectMake(10, self.frame.size.height - page.titlePositionY, self.scrollView.frame.size.width - 20, [page.title sizeWithFont:page.titleFont constrainedToSize:CGSizeMake(self.scrollView.frame.size.width - 20, 100) lineBreakMode:NSLineBreakByWordWrapping].height);
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleLabelFrame];
         titleLabel.text = page.title;
-        titleLabel.font = TITLE_FONT;
-        titleLabel.textColor = TITLE_TEXT_COLOR;
+        titleLabel.font = page.titleFont;
+        titleLabel.textColor = page.titleColor;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -154,8 +150,8 @@
         UITextView *descLabel = [[UITextView alloc] initWithFrame:descLabelFrame];
         descLabel.text = page.desc;
         descLabel.scrollEnabled = NO;
-        descLabel.font = DESCRIPTION_FONT;
-        descLabel.textColor = DESCRIPTION_TEXT_COLOR;
+        descLabel.font = page.descFont;
+        descLabel.textColor = page.descColor;
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
