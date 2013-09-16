@@ -158,7 +158,7 @@
         descLabel.textColor = DESCRIPTION_TEXT_COLOR;
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
-        descLabel.editable = NO;
+        descLabel.userInteractionEnabled = NO;
         [descLabel sizeToFit];
         [pageView addSubview:descLabel];
     }
