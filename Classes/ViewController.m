@@ -119,8 +119,10 @@
     
     EAIntroPage *page3 = [EAIntroPage page];
     page3.title = @"This is page 3";
+    page3.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:20];
     page3.titlePositionY = 220;
-    page3.desc = @"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.";
+    page3.desc = @"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.";
+    page3.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
     page3.descPositionY = 200;
     page3.titleImage = [UIImage imageNamed:@"femalecodertocat"];
     page3.imgPositionY = 100;
@@ -128,11 +130,11 @@
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page1,page2,page3]];
     intro.backgroundColor = [UIColor colorWithRed:1.0f green:0.58f blue:0.21f alpha:1.0f]; //iOS7 orange
     
-    intro.pageControlY = 80.0f;
+    intro.pageControlY = 100.0f;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [btn setBackgroundImage:[UIImage imageNamed:@"skipButton"] forState:UIControlStateNormal];
-    [btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 70, 230, 40)];
+    [btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 60, 230, 40)];
     [btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     intro.skipButton = btn;
