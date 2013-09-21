@@ -17,12 +17,18 @@ This control is inspired by [MYIntroductionView](https://github.com/MatthewYork/
 License: MIT.
 
 ##CocoaPods
-Will add CocoaPods instructions as soon as control is approved in official repo.
+
+[CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project. 
+
+* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 1.1.0'`
+* Run `pod install`.
+* Include with `#import "EAIntroView.h"` to use it wherever you need.
+* Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
 
 ##Manual installation
 
-* add `EAIntroPage` and `EAIntroView` headers and implementations to your project (4 files total)
-* `#import "EAIntroView.h"` to use it in a class
+* Add `EAIntroPage` and `EAIntroView` headers and implementations to your project (4 files total).
+* Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
 
 ##How To Use It
@@ -45,10 +51,11 @@ Custom
 ```objc
 EAIntroPage *page3 = [EAIntroPage page];
 page3.title = @"This is page 3";
+page3.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:20];
 page3.titlePositionY = 220;
-page3.desc = @"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.";
+page3.desc = @"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.";
+page3.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
 page3.descPositionY = 200;
-page3.bgImage = [UIImage imageNamed:@"3"];
 page3.titleImage = [UIImage imageNamed:@"femalecodertocat"];
 page3.imgPositionY = 100;
 ```    
@@ -67,10 +74,10 @@ Custom
 ```objc
 EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page1,page2,page3]];
 intro.backgroundColor = [UIColor colorWithRed:1.0f green:0.58f blue:0.21f alpha:1.0f]; //iOS7 orange    
-intro.pageControlY = 80.0f;    
+intro.pageControlY = 100.0f;    
 UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 [btn setBackgroundImage:[UIImage imageNamed:@"skipButton"] forState:UIControlStateNormal];
-[btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 70, 230, 40)];
+[btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 60, 230, 40)];
 [btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
 [btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
 intro.skipButton = btn;
