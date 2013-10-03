@@ -23,6 +23,10 @@
 @property (nonatomic, retain) UIColor *descColor;
 @property (nonatomic, assign) CGFloat descPositionY;
 
+// if customView is set - all other properties are ignored
+@property (nonatomic, retain) UIView *customView;
+
 + (EAIntroPage *)page;
++ (EAIntroPage *)pageWithCustomView:(UIView *)customV;
 
 @end

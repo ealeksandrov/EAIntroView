@@ -122,6 +122,13 @@
     
     UIView *pageView = [[UIView alloc] initWithFrame:CGRectMake(*xIndex, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
     
+    *xIndex += self.scrollView.frame.size.width;
+    
+    if(page.customView) {
+        [pageView addSubview:page.customView];
+        return pageView;
+    }
+    
     if(page.titleImage) {
         UIImageView *titleImageView = [[UIImageView alloc] initWithImage:page.titleImage];
         CGRect rect1 = titleImageView.frame;
@@ -158,8 +165,6 @@
         //[descLabel sizeToFit];
         [pageView addSubview:descLabel];
     }
-    
-    *xIndex += self.scrollView.frame.size.width;
     
     return pageView;
 }

@@ -24,4 +24,11 @@
     return newPage;
 }
 
++ (EAIntroPage *)pageWithCustomView:(UIView *)customV {
+    EAIntroPage *newPage = [[EAIntroPage alloc] init];
+    newPage.customView = customV;
+    
+    return newPage;
+}
+
 @end
