@@ -9,6 +9,7 @@ Some features (all features are optional):
 * swipe from last page to close
 * custom background for each page with cross-dissolve transition
 * for each page - background, title image, title text, description and their separate Y positions
+* possibility to set your own custom view for page
 * custom background or color for whole view
 * custom page control, skip button
 
@@ -20,7 +21,7 @@ License: MIT.
 
 [CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project. 
 
-* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 1.1.0'`
+* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 1.2.0'`
 * Run `pod install`.
 * Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
@@ -36,7 +37,7 @@ License: MIT.
 Sample project have some examples of customization. Look in `viewDidAppear`, uncomment some lines to see variants.
 
 ###Step 1 - Build Pages
-Each page created with `[EAIntroPage page]` class method. Then you can customize any property, all of them are optional.
+Each page created with `[EAIntroPage page]` class method. Then you can customize any property, all of them are optional. Another approach is to pass your own, custom view in `EAIntroPage`, this way every other option is ignored.
 
 Simple
 
@@ -58,7 +59,21 @@ page3.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
 page3.descPositionY = 200;
 page3.titleImage = [UIImage imageNamed:@"femalecodertocat"];
 page3.imgPositionY = 100;
-```    
+```
+
+Custom view
+
+```objc
+UIView *viewForPage2 = [[UIView alloc] initWithFrame:self.view.bounds];
+UILabel *labelForPage2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 220, 300, 30)];
+labelForPage2.text = @"Some custom view";
+labelForPage2.font = [UIFont systemFontOfSize:32];
+labelForPage2.textColor = [UIColor whiteColor];
+labelForPage2.backgroundColor = [UIColor clearColor];
+labelForPage2.transform = CGAffineTransformMakeRotation(M_PI_2*3);
+[viewForPage2 addSubview:labelForPage2];
+EAIntroPage *page2 = [EAIntroPage pageWithCustomView:viewForPage2];
+```
 
 ###Step 2 - Create Introduction View
 Once all pages have been created,  you are ready to create the introduction view. Just pass them in right order in the introduction view.
