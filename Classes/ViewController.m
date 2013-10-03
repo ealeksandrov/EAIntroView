@@ -158,6 +158,7 @@
     labelForPage2.text = @"Some custom view";
     labelForPage2.font = [UIFont systemFontOfSize:32];
     labelForPage2.textColor = [UIColor whiteColor];
+    labelForPage2.backgroundColor = [UIColor clearColor];
     labelForPage2.transform = CGAffineTransformMakeRotation(M_PI_2*3);
     [viewForPage2 addSubview:labelForPage2];
     EAIntroPage *page2 = [EAIntroPage pageWithCustomView:viewForPage2];
