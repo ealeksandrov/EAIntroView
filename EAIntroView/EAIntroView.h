@@ -33,6 +33,7 @@
 @property (nonatomic, retain) UIImageView *bgImageView;
 @property (nonatomic, retain) UIImageView *pageBgBack;
 @property (nonatomic, retain) UIImageView *pageBgFront;
+@property (nonatomic, retain) NSArray *pages;
 
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
 

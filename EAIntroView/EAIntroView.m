@@ -10,7 +10,6 @@
 #define DEFAULT_BACKGROUND_COLOR [UIColor blackColor]
 
 @interface EAIntroView() {
-    NSArray *pages;
     NSMutableArray *pageViews;
     NSInteger LastPageIndex;
 }
@@ -43,7 +42,7 @@
         self.hideOffscreenPages = YES;
         self.titleViewY = 20.0f;
         self.pageControlY = 60.0f;
-        pages = [pagesArray copy];
+        _pages = [pagesArray copy];
         [self buildUIWithFrame:frame];
         [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     }
@@ -57,11 +56,6 @@
     
     [self buildBackgroundImage];
     [self buildScrollViewWithFrame:frame];
-    
-    [self.pageBgBack setAlpha:0];
-    [self.pageBgBack setImage:[self bgForPage:1]];
-    [self.pageBgFront setAlpha:1];
-    [self.pageBgFront setImage:[self bgForPage:0]];
     
     [self buildFooterView];
     
@@ -103,8 +97,8 @@
     
     //A running x-coordinate. This grows for every page
     CGFloat contentXIndex = 0;
-    for (int idx = 0; idx < pages.count; idx++) {
-        [pageViews addObject:[self viewForPage:pages[idx] atXIndex:&contentXIndex]];
+    for (int idx = 0; idx < _pages.count; idx++) {
+        [pageViews addObject:[self viewForPage:_pages[idx] atXIndex:&contentXIndex]];
         [self.scrollView addSubview:pageViews[idx]];
     }
     
@@ -116,6 +110,11 @@
     
     self.scrollView.contentSize = CGSizeMake(contentXIndex, self.scrollView.frame.size.height);
     [self addSubview:self.scrollView];
+    
+    [self.pageBgBack setAlpha:0];
+    [self.pageBgBack setImage:[self bgForPage:1]];
+    [self.pageBgFront setAlpha:1];
+    [self.pageBgFront setImage:[self bgForPage:0]];
 }
 
 - (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat *)xIndex {
@@ -190,7 +189,7 @@
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20)];
     [self.pageControl setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [self.pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
-    self.pageControl.numberOfPages = pages.count;
+    self.pageControl.numberOfPages = _pages.count;
     [self addSubview:self.pageControl];
     
     self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y, 80, self.pageControl.frame.size.height)];
@@ -252,13 +251,20 @@
 }
 
 - (UIImage *)bgForPage:(int)idx {
-    if(idx >= pages.count || idx < 0)
+    if(idx >= _pages.count || idx < 0)
         return nil;
     
-    return ((EAIntroPage *)pages[idx]).bgImage;
+    return ((EAIntroPage *)_pages[idx]).bgImage;
 }
 
 #pragma mark - Custom setters
+
+- (void)setPages:(NSArray *)pages {
+    _pages = [pages copy];
+    [self.scrollView removeFromSuperview];
+    self.scrollView = nil;
+    [self buildScrollViewWithFrame:self.frame];
+}
 
 - (void)setBgImage:(UIImage *)bgImage {
     _bgImage = bgImage;
