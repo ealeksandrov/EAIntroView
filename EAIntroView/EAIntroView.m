@@ -34,6 +34,20 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        pageViews = [[NSMutableArray alloc] init];
+        self.swipeToExit = YES;
+        self.hideOffscreenPages = YES;
+        self.titleViewY = 20.0f;
+        self.pageControlY = 60.0f;
+        [self buildUIWithFrame:self.frame];
+        [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray {
     self = [super initWithFrame:frame];
     if (self) {
