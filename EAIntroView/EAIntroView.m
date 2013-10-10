@@ -83,12 +83,14 @@
     self.bgImageView.backgroundColor = [UIColor clearColor];
     self.bgImageView.contentMode = UIViewContentModeScaleToFill;
     self.bgImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.bgImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.bgImageView];
     
     self.pageBgBack = [[UIImageView alloc] initWithFrame:self.frame];
     self.pageBgBack.backgroundColor = [UIColor clearColor];
     self.pageBgBack.contentMode = UIViewContentModeScaleToFill;
     self.pageBgBack.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.pageBgBack.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.pageBgBack.alpha = 0;
     [self addSubview:self.pageBgBack];
     
@@ -96,6 +98,7 @@
     self.pageBgFront.backgroundColor = [UIColor clearColor];
     self.pageBgFront.contentMode = UIViewContentModeScaleToFill;
     self.pageBgFront.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.pageBgFront.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.pageBgFront.alpha = 0;
     [self addSubview:self.pageBgFront];
 }
@@ -108,6 +111,8 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.delegate = self;
+    
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
     //A running x-coordinate. This grows for every page
     CGFloat contentXIndex = 0;
