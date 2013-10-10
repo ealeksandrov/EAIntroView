@@ -12,8 +12,10 @@ Some features (all features are optional):
 * possibility to set your own custom view for page
 * custom background or color for whole view
 * custom page control, skip button
+* storyboard/IB support
+* autoresize support
 
-This control is inspired by [MYIntroductionView](https://github.com/MatthewYork/iPhone-IntroductionTutorial) by [Matthew York](https://github.com/MatthewYork). Take it if you want right-to-left language support or autorotation and resize.
+This control is inspired by [MYIntroductionView](https://github.com/MatthewYork/iPhone-IntroductionTutorial) by [Matthew York](https://github.com/MatthewYork).
 
 License: MIT.
 
@@ -21,7 +23,7 @@ License: MIT.
 
 [CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project. 
 
-* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 1.2.0'`
+* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 1.3.0'`
 * Run `pod install`.
 * Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
@@ -109,3 +111,12 @@ Don't forget to set the delegate to the calling class if you are using delegatio
 ```objc
 [intro showInView:self.view animateDuration:0.0];
 ```
+
+###Storyboard/IB
+Since 1.3.0 EAIntroView supports init from IB.
+
+1. Drop UIView to your IB document.
+2. Set its class to `EAIntroView`.
+3. Create `IBOutlet` property in your view controller: `@property(nonatomic,weak) IBOutlet EAIntroView *introView;`.
+4. Connect `IBOutlet` with `EAIntroView` in IB.
+5. Build array of pages and pass it to `EAIntroView` property in `setPages:`.
