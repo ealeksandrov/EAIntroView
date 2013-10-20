@@ -255,6 +255,10 @@
     
     if (page == (pageViews.count - 1) && self.swipeToExit) {
         self.alpha = ((self.scrollView.frame.size.width*pageViews.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
+		
+		if (self.alpha < 0.1f) {
+			[self removeFromSuperview];
+		}
     } else {
         [self crossDissolveForOffset:offset];
     }
@@ -378,7 +382,9 @@
 - (void)hideWithFadeOutDuration:(CGFloat)duration {
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 0;
-    } completion:nil];
+    } completion:^(BOOL finished){
+		[self removeFromSuperview];
+	}];
 }
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
