@@ -238,9 +238,7 @@
     self.currentPageIndex = scrollView.contentOffset.x/self.scrollView.frame.size.width;
     
     if (self.currentPageIndex == (pageViews.count)) {
-        if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
-            [self.delegate introDidFinish];
-        }
+        [self finishIntroductionAndRemoveSelf];
     } else {
         LastPageIndex = self.pageControl.currentPage;
         self.pageControl.currentPage = self.currentPageIndex;
@@ -255,10 +253,6 @@
     
     if (page == (pageViews.count - 1) && self.swipeToExit) {
         self.alpha = ((self.scrollView.frame.size.width*pageViews.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
-		
-		if (self.alpha < 0.1f) {
-			[self removeFromSuperview];
-		}
     } else {
         [self crossDissolveForOffset:offset];
     }
@@ -372,10 +366,6 @@
 }
 
 - (void)skipIntroduction {
-    if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
-        [self.delegate introDidFinish];
-    }
-    
     [self hideWithFadeOutDuration:0.3];
 }
 
@@ -383,7 +373,7 @@
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 0;
     } completion:^(BOOL finished){
-		[self removeFromSuperview];
+		[self finishIntroductionAndRemoveSelf];
 	}];
 }
 
@@ -395,6 +385,14 @@
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 1;
     }];
+}
+
+- (void)finishIntroductionAndRemoveSelf {
+	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
+		[self.delegate introDidFinish];
+	}
+	
+	[self removeFromSuperview];
 }
 
 @end
