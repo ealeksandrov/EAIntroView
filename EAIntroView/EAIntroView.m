@@ -258,6 +258,12 @@
     }
 }
 
+
+float easeOutValue(float value) {
+    float inverse = value - 1.0;
+    return 1.0 + inverse * inverse * inverse;
+}
+
 - (void)crossDissolveForOffset:(float)offset {
     NSInteger page = (int)(offset);
     float alphaValue = offset - (int)offset;
@@ -275,6 +281,11 @@
     
     float backLayerAlpha = alphaValue;
     float frontLayerAlpha = (1 - alphaValue);
+    
+    if (self.easeOutCrossDisolves) {
+        backLayerAlpha = easeOutValue(backLayerAlpha);
+        frontLayerAlpha = easeOutValue(frontLayerAlpha);
+    }
     
     [self.pageBgBack setAlpha:backLayerAlpha];
     [self.pageBgFront setAlpha:frontLayerAlpha];

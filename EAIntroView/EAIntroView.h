@@ -21,6 +21,10 @@
 // pageControl Y position - from bottom of the screen
 @property (nonatomic, assign) bool swipeToExit;
 @property (nonatomic, assign) bool hideOffscreenPages;
+
+//Wait longer for opacity change of page background images
+// to prevent the UIView background from appearing
+@property (nonatomic, assign) bool easeOutCrossDisolves;
 @property (nonatomic, retain) UIImage *bgImage;
 @property (nonatomic, retain) UIView *titleView;
 @property (nonatomic, assign) CGFloat titleViewY;
