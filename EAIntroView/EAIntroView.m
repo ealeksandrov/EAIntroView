@@ -219,6 +219,10 @@
 
 - (void)buildFooterView {
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20)];
+    
+    //Set defersCurrentPageDisplay to YES to prevent page controll jerking when switching pages with page control. This prevents page control from instant change of page indication.
+    self.pageControl.defersCurrentPageDisplay = YES;
+    
     [self.pageControl setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [self.pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
     self.pageControl.numberOfPages = _pages.count;
@@ -235,19 +239,16 @@
 #pragma mark - UIScrollView Delegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    self.currentPageIndex = scrollView.contentOffset.x/self.scrollView.frame.size.width;
-    
     if (self.currentPageIndex == (pageViews.count)) {
         [self finishIntroductionAndRemoveSelf];
-    } else {
-        LastPageIndex = self.pageControl.currentPage;
-        self.pageControl.currentPage = self.currentPageIndex;
-        
-        [self makePanelVisibleAtIndex:(NSInteger)self.currentPageIndex];
     }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    //Changed page number calculating. Pages now switched when content passes half of screen. In other words, we have index of page which displayed more than half.
+    //Moved page number calculation here to have timely page indication. No need to wait until scrollView stops animating.
+    self.currentPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
+    
     float offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     NSInteger page = (int)(offset);
     
@@ -256,8 +257,14 @@
     } else {
         [self crossDissolveForOffset:offset];
     }
+    
+    if (self.currentPageIndex < pageViews.count) {
+        LastPageIndex = self.pageControl.currentPage;
+        self.pageControl.currentPage = self.currentPageIndex;
+        
+        [self makePanelVisibleAtIndex:(NSInteger)self.currentPageIndex];
+    }
 }
-
 
 float easeOutValue(float value) {
     float inverse = value - 1.0;
