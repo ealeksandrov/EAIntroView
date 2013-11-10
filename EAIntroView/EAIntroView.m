@@ -409,8 +409,12 @@ float easeOutValue(float value) {
 	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
 		[self.delegate introDidFinish];
 	}
-	
-	[self removeFromSuperview];
+	//Calling removeFromSuperview from scrollViewDidEndDecelerating: method leads to crash on iOS versions < 7.0.
+    //removeFromSuperview should be called after a delay
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)0);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self removeFromSuperview];
+    });
 }
 
 @end
