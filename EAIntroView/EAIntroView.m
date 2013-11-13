@@ -23,13 +23,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        pageViews = [[NSMutableArray alloc] init];
-        self.swipeToExit = YES;
-        self.hideOffscreenPages = YES;
-        self.titleViewY = 20.0f;
-        self.pageControlY = 60.0f;
-        [self buildUIWithFrame:frame];
-        [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [self applyDefaultsToSelfDuringInitializationWithframe:frame pages:nil];
     }
     return self;
 }
@@ -37,13 +31,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        pageViews = [[NSMutableArray alloc] init];
-        self.swipeToExit = YES;
-        self.hideOffscreenPages = YES;
-        self.titleViewY = 20.0f;
-        self.pageControlY = 60.0f;
-        [self buildUIWithFrame:self.frame];
-        [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [self applyDefaultsToSelfDuringInitializationWithframe:self.frame pages:nil];
     }
     return self;
 }
@@ -51,68 +39,93 @@
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray {
     self = [super initWithFrame:frame];
     if (self) {
-        pageViews = [[NSMutableArray alloc] init];
-        self.swipeToExit = YES;
-        self.hideOffscreenPages = YES;
-        self.titleViewY = 20.0f;
-        self.pageControlY = 60.0f;
-        _pages = [pagesArray copy];
-        [self buildUIWithFrame:frame];
-        [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [self applyDefaultsToSelfDuringInitializationWithframe:self.frame pages:pagesArray];
     }
     return self;
 }
 
+#pragma mark - Private
+
+- (void)applyDefaultsToSelfDuringInitializationWithframe:(CGRect)frame pages:(NSArray *)pagesArray {
+    pageViews = [[NSMutableArray alloc] init];
+    self.swipeToExit = YES;
+    self.hideOffscreenPages = YES;
+    self.titleViewY = 20.0f;
+    self.pageControlY = 60.0f;
+    _pages = [pagesArray copy];
+    [self buildUI];
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+}
+
+- (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
+    backgroundImageView.backgroundColor = [UIColor clearColor];
+    backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+    backgroundImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+}
+
+#pragma mark - Properties
+
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
+        _scrollView.pagingEnabled = YES;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.delegate = self;
+        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    }
+    return _scrollView;
+}
+
+- (UIImageView *)bgImageView {
+    if (!_bgImageView) {
+        _bgImageView = [[UIImageView alloc] initWithFrame:self.frame];
+        [self applyDefaultsToBackgroundImageView:_bgImageView];
+    }
+    return _bgImageView;
+}
+
+- (UIImageView *)pageBgBack {
+    if (!_pageBgBack) {
+        _pageBgBack = [[UIImageView alloc] initWithFrame:self.frame];
+        [self applyDefaultsToBackgroundImageView:_pageBgBack];
+        _pageBgBack.alpha = 0;
+    }
+    return _pageBgBack;
+}
+
+- (UIImageView *)pageBgFront {
+    if (!_pageBgFront) {
+        _pageBgFront = [[UIImageView alloc] initWithFrame:self.frame];
+        [self applyDefaultsToBackgroundImageView:_pageBgFront];
+        _pageBgFront.alpha = 0;
+    }
+    return _pageBgFront;
+}
+
 #pragma mark - UI building
 
-- (void)buildUIWithFrame:(CGRect)frame {
+- (void)buildUI {
     self.backgroundColor = DEFAULT_BACKGROUND_COLOR;
     
     [self buildBackgroundImage];
-    [self buildScrollViewWithFrame:frame];
+    [self buildScrollView];
     
     [self buildFooterView];
     
-    [self.bgImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [self.pageControl setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self.skipButton setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    self.bgImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.skipButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 }
 
 - (void)buildBackgroundImage {
-    self.bgImageView = [[UIImageView alloc] initWithFrame:self.frame];
-    self.bgImageView.backgroundColor = [UIColor clearColor];
-    self.bgImageView.contentMode = UIViewContentModeScaleToFill;
-    self.bgImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.bgImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.bgImageView];
-    
-    self.pageBgBack = [[UIImageView alloc] initWithFrame:self.frame];
-    self.pageBgBack.backgroundColor = [UIColor clearColor];
-    self.pageBgBack.contentMode = UIViewContentModeScaleToFill;
-    self.pageBgBack.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.pageBgBack.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.pageBgBack.alpha = 0;
     [self addSubview:self.pageBgBack];
-    
-    self.pageBgFront = [[UIImageView alloc] initWithFrame:self.frame];
-    self.pageBgFront.backgroundColor = [UIColor clearColor];
-    self.pageBgFront.contentMode = UIViewContentModeScaleToFill;
-    self.pageBgFront.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.pageBgFront.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.pageBgFront.alpha = 0;
     [self addSubview:self.pageBgFront];
 }
 
-- (void)buildScrollViewWithFrame:(CGRect)frame {
-    
-    self.scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
-    
-    self.scrollView.pagingEnabled = YES;
-    self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.showsVerticalScrollIndicator = NO;
-    self.scrollView.delegate = self;
-    
-    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+- (void)buildScrollView {
     
     //A running x-coordinate. This grows for every page
     CGFloat contentXIndex = 0;
@@ -130,10 +143,10 @@
     [self addSubview:self.scrollView];
     self.scrollView.contentSize = CGSizeMake(contentXIndex, self.scrollView.frame.size.height);
     
-    [self.pageBgBack setAlpha:0];
-    [self.pageBgBack setImage:[self bgForPage:1]];
-    [self.pageBgFront setAlpha:1];
-    [self.pageBgFront setImage:[self bgForPage:0]];
+    self.pageBgBack.alpha = 0;
+    self.pageBgBack.image = [self bgForPage:1];
+    self.pageBgFront.alpha = 1;
+    self.pageBgFront.image = [self bgForPage:0];
 }
 
 - (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat *)xIndex {
@@ -152,11 +165,11 @@
         CGRect rect1 = titleImageView.frame;
         rect1.origin.x = (self.scrollView.frame.size.width - rect1.size.width)/2;
         rect1.origin.y = page.imgPositionY;
-        [titleImageView setFrame:rect1];
+        titleImageView.frame = rect1;
         [pageView addSubview:titleImageView];
     }
     
-    if([page.title length]) {
+    if(page.title.length) {
         CGFloat titleHeight;
         
         if ([page.title respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
@@ -220,17 +233,17 @@
 - (void)buildFooterView {
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20)];
     
-    //Set defersCurrentPageDisplay to YES to prevent page controll jerking when switching pages with page control. This prevents page control from instant change of page indication.
+    //Set defersCurrentPageDisplay to YES to prevent page control jerking when switching pages with page control. This prevents page control from instant change of page indication.
     self.pageControl.defersCurrentPageDisplay = YES;
     
-    [self.pageControl setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    self.pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
     [self.pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
     self.pageControl.numberOfPages = _pages.count;
     [self addSubview:self.pageControl];
     
     self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y, 80, self.pageControl.frame.size.height)];
     
-    [self.skipButton setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+    self.skipButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
     [self.skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.skipButton];
@@ -276,15 +289,15 @@ float easeOutValue(float value) {
     float alphaValue = offset - (int)offset;
     
     if (alphaValue < 0 && self.currentPageIndex == 0){
-        [self.pageBgBack setImage:nil];
-        [self.pageBgFront setAlpha:(1 + alphaValue)];
+        self.pageBgBack.image = nil;
+        self.pageBgFront.alpha = (1 + alphaValue);
         return;
     }
     
-    [self.pageBgFront setAlpha:1];
-    [self.pageBgFront setImage:[self bgForPage:page]];
-    [self.pageBgBack setAlpha:0];
-    [self.pageBgBack setImage:[self bgForPage:page+1]];
+    self.pageBgFront.alpha = 1;
+    self.pageBgFront.image = [self bgForPage:page];
+    self.pageBgBack.alpha = 0;
+    self.pageBgBack.image = [self bgForPage:page+1];
     
     float backLayerAlpha = alphaValue;
     float frontLayerAlpha = (1 - alphaValue);
@@ -294,8 +307,8 @@ float easeOutValue(float value) {
         frontLayerAlpha = easeOutValue(frontLayerAlpha);
     }
     
-    [self.pageBgBack setAlpha:backLayerAlpha];
-    [self.pageBgFront setAlpha:frontLayerAlpha];
+    self.pageBgBack.alpha = backLayerAlpha;
+    self.pageBgFront.alpha = frontLayerAlpha;
 }
 
 - (UIImage *)bgForPage:(int)idx {
@@ -311,12 +324,12 @@ float easeOutValue(float value) {
     _pages = [pages copy];
     [self.scrollView removeFromSuperview];
     self.scrollView = nil;
-    [self buildScrollViewWithFrame:self.frame];
+    [self buildScrollView];
 }
 
 - (void)setBgImage:(UIImage *)bgImage {
     _bgImage = bgImage;
-    [self.bgImageView setImage:_bgImage];
+    self.bgImageView.image = _bgImage;
 }
 
 - (void)setSwipeToExit:(bool)swipeToExit {
@@ -336,18 +349,18 @@ float easeOutValue(float value) {
 - (void)setTitleView:(UIView *)titleView {
     [_titleView removeFromSuperview];
     _titleView = titleView;
-    [_titleView setFrame:CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height)];
+    _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
     [self addSubview:_titleView];
 }
 
 - (void)setTitleViewY:(CGFloat)titleViewY {
     _titleViewY = titleViewY;
-    [_titleView setFrame:CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height)];
+    _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
 }
 
 - (void)setPageControlY:(CGFloat)pageControlY {
     _pageControlY = pageControlY;
-    [self.pageControl setFrame:CGRectMake(0, self.frame.size.height - pageControlY, self.frame.size.width, 20)];
+    self.pageControl.frame = CGRectMake(0, self.frame.size.height - pageControlY, self.frame.size.width, 20);
 }
 
 - (void)setSkipButton:(UIButton *)skipButton {
@@ -397,7 +410,7 @@ float easeOutValue(float value) {
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
     self.alpha = 0;
-    [self.scrollView setContentOffset:CGPointZero];
+    self.scrollView.contentOffset = CGPointZero;
     [view addSubview:self];
     
     [UIView animateWithDuration:duration animations:^{
