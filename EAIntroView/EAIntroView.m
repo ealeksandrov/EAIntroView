@@ -211,6 +211,12 @@
         [pageView addSubview:descLabel];
     }
     
+    if(page.subviews) {
+        for (UIView *subV in page.subviews) {
+            [pageView addSubview:subV];
+        }
+    }
+    
     return pageView;
 }
 

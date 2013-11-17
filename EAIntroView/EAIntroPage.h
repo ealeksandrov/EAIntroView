@@ -22,6 +22,7 @@
 @property (nonatomic, retain) UIFont *descFont;
 @property (nonatomic, retain) UIColor *descColor;
 @property (nonatomic, assign) CGFloat descPositionY;
+@property (nonatomic, retain) NSArray *subviews;
 
 // if customView is set - all other properties are ignored
 @property (nonatomic, retain) UIView *customView;
