@@ -316,6 +316,18 @@ float easeOutValue(float value) {
     
     self.pageBgBack.alpha = backLayerAlpha;
     self.pageBgFront.alpha = frontLayerAlpha;
+    
+    if(self.titleView) {
+        if([self showTitleViewForPage:page] && [self showTitleViewForPage:page+1]) {
+            [self.titleView setAlpha:1.0];
+        } else if(![self showTitleViewForPage:page] && ![self showTitleViewForPage:page+1]) {
+            [self.titleView setAlpha:0.0];
+        } else if([self showTitleViewForPage:page]) {
+            [self.titleView setAlpha:(1 - alphaValue)];
+        } else {
+            [self.titleView setAlpha:alphaValue];
+        }
+    }
 }
 
 - (UIImage *)bgForPage:(int)idx {
@@ -357,6 +369,10 @@ float easeOutValue(float value) {
     [_titleView removeFromSuperview];
     _titleView = titleView;
     _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
+    
+    float offset = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    [self crossDissolveForOffset:offset];
+    
     [self addSubview:_titleView];
 }
 
@@ -446,6 +462,13 @@ float easeOutValue(float value) {
     float offset = pageNumber * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
+}
+
+- (BOOL)showTitleViewForPage:(int)idx {
+    if(idx >= _pages.count || idx < 0)
+        return NO;
+
+    return ((EAIntroPage *)_pages[idx]).showTitleView;
 }
 
 @end

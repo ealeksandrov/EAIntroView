@@ -20,6 +20,7 @@
     newPage.desc = @"";
     newPage.descFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0];
     newPage.descColor = [UIColor whiteColor];
+    newPage.showTitleView = YES;
     
     return newPage;
 }
