@@ -49,6 +49,7 @@
 - (void)applyDefaultsToSelfDuringInitializationWithframe:(CGRect)frame pages:(NSArray *)pagesArray {
     pageViews = [[NSMutableArray alloc] init];
     self.swipeToExit = YES;
+    self.easeOutCrossDisolves = YES;
     self.hideOffscreenPages = YES;
     self.titleViewY = 20.0f;
     self.pageControlY = 60.0f;
