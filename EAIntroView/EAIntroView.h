@@ -43,7 +43,6 @@
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
-
 - (void)goToPage:(int)pageNumber animated:(BOOL)animated;
 
 @end

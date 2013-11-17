@@ -65,6 +65,53 @@
     backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
 
+- (void)makePanelVisibleAtIndex:(NSInteger)panelIndex{
+    [UIView animateWithDuration:0.3 animations:^{
+        for (int idx = 0; idx < pageViews.count; idx++) {
+            if (idx == panelIndex) {
+                [pageViews[idx] setAlpha:1];
+            }
+            else {
+                if(!self.hideOffscreenPages) {
+                    [pageViews[idx] setAlpha:0];
+                }
+            }
+        }
+    }];
+}
+
+- (BOOL)showTitleViewForPage:(int)idx {
+    if(idx >= _pages.count || idx < 0)
+        return NO;
+    
+    return ((EAIntroPage *)_pages[idx]).showTitleView;
+}
+
+- (void)showPanelAtPageControl {
+    LastPageIndex = self.pageControl.currentPage;
+    self.currentPageIndex = self.pageControl.currentPage;
+    
+    [self makePanelVisibleAtIndex:(NSInteger)self.currentPageIndex];
+    
+    [self.scrollView setContentOffset:CGPointMake(self.currentPageIndex * 320, 0) animated:YES];
+}
+
+- (void)finishIntroductionAndRemoveSelf {
+	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
+		[self.delegate introDidFinish];
+	}
+	//Calling removeFromSuperview from scrollViewDidEndDecelerating: method leads to crash on iOS versions < 7.0.
+    //removeFromSuperview should be called after a delay
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)0);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self removeFromSuperview];
+    });
+}
+
+- (void)skipIntroduction {
+    [self hideWithFadeOutDuration:0.3];
+}
+
 #pragma mark - Properties
 
 - (UIScrollView *)scrollView {
@@ -362,7 +409,6 @@ float easeOutValue(float value) {
         self.scrollView.contentSize = CGSizeMake(contentXIndex, self.scrollView.frame.size.height);
     }
     _swipeToExit = swipeToExit;
-    
 }
 
 - (void)setTitleView:(UIView *)titleView {
@@ -395,42 +441,6 @@ float easeOutValue(float value) {
 
 #pragma mark - Actions
 
-- (void)makePanelVisibleAtIndex:(NSInteger)panelIndex{
-    [UIView animateWithDuration:0.3 animations:^{
-        for (int idx = 0; idx < pageViews.count; idx++) {
-            if (idx == panelIndex) {
-                [pageViews[idx] setAlpha:1];
-            }
-            else {
-                if(!self.hideOffscreenPages) {
-                    [pageViews[idx] setAlpha:0];
-                }
-            }
-        }
-    }];
-}
-
-- (void)showPanelAtPageControl {
-    LastPageIndex = self.pageControl.currentPage;
-    self.currentPageIndex = self.pageControl.currentPage;
-    
-    [self makePanelVisibleAtIndex:(NSInteger)self.currentPageIndex];
-    
-    [self.scrollView setContentOffset:CGPointMake(self.currentPageIndex * 320, 0) animated:YES];
-}
-
-- (void)skipIntroduction {
-    [self hideWithFadeOutDuration:0.3];
-}
-
-- (void)hideWithFadeOutDuration:(CGFloat)duration {
-    [UIView animateWithDuration:duration animations:^{
-        self.alpha = 0;
-    } completion:^(BOOL finished){
-		[self finishIntroductionAndRemoveSelf];
-	}];
-}
-
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
     self.alpha = 0;
     self.scrollView.contentOffset = CGPointZero;
@@ -441,16 +451,12 @@ float easeOutValue(float value) {
     }];
 }
 
-- (void)finishIntroductionAndRemoveSelf {
-	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
-		[self.delegate introDidFinish];
-	}
-	//Calling removeFromSuperview from scrollViewDidEndDecelerating: method leads to crash on iOS versions < 7.0.
-    //removeFromSuperview should be called after a delay
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)0);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self removeFromSuperview];
-    });
+- (void)hideWithFadeOutDuration:(CGFloat)duration {
+    [UIView animateWithDuration:duration animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished){
+		[self finishIntroductionAndRemoveSelf];
+	}];
 }
 
 - (void)goToPage:(int)pageNumber animated:(BOOL)animated {
@@ -462,13 +468,6 @@ float easeOutValue(float value) {
     float offset = pageNumber * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
-}
-
-- (BOOL)showTitleViewForPage:(int)idx {
-    if(idx >= _pages.count || idx < 0)
-        return NO;
-
-    return ((EAIntroPage *)_pages[idx]).showTitleView;
 }
 
 @end
