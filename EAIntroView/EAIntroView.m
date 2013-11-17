@@ -431,4 +431,15 @@ float easeOutValue(float value) {
     });
 }
 
+- (void)goToPage:(int)pageNumber animated:(BOOL)animated {
+    if(pageNumber < 0 || pageNumber >= [self.pages count]) {
+        NSLog(@"Wrong pageNumber recieved: %d",pageNumber);
+        return;
+    }
+    
+    float offset = pageNumber * self.scrollView.frame.size.width;
+    CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
+    [self.scrollView scrollRectToVisible:pageRect animated:animated];
+}
+
 @end
