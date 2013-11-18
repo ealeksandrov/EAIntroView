@@ -33,6 +33,7 @@
 @property (nonatomic, retain) UIButton *skipButton;
 
 @property (nonatomic, assign) NSInteger currentPageIndex;
+@property (nonatomic, assign) NSInteger visiblePageIndex;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIImageView *bgImageView;
 @property (nonatomic, retain) UIImageView *pageBgBack;

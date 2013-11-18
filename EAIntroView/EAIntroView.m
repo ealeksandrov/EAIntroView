@@ -11,7 +11,6 @@
 
 @interface EAIntroView() {
     NSMutableArray *pageViews;
-    NSInteger LastPageIndex;
 }
 
 @end
@@ -88,12 +87,12 @@
 }
 
 - (void)showPanelAtPageControl {
-    LastPageIndex = self.pageControl.currentPage;
     self.currentPageIndex = self.pageControl.currentPage;
+    self.visiblePageIndex = self.currentPageIndex;
     
-    [self makePanelVisibleAtIndex:(NSInteger)self.currentPageIndex];
+    [self makePanelVisibleAtIndex:self.currentPageIndex];
     
-    [self.scrollView setContentOffset:CGPointMake(self.currentPageIndex * 320, 0) animated:YES];
+    [self goToPage:self.currentPageIndex animated:YES];
 }
 
 - (void)finishIntroductionAndRemoveSelf {
@@ -306,6 +305,8 @@
 #pragma mark - UIScrollView Delegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    self.currentPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
+    
     if (self.currentPageIndex == (pageViews.count)) {
         [self finishIntroductionAndRemoveSelf];
     }
@@ -314,7 +315,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     //Changed page number calculating. Pages now switched when content passes half of screen. In other words, we have index of page which displayed more than half.
     //Moved page number calculation here to have timely page indication. No need to wait until scrollView stops animating.
-    self.currentPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
+    self.visiblePageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
     
     float offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     NSInteger page = (int)(offset);
@@ -325,11 +326,10 @@
         [self crossDissolveForOffset:offset];
     }
     
-    if (self.currentPageIndex < pageViews.count) {
-        LastPageIndex = self.pageControl.currentPage;
-        self.pageControl.currentPage = self.currentPageIndex;
+    if (self.visiblePageIndex < pageViews.count) {
+        self.pageControl.currentPage = self.visiblePageIndex;
         
-        [self makePanelVisibleAtIndex:(NSInteger)self.currentPageIndex];
+        [self makePanelVisibleAtIndex:self.visiblePageIndex];
     }
 }
 
@@ -342,7 +342,7 @@ float easeOutValue(float value) {
     NSInteger page = (int)(offset);
     float alphaValue = offset - (int)offset;
     
-    if (alphaValue < 0 && self.currentPageIndex == 0){
+    if (alphaValue < 0 && self.visiblePageIndex == 0){
         self.pageBgBack.image = nil;
         self.pageBgFront.alpha = (1 + alphaValue);
         return;
