@@ -9,11 +9,16 @@
 
 #define DEFAULT_BACKGROUND_COLOR [UIColor blackColor]
 
-@interface EAIntroView() {
-    NSMutableArray *pageViews;
-}
+@interface EAIntroView()
 
 @end
+
+@interface EAIntroPage()
+
+@property(nonatomic, strong, readwrite) UIView *pageView;
+
+@end
+
 
 @implementation EAIntroView
 
@@ -46,7 +51,6 @@
 #pragma mark - Private
 
 - (void)applyDefaultsToSelfDuringInitializationWithframe:(CGRect)frame pages:(NSArray *)pagesArray {
-    pageViews = [[NSMutableArray alloc] init];
     self.swipeToExit = YES;
     self.easeOutCrossDisolves = YES;
     self.hideOffscreenPages = YES;
@@ -66,17 +70,20 @@
 
 - (void)makePanelVisibleAtIndex:(NSInteger)panelIndex{
     [UIView animateWithDuration:0.3 animations:^{
-        for (int idx = 0; idx < pageViews.count; idx++) {
+        for (int idx = 0; idx < _pages.count; idx++) {
             if (idx == panelIndex) {
-                [pageViews[idx] setAlpha:1];
-            }
-            else {
+                [[self viewForPageIndex:idx] setAlpha:1];
+            } else {
                 if(!self.hideOffscreenPages) {
-                    [pageViews[idx] setAlpha:0];
+                    [[self viewForPageIndex:idx] setAlpha:0];
                 }
             }
         }
     }];
+}
+
+- (UIView *)viewForPageIndex:(int)idx {
+    return ((EAIntroPage *)_pages[idx]).pageView;
 }
 
 - (BOOL)showTitleViewForPage:(int)idx {
@@ -177,11 +184,14 @@
     //A running x-coordinate. This grows for every page
     CGFloat contentXIndex = 0;
     for (int idx = 0; idx < _pages.count; idx++) {
-        [pageViews addObject:[self viewForPage:_pages[idx] atXIndex:&contentXIndex]];
-        [self.scrollView addSubview:pageViews[idx]];
+        EAIntroPage *page = _pages[idx];
+        page.pageView = [self viewForPage:page atXIndex:&contentXIndex];
+        [self.scrollView addSubview:page.pageView];
+        [page pageDidLoad];
     }
     
     [self makePanelVisibleAtIndex:0];
+    [_pages[0] pageDidAppear];
     
     if (self.swipeToExit) {
         [self appendCloseViewAtXIndex:&contentXIndex];
@@ -307,7 +317,7 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     self.currentPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
     
-    if (self.currentPageIndex == (pageViews.count)) {
+    if (self.currentPageIndex == (_pages.count)) {
         [self finishIntroductionAndRemoveSelf];
     }
 }
@@ -320,13 +330,13 @@
     float offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     NSInteger page = (int)(offset);
     
-    if (page == (pageViews.count - 1) && self.swipeToExit) {
-        self.alpha = ((self.scrollView.frame.size.width*pageViews.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
+    if (page == (_pages.count - 1) && self.swipeToExit) {
+        self.alpha = ((self.scrollView.frame.size.width*_pages.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
     } else {
         [self crossDissolveForOffset:offset];
     }
     
-    if (self.visiblePageIndex < pageViews.count) {
+    if (self.visiblePageIndex < _pages.count) {
         self.pageControl.currentPage = self.visiblePageIndex;
         
         [self makePanelVisibleAtIndex:self.visiblePageIndex];
@@ -385,6 +395,14 @@ float easeOutValue(float value) {
 }
 
 #pragma mark - Custom setters
+
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex {
+    if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
+        [_pages[_currentPageIndex] pageDidDisappear];
+        [_pages[currentPageIndex] pageDidAppear];
+    }
+    _currentPageIndex = currentPageIndex;
+}
 
 - (void)setPages:(NSArray *)pages {
     _pages = [pages copy];

@@ -7,10 +7,18 @@
 
 #import "EAIntroPage.h"
 
+@interface EAIntroPage ()
+
+@property(nonatomic, strong, readwrite) UIView *pageView;
+
+@end
+
 @implementation EAIntroPage
 
-+ (EAIntroPage *)page {
-    EAIntroPage *newPage = [[EAIntroPage alloc] init];
+#pragma mark - Page lifecycle
+
++ (instancetype)page {
+    EAIntroPage *newPage = [[super alloc] init];
     newPage.imgPositionY    = 50.0f;
     newPage.titlePositionY  = 160.0f;
     newPage.descPositionY   = 140.0f;
@@ -25,11 +33,23 @@
     return newPage;
 }
 
-+ (EAIntroPage *)pageWithCustomView:(UIView *)customV {
-    EAIntroPage *newPage = [[EAIntroPage alloc] init];
++ (instancetype)pageWithCustomView:(UIView *)customV {
+    EAIntroPage *newPage = [[super alloc] init];
     newPage.customView = customV;
     
     return newPage;
+}
+
+- (void)pageDidLoad {
+    //override
+}
+
+- (void)pageDidAppear {
+    //override
+}
+
+- (void)pageDidDisappear {
+    //override
 }
 
 @end

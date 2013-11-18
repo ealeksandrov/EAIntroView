@@ -9,26 +9,41 @@
 
 @interface EAIntroPage : NSObject
 
-// title image Y position - from top of the screen
-// title and description labels Y position - from bottom of the screen
-@property (nonatomic, retain) UIImage *bgImage;
-@property (nonatomic, retain) UIImage *titleImage;
-@property (nonatomic, assign) CGFloat imgPositionY;
-@property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) UIFont *titleFont;
-@property (nonatomic, retain) UIColor *titleColor;
-@property (nonatomic, assign) CGFloat titlePositionY;
-@property (nonatomic, retain) NSString *desc;
-@property (nonatomic, retain) UIFont *descFont;
-@property (nonatomic, retain) UIColor *descColor;
-@property (nonatomic, assign) CGFloat descPositionY;
-@property (nonatomic, retain) NSArray *subviews;
+
+// backround used for cross-dissolve
+@property (nonatomic, strong) UIImage *bgImage;
+// show or hide EAIntroView titleView on this page (default YES)
 @property (nonatomic, assign) bool showTitleView;
 
-// if customView is set - all other properties are ignored
+
+// properties for default EAIntroPage layout
+//
+// title image Y position - from top of the screen
+// title and description labels Y position - from bottom of the screen
+// all items from subviews array will be added on page
+@property (nonatomic, strong) UIImage *titleImage;
+@property (nonatomic, assign) CGFloat imgPositionY;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) UIFont *titleFont;
+@property (nonatomic, strong) UIColor *titleColor;
+@property (nonatomic, assign) CGFloat titlePositionY;
+@property (nonatomic, strong) NSString *desc;
+@property (nonatomic, strong) UIFont *descFont;
+@property (nonatomic, strong) UIColor *descColor;
+@property (nonatomic, assign) CGFloat descPositionY;
+@property (nonatomic, strong) NSArray *subviews;
+
+
+// if customView is set - all other default properties are ignored
 @property (nonatomic, retain) UIView *customView;
 
-+ (EAIntroPage *)page;
-+ (EAIntroPage *)pageWithCustomView:(UIView *)customV;
+@property(nonatomic, strong, readonly) UIView *pageView;
+
++ (instancetype)page;
++ (instancetype)pageWithCustomView:(UIView *)customV;
+
+- (void)pageDidLoad;
+- (void)pageDidAppear;
+- (void)pageDidDisappear;
 
 @end

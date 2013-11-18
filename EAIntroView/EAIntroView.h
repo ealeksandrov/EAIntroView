@@ -21,24 +21,21 @@
 // pageControl Y position - from bottom of the screen
 @property (nonatomic, assign) bool swipeToExit;
 @property (nonatomic, assign) bool hideOffscreenPages;
-
-//Wait longer for opacity change of page background images
-// to prevent the UIView background from appearing
 @property (nonatomic, assign) bool easeOutCrossDisolves;
-@property (nonatomic, retain) UIImage *bgImage;
-@property (nonatomic, retain) UIView *titleView;
+@property (nonatomic, strong) UIImage *bgImage;
+@property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, assign) CGFloat titleViewY;
-@property (nonatomic, retain) UIPageControl *pageControl;
+@property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, assign) CGFloat pageControlY;
-@property (nonatomic, retain) UIButton *skipButton;
+@property (nonatomic, strong) UIButton *skipButton;
 
 @property (nonatomic, assign) NSInteger currentPageIndex;
 @property (nonatomic, assign) NSInteger visiblePageIndex;
-@property (nonatomic, retain) UIScrollView *scrollView;
-@property (nonatomic, retain) UIImageView *bgImageView;
-@property (nonatomic, retain) UIImageView *pageBgBack;
-@property (nonatomic, retain) UIImageView *pageBgFront;
-@property (nonatomic, retain) NSArray *pages;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIImageView *bgImageView;
+@property (nonatomic, strong) UIImageView *pageBgBack;
+@property (nonatomic, strong) UIImageView *pageBgFront;
+@property (nonatomic, strong) NSArray *pages;
 
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
 
