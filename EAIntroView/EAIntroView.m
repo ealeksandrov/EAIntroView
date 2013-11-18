@@ -5,9 +5,11 @@
 
 #import "EAIntroView.h"
 
-#define DEFAULT_BACKGROUND_COLOR [UIColor blackColor]
-
 @interface EAIntroView()
+
+@property (nonatomic, strong) UIImageView *bgImageView;
+@property (nonatomic, strong) UIImageView *pageBgBack;
+@property (nonatomic, strong) UIImageView *pageBgFront;
 
 @end
 
@@ -166,7 +168,7 @@
 #pragma mark - UI building
 
 - (void)buildUI {
-    self.backgroundColor = DEFAULT_BACKGROUND_COLOR;
+    self.backgroundColor = [UIColor blackColor];
     
     [self buildBackgroundImage];
     [self buildScrollView];
@@ -459,6 +461,11 @@ float easeOutValue(float value) {
 - (void)setPageControlY:(CGFloat)pageControlY {
     _pageControlY = pageControlY;
     self.pageControl.frame = CGRectMake(0, self.frame.size.height - pageControlY, self.frame.size.width, 20);
+    
+    self.pageControl.defersCurrentPageDisplay = YES;
+    self.pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
+    [self.pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
+    self.pageControl.numberOfPages = _pages.count;
 }
 
 - (void)setSkipButton:(UIButton *)skipButton {

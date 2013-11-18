@@ -33,9 +33,6 @@
 @property (nonatomic, assign) NSInteger currentPageIndex;
 @property (nonatomic, assign) NSInteger visiblePageIndex;
 @property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIImageView *bgImageView;
-@property (nonatomic, strong) UIImageView *pageBgBack;
-@property (nonatomic, strong) UIImageView *pageBgFront;
 @property (nonatomic, strong) NSArray *pages;
 
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
