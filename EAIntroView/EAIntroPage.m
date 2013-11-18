@@ -40,6 +40,13 @@
     return newPage;
 }
 
++ (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName {
+    EAIntroPage *newPage = [[super alloc] init];
+    newPage.customView = [[NSBundle mainBundle] loadNibNamed:nibName owner:nil options:nil][0];
+    
+    return newPage;
+}
+
 - (void)pageDidLoad {
     //override
 }

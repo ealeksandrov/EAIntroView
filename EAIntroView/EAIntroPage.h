@@ -41,6 +41,7 @@
 
 + (instancetype)page;
 + (instancetype)pageWithCustomView:(UIView *)customV;
++ (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName;
 
 - (void)pageDidLoad;
 - (void)pageDidAppear;

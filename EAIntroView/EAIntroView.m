@@ -200,7 +200,7 @@
         [self appendCloseViewAtXIndex:&contentXIndex];
     }
     
-    [self addSubview:self.scrollView];
+    [self insertSubview:self.scrollView aboveSubview:self.pageBgFront];
     self.scrollView.contentSize = CGSizeMake(contentXIndex, self.scrollView.frame.size.height);
     
     self.pageBgBack.alpha = 0;
