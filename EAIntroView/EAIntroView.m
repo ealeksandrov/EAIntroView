@@ -92,12 +92,19 @@
 }
 
 - (void)showPanelAtPageControl {
-    self.currentPageIndex = self.pageControl.currentPage;
-    self.visiblePageIndex = self.currentPageIndex;
-    
     [self makePanelVisibleAtIndex:self.currentPageIndex];
     
-    [self goToPage:self.currentPageIndex animated:YES];
+    [self setCurrentPageIndex:self.pageControl.currentPage animated:YES];
+}
+
+- (void)checkIndexForScrollView:(UIScrollView *)scrollView {
+    NSInteger newPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
+    [self notifyDelegateWithPreviousPage:self.currentPageIndex andCurrentPage:newPageIndex];
+    _currentPageIndex = newPageIndex;
+    
+    if (self.currentPageIndex == (_pages.count)) {
+        [self finishIntroductionAndRemoveSelf];
+    }
 }
 
 - (void)finishIntroductionAndRemoveSelf {
@@ -316,11 +323,11 @@
 #pragma mark - UIScrollView Delegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    self.currentPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
-    
-    if (self.currentPageIndex == (_pages.count)) {
-        [self finishIntroductionAndRemoveSelf];
-    }
+    [self checkIndexForScrollView:scrollView];
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    [self checkIndexForScrollView:scrollView];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -397,15 +404,14 @@ float easeOutValue(float value) {
 
 #pragma mark - Custom setters
 
-- (void)setCurrentPageIndex:(NSInteger)currentPageIndex {
+- (void)notifyDelegateWithPreviousPage:(NSInteger)previousPageIndex andCurrentPage:(NSInteger)currentPageIndex {
     if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
-        [_pages[_currentPageIndex] pageDidDisappear];
+        [_pages[previousPageIndex] pageDidDisappear];
         [_pages[currentPageIndex] pageDidAppear];
         if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
             [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
         }
     }
-    _currentPageIndex = currentPageIndex;
 }
 
 - (void)setPages:(NSArray *)pages {
@@ -482,13 +488,17 @@ float easeOutValue(float value) {
 	}];
 }
 
-- (void)goToPage:(int)pageNumber animated:(BOOL)animated {
-    if(pageNumber < 0 || pageNumber >= [self.pages count]) {
-        NSLog(@"Wrong pageNumber recieved: %d",pageNumber);
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex {
+    [self setCurrentPageIndex:currentPageIndex animated:NO];
+}
+
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
+    if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
+        NSLog(@"Wrong currentPageIndex recieved: %d",currentPageIndex);
         return;
     }
     
-    float offset = pageNumber * self.scrollView.frame.size.width;
+    float offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
 }

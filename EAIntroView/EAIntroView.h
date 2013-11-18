@@ -42,6 +42,8 @@
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
-- (void)goToPage:(int)pageNumber animated:(BOOL)animated;
+
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex;
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated;
 
 @end
