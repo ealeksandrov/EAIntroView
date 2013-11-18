@@ -6,6 +6,6 @@
 #import <UIKit/UIKit.h>
 #import "EAIntroView.h"
 
-@interface ViewController : UIViewController <EAIntroDelegate>
+@interface ViewController : UITableViewController <EAIntroDelegate>
 
 @end
