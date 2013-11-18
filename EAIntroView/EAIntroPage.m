@@ -1,9 +1,7 @@
 //
 //  EAIntroPage.m
-//  EAIntroView
 //
-//  Copyright (c) 2013 Evgeny Aleksandrov.
-//
+//  Copyright (c) 2013 Evgeny Aleksandrov. License: MIT.
 
 #import "EAIntroPage.h"
 

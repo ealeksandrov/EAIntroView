@@ -1,9 +1,7 @@
 //
 //  EAIntroView.h
-//  EAIntroView
 //
-//  Copyright (c) 2013 Evgeny Aleksandrov.
-//
+//  Copyright (c) 2013 Evgeny Aleksandrov. License: MIT.
 
 #import <UIKit/UIKit.h>
 #import "EAIntroPage.h"
