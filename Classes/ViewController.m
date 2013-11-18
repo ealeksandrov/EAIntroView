@@ -58,9 +58,9 @@
     page3.bgImage = [UIImage imageNamed:@"3"];
     page3.titleImage = [UIImage imageNamed:@"femalecodertocat"];
     
-    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page1,page2,page3]];
-    
+    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds];
     [intro setDelegate:self];
+    [intro setPages:@[page1,page2,page3]];
     [intro showInView:self.view animateDuration:0.0];
 }
 
@@ -205,8 +205,12 @@
     [intro setPages:@[page1,page2,page3]];
 }
 
-- (void)introDidFinish {
+- (void)introDidFinish:(EAIntroView *)introView {
     NSLog(@"Intro callback");
+}
+
+- (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSInteger)pageIndex {
+    NSLog(@"Its page #%d",pageIndex);
 }
 
 @end

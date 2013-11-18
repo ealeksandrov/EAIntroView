@@ -8,9 +8,12 @@
 #import <UIKit/UIKit.h>
 #import "EAIntroPage.h"
 
+@class EAIntroView;
+
 @protocol EAIntroDelegate
 @optional
-- (void)introDidFinish;
+- (void)introDidFinish:(EAIntroView *)introView;
+- (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSInteger)pageIndex;
 @end
 
 @interface EAIntroView : UIView <UIScrollViewDelegate>

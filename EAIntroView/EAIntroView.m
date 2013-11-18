@@ -103,8 +103,8 @@
 }
 
 - (void)finishIntroductionAndRemoveSelf {
-	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish)]) {
-		[self.delegate introDidFinish];
+	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
+		[self.delegate introDidFinish:self];
 	}
 	//Calling removeFromSuperview from scrollViewDidEndDecelerating: method leads to crash on iOS versions < 7.0.
     //removeFromSuperview should be called after a delay
@@ -192,6 +192,9 @@
     
     [self makePanelVisibleAtIndex:0];
     [_pages[0] pageDidAppear];
+    if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
+        [self.delegate intro:self pageAppeared:_pages[0] withIndex:0];
+    }
     
     if (self.swipeToExit) {
         [self appendCloseViewAtXIndex:&contentXIndex];
@@ -400,6 +403,9 @@ float easeOutValue(float value) {
     if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
         [_pages[_currentPageIndex] pageDidDisappear];
         [_pages[currentPageIndex] pageDidAppear];
+        if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
+            [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
+        }
     }
     _currentPageIndex = currentPageIndex;
 }
