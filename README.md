@@ -4,18 +4,39 @@
 ![BackgroundImage](https://raw.github.com/ealeksandrov/EAIntroView/master/2.png)
 
 This is highly customizable drop-in solution for introduction views.
-Some features (all features are optional):
+Some features (remember, most features are optional and can be turned off):
 
-* swipe from last page to close
-* custom background for each page with cross-dissolve transition
-* for each page - background, title image, title text, description and their separate Y positions
-* possibility to set your own custom view for page
-* custom background or color for whole view
-* custom page control, skip button
+* beautiful demo project to look on some examples
+	* customizability is unlimited, one can make complex introView with animations and interactive pages, so do not limit yourself with existing examples
+* for each basic page: 
+	* background (with cross-dissolve transition between pages)
+	* title image (+ Y position)
+	* title text (+ font, color and Y position)
+	* description text (+ font, color and Y position)
+	* subviews array (added to page after building default layout)
+* possibility to set your own custom view for page:
+	* pageWithCustomView:
+	* pageWithCustomViewFromNibNamed:
+* possibility to make sublass of EAIntroPage and react to actions:
+	* pageDidLoad
+	* pageDidAppear
+	* pageDidDisappear
+* many options to customize parent view:
+	* swipe from last page to close
+	* custom background image or color
+	* custom page control
+	* custom skip button
+	* pinned titleView (+ Y position, can be hidden on some pages)
+* delegate protocol to listen:
+	* introDidFinish:
+	* intro:pageAppeared:withIndex:
+* actions on IntroView:
+	* setPages:
+	* showInView:animateDuration:
+	* hideWithFadeOutDuration:
+	* setCurrentPageIndex:animated:
 * storyboard/IB support
 * autoresize support
-
-This control is inspired by [MYIntroductionView](https://github.com/MatthewYork/iPhone-IntroductionTutorial) by [Matthew York](https://github.com/MatthewYork).
 
 License: MIT.
 
@@ -23,7 +44,7 @@ License: MIT.
 
 [CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project. 
 
-* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 1.3.0'`
+* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 2.0.0'`
 * Run `pod install`.
 * Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
@@ -36,71 +57,41 @@ License: MIT.
 
 ##How To Use It
 
-Sample project have some examples of customization. Look in `viewDidAppear`, uncomment some lines to see variants.
+Sample project have many examples of customization. Here are only simple ones.
 
 ###Step 1 - Build Pages
-Each page created with `[EAIntroPage page]` class method. Then you can customize any property, all of them are optional. Another approach is to pass your own, custom view in `EAIntroPage`, this way every other option is ignored.
-
-Simple
+Each page created with `[EAIntroPage page]` class method. Then you can customize any property, all of them are optional. Another approach is to pass your own (can be nib), custom view in `EAIntroPage`, this way most other options are ignored.
 
 ```objc
+// basic
 EAIntroPage *page1 = [EAIntroPage page];
 page1.title = @"Hello world";
-page1.desc = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+page1.desc = sampleDesc1;
+// custom
+EAIntroPage *page2 = [EAIntroPage page];
+page2.title = @"This is page 2";
+page2.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:20];
+page2.titlePositionY = 220;
+page2.desc = sampleDesc2;
+page2.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
+page2.descPositionY = 200;
+page2.titleImage = [UIImage imageNamed:@"title3"];
+page2.imgPositionY = 100;
+// custom view from nib
+EAIntroPage *page3 = [EAIntroPage pageWithCustomViewFromNibNamed:@"IntroPage"];
+page3.bgImage = [UIImage imageNamed:@"bg2"];
 ```
 
-Custom
-
-```objc
-EAIntroPage *page3 = [EAIntroPage page];
-page3.title = @"This is page 3";
-page3.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:20];
-page3.titlePositionY = 220;
-page3.desc = @"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.";
-page3.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
-page3.descPositionY = 200;
-page3.titleImage = [UIImage imageNamed:@"femalecodertocat"];
-page3.imgPositionY = 100;
-```
-
-Custom view
-
-```objc
-UIView *viewForPage2 = [[UIView alloc] initWithFrame:self.view.bounds];
-UILabel *labelForPage2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 220, 300, 30)];
-labelForPage2.text = @"Some custom view";
-labelForPage2.font = [UIFont systemFontOfSize:32];
-labelForPage2.textColor = [UIColor whiteColor];
-labelForPage2.backgroundColor = [UIColor clearColor];
-labelForPage2.transform = CGAffineTransformMakeRotation(M_PI_2*3);
-[viewForPage2 addSubview:labelForPage2];
-EAIntroPage *page2 = [EAIntroPage pageWithCustomView:viewForPage2];
-```
 
 ###Step 2 - Create Introduction View
-Once all pages have been created,  you are ready to create the introduction view. Just pass them in right order in the introduction view.
+Once all pages have been created,  you are ready to create the introduction view. Just pass them in right order in the introduction view. You can also pass array of pages after IntroView's initialization, it will rebuild its contents.
 
-Simple
-
-```objc
-EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page1,page2,page3]];
-```
-
-Custom
 
 ```objc
-EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page1,page2,page3]];
-intro.backgroundColor = [UIColor colorWithRed:1.0f green:0.58f blue:0.21f alpha:1.0f]; //iOS7 orange    
-intro.pageControlY = 100.0f;    
-UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-[btn setBackgroundImage:[UIImage imageNamed:@"skipButton"] forState:UIControlStateNormal];
-[btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 60, 230, 40)];
-[btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
-[btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-intro.skipButton = btn;
+EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page1,page2,page3,page4]];
 ```
 
-Don't forget to set the delegate to the calling class if you are using delegation for any callbacks
+Don't forget to set the delegate if you want to use any callbacks.
 
 ```objc
 [intro setDelegate:self];
@@ -113,10 +104,11 @@ Don't forget to set the delegate to the calling class if you are using delegatio
 ```
 
 ###Storyboard/IB
-Since 1.3.0 EAIntroView supports init from IB.
+Since 1.3.0 EAIntroView supports init from IB. Since 2.0.0 EAIntroPage supports it too.
 
 1. Drop UIView to your IB document.
 2. Set its class to `EAIntroView`.
 3. Create `IBOutlet` property in your view controller: `@property(nonatomic,weak) IBOutlet EAIntroView *introView;`.
 4. Connect `IBOutlet` with `EAIntroView` in IB.
-5. Build array of pages and pass it to `EAIntroView` property in `setPages:`.
+5. Build array of pages (you can use `pageWithCustomViewFromNibNamed:` here with separate nibs for each page).
+6. Pass pages array to `EAIntroView` property in `setPages:`.
