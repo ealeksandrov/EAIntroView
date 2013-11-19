@@ -6,6 +6,7 @@
 #import "ViewController.h"
 #import "PageSubclass.h"
 #import "SMPageControl.h"
+#import <QuartzCore/QuartzCore.h>
 
 static NSString * const sampleDesc1 = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 static NSString * const sampleDesc2 = @"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.";
@@ -115,14 +116,17 @@ static NSString * const sampleDesc4 = @"Nam libero tempore, cum soluta nobis est
     page4.titleImage = [UIImage imageNamed:@"title4"];
     
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
-    intro.bgImage = [UIImage imageNamed:@"bg1"];
+    intro.bgImage = [UIImage imageNamed:@"bg2"];
     
-    intro.pageControlY = 270.0f;
+    intro.pageControlY = 250.0f;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 60, 230, 40)];
     [btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    btn.layer.borderWidth = 2.0f;
+    btn.layer.cornerRadius = 10;
+    btn.layer.borderColor = [[UIColor whiteColor] CGColor];
     intro.skipButton = btn;
     
     [intro setDelegate:self];
