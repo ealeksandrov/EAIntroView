@@ -120,7 +120,6 @@ static NSString * const sampleDesc4 = @"Nam libero tempore, cum soluta nobis est
     intro.pageControlY = 270.0f;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btn setBackgroundImage:[UIImage imageNamed:@"skipButton"] forState:UIControlStateNormal];
     [btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 60, 230, 40)];
     [btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
