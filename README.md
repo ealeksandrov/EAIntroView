@@ -27,6 +27,7 @@ Some features (remember, most features are optional and can be turned off):
 	* custom page control
 	* custom skip button
 	* pinned titleView (+ Y position, can be hidden on some pages)
+	* hide page control
 * delegate protocol to listen:
 	* introDidFinish:
 	* intro:pageAppeared:withIndex:

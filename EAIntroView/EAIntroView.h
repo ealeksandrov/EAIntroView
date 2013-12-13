@@ -25,6 +25,7 @@
 @property (nonatomic, assign) bool swipeToExit;
 @property (nonatomic, assign) bool hideOffscreenPages;
 @property (nonatomic, assign) bool easeOutCrossDisolves;
+@property (nonatomic, assign) bool hidePageControl;
 @property (nonatomic, strong) UIImage *bgImage;
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, assign) CGFloat titleViewY;

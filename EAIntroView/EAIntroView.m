@@ -450,6 +450,12 @@ float easeOutValue(float value) {
     _swipeToExit = swipeToExit;
 }
 
+- (void)setHidePageControl:(bool)hidePageControl {
+    if (hidePageControl==YES) {
+        self.pageControl.hidden = YES;
+    }
+}
+
 - (void)setTitleView:(UIView *)titleView {
     [_titleView removeFromSuperview];
     _titleView = titleView;

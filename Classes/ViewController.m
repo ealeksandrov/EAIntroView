@@ -54,6 +54,10 @@ static NSString * const sampleDesc4 = @"Nam libero tempore, cum soluta nobis est
     page4.titleImage = [UIImage imageNamed:@"title4"];
     
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
+    
+    // hide page control
+    //intro.hidePageControl = YES;
+    
     [intro setDelegate:self];
     
     [intro showInView:rootView animateDuration:0.3];
