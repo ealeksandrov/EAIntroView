@@ -323,9 +323,17 @@
 }
 
 #pragma mark - UIScrollView Delegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if ([(id)self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)]) {
+        [self.delegate intro:self pageStartScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
+    }
+}
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
+    if ([(id)self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)]) {
+        [self.delegate intro:self pageEndScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
+    }
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
