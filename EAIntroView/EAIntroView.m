@@ -86,7 +86,7 @@
     return ((EAIntroPage *)_pages[idx]).pageView;
 }
 
-- (BOOL)showTitleViewForPage:(int)idx {
+- (BOOL)showTitleViewForPage:(NSInteger)idx {
     if(idx >= _pages.count || idx < 0)
         return NO;
     
@@ -509,7 +509,7 @@ float easeOutValue(float value) {
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
     if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
-        NSLog(@"Wrong currentPageIndex recieved: %d",currentPageIndex);
+        NSLog(@"Wrong currentPageIndex recieved: %ld",(long)currentPageIndex);
         return;
     }
     
