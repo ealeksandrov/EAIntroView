@@ -259,6 +259,7 @@
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        titleLabel.numberOfLines = 0;
         [pageView addSubview:titleLabel];
     }
     
