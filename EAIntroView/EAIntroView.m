@@ -82,7 +82,7 @@
     }];
 }
 
-- (UIView *)viewForPageIndex:(int)idx {
+- (UIView *)viewForPageIndex:(NSInteger)idx {
     return ((EAIntroPage *)_pages[idx]).pageView;
 }
 
@@ -347,7 +347,7 @@
     self.visiblePageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
     
     float offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
-    NSInteger page = (int)(offset);
+    NSInteger page = (NSInteger)(offset);
     
     if (page == (_pages.count - 1) && self.swipeToExit) {
         self.alpha = ((self.scrollView.frame.size.width*_pages.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
@@ -368,8 +368,8 @@ float easeOutValue(float value) {
 }
 
 - (void)crossDissolveForOffset:(float)offset {
-    NSInteger page = (int)(offset);
-    float alphaValue = offset - (int)offset;
+    NSInteger page = (NSInteger)(offset);
+    float alphaValue = offset - page;
     
     if (alphaValue < 0 && self.visiblePageIndex == 0){
         self.pageBgBack.image = nil;
@@ -406,7 +406,7 @@ float easeOutValue(float value) {
     }
 }
 
-- (UIImage *)bgForPage:(int)idx {
+- (UIImage *)bgForPage:(NSInteger)idx {
     if(idx >= _pages.count || idx < 0)
         return nil;
     
