@@ -316,6 +316,7 @@
     [self addSubview:self.pageControl];
     
     self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y - ((30 - self.pageControl.frame.size.height)/2), 80, 30)];
+    self.skipButton.hidden = self.showSkipButtonOnLastPage;
     
     self.skipButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
@@ -359,6 +360,12 @@
         self.pageControl.currentPage = self.visiblePageIndex;
         
         [self makePanelVisibleAtIndex:self.visiblePageIndex];
+    }
+    
+    if (self.showSkipButtonOnLastPage) {
+        if (self.visiblePageIndex == _pages.count - 1) {
+            self.skipButton.hidden = !self.showSkipButtonOnLastPage;
+        }
     }
 }
 
@@ -480,8 +487,14 @@ float easeOutValue(float value) {
 - (void)setSkipButton:(UIButton *)skipButton {
     [_skipButton removeFromSuperview];
     _skipButton = skipButton;
+    _skipButton.hidden = self.showSkipButtonOnLastPage;
     [_skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_skipButton];
+}
+
+- (void)setShowSkipButtonOnLastPage:(BOOL)showSkipButtonOnLastPage {
+    _showSkipButtonOnLastPage = showSkipButtonOnLastPage;
+    self.skipButton.hidden = _showSkipButtonOnLastPage;
 }
 
 #pragma mark - Actions
