@@ -400,6 +400,18 @@ float easeOutValue(float value) {
             [self.titleView setAlpha:alphaValue];
         }
     }
+    
+    if(self.skipButton) {
+        if(!self.showSkipButtonOnlyOnLastPage) {
+            [self.skipButton setAlpha:1.0];
+        } else if(page < (long)[self.pages count] - 2) {
+            [self.skipButton setAlpha:0.0];
+        } else if(page == [self.pages count] - 1) {
+            [self.skipButton setAlpha:(1 - alphaValue)];
+        } else {
+            [self.skipButton setAlpha:alphaValue];
+        }
+    }
 }
 
 - (UIImage *)bgForPage:(NSInteger)idx {
@@ -478,6 +490,13 @@ float easeOutValue(float value) {
     _skipButton = skipButton;
     [_skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_skipButton];
+}
+
+- (void)setShowSkipButtonOnlyOnLastPage:(bool)showSkipButtonOnlyOnLastPage {
+    _showSkipButtonOnlyOnLastPage = showSkipButtonOnlyOnLastPage;
+    
+    float offset = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    [self crossDissolveForOffset:offset];
 }
 
 #pragma mark - Actions
