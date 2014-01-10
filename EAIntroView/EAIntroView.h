@@ -25,6 +25,7 @@
 @property (nonatomic, assign) bool swipeToExit;
 @property (nonatomic, assign) bool hideOffscreenPages;
 @property (nonatomic, assign) bool easeOutCrossDisolves;
+@property (nonatomic, assign) BOOL showSkipButtonOnLastPage;        // default is NO.
 @property (nonatomic, strong) UIImage *bgImage;
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, assign) CGFloat titleViewY;
