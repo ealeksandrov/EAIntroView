@@ -188,7 +188,6 @@
 
 - (void)buildScrollView {
     
-    //A running x-coordinate. This grows for every page
     CGFloat contentXIndex = 0;
     for (int idx = 0; idx < _pages.count; idx++) {
         EAIntroPage *page = _pages[idx];
@@ -307,7 +306,6 @@
 - (void)buildFooterView {
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20)];
     
-    //Set defersCurrentPageDisplay to YES to prevent page control jerking when switching pages with page control. This prevents page control from instant change of page indication.
     self.pageControl.defersCurrentPageDisplay = YES;
     
     self.pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
@@ -342,8 +340,6 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    //Changed page number calculating. Pages now switched when content passes half of screen. In other words, we have index of page which displayed more than half.
-    //Moved page number calculation here to have timely page indication. No need to wait until scrollView stops animating.
     self.visiblePageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
     
     float offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
