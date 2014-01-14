@@ -61,9 +61,21 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
+- (void)setAspectFillBackgroundImages:(bool)aspectFillBackgroundImages
+{
+    _aspectFillBackgroundImages = aspectFillBackgroundImages;
+    [self applyDefaultsToBackgroundImageView:_pageBgBack];
+    [self applyDefaultsToBackgroundImageView:_pageBgFront];
+    [self applyDefaultsToBackgroundImageView:_bgImageView];
+}
+
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
     backgroundImageView.backgroundColor = [UIColor clearColor];
-    backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+    if (self.aspectFillBackgroundImages) {
+        backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
+    } else {
+        backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+    }
     backgroundImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
