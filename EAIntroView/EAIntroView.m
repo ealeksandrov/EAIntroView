@@ -537,11 +537,6 @@ float easeOutValue(float value) {
         return;
     }
     
-    if(!self.scrollEnabled) {
-        NSLog(@"Scrolling is disabled");
-        return;
-    }
-    
     float offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
