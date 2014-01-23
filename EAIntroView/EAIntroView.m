@@ -57,6 +57,7 @@
     self.titleViewY = 20.0f;
     self.pageControlY = 60.0f;
     _pages = [pagesArray copy];
+    self.scrollEnabled = YES;
     [self buildUI];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
@@ -499,6 +500,13 @@ float easeOutValue(float value) {
     [self crossDissolveForOffset:offset];
 }
 
+- (void)setScrollEnabled:(BOOL)scrollEnabled {
+    _scrollEnabled = scrollEnabled;
+    
+    self.scrollView.scrollEnabled = scrollEnabled;
+    self.pageControl.enabled = scrollEnabled;
+}
+
 #pragma mark - Actions
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
@@ -526,6 +534,11 @@ float easeOutValue(float value) {
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
     if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
         NSLog(@"Wrong currentPageIndex recieved: %ld",(long)currentPageIndex);
+        return;
+    }
+    
+    if(!self.scrollEnabled) {
+        NSLog(@"Scrolling is disabled");
         return;
     }
     
