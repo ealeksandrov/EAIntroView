@@ -39,6 +39,7 @@
 		5513593A17E440C500B41A90 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5513592E17E440C500B41A90 /* Default@2x.png */; };
 		5513593B17E440C500B41A90 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5513592F17E440C500B41A90 /* MainStoryboard.storyboard */; };
 		5513593D17E440C500B41A90 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5513593317E440C500B41A90 /* main.m */; };
+		DD5EA7331891547500F82BD8 /* IntroPage.m in Sources */ = {isa = PBXBuildFile; fileRef = DD5EA7321891547500F82BD8 /* IntroPage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +84,8 @@
 		5513593117E440C500B41A90 /* EAIntroView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "EAIntroView-Info.plist"; sourceTree = "<group>"; };
 		5513593217E440C500B41A90 /* EAIntroView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EAIntroView-Prefix.pch"; sourceTree = "<group>"; };
 		5513593317E440C500B41A90 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DD5EA7311891547500F82BD8 /* IntroPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroPage.h; sourceTree = "<group>"; };
+		DD5EA7321891547500F82BD8 /* IntroPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroPage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +205,8 @@
 				5513592C17E440C500B41A90 /* Default-568h@2x.png */,
 				5513592D17E440C500B41A90 /* Default.png */,
 				5513592E17E440C500B41A90 /* Default@2x.png */,
+				DD5EA7311891547500F82BD8 /* IntroPage.h */,
+				DD5EA7321891547500F82BD8 /* IntroPage.m */,
 				55106198183AB4CA003D79BF /* IntroPage.xib */,
 				5513592F17E440C500B41A90 /* MainStoryboard.storyboard */,
 			);
@@ -308,6 +313,7 @@
 				5513593617E440C500B41A90 /* EAIntroPage.m in Sources */,
 				5513593717E440C500B41A90 /* EAIntroView.m in Sources */,
 				5513593D17E440C500B41A90 /* main.m in Sources */,
+				DD5EA7331891547500F82BD8 /* IntroPage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

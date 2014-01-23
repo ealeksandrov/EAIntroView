@@ -6,6 +6,7 @@
 #import "ViewController.h"
 #import "PageSubclass.h"
 #import "SMPageControl.h"
+#import "IntroPage.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSString * const sampleDesc1 = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
@@ -193,6 +194,8 @@ static NSString * const sampleDesc4 = @"Nam libero tempore, cum soluta nobis est
     
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
     [intro setDelegate:self];
+    
+    ((IntroPage *)page2.customView).introView = intro;
     
     [intro showInView:rootView animateDuration:0.3];
 }
