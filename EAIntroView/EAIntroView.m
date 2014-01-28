@@ -197,10 +197,6 @@
     }
     
     [self makePanelVisibleAtIndex:0];
-    [_pages[0] pageDidAppear];
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
-        [self.delegate intro:self pageAppeared:_pages[0] withIndex:0];
-    }
     
     if (self.swipeToExit) {
         [self appendCloseViewAtXIndex:&contentXIndex];
@@ -508,6 +504,11 @@ float easeOutValue(float value) {
     
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 1;
+    } completion:^(BOOL finished) {
+        [_pages[self.currentPageIndex] pageDidAppear];
+        if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
+            [self.delegate intro:self pageAppeared:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
+        }
     }];
 }
 
