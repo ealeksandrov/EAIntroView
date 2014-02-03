@@ -38,6 +38,8 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSArray *pages;
 
+@property (nonatomic) BOOL scrollEnabled;
+
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;

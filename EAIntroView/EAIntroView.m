@@ -57,6 +57,7 @@
     self.titleViewY = 20.0f;
     self.pageControlY = 60.0f;
     _pages = [pagesArray copy];
+    self.scrollEnabled = YES;
     [self buildUI];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
@@ -493,6 +494,13 @@ float easeOutValue(float value) {
     
     float offset = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     [self crossDissolveForOffset:offset];
+}
+
+- (void)setScrollEnabled:(BOOL)scrollEnabled {
+    _scrollEnabled = scrollEnabled;
+    
+    self.scrollView.scrollEnabled = scrollEnabled;
+    self.pageControl.enabled = scrollEnabled;
 }
 
 #pragma mark - Actions
