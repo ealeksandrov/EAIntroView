@@ -526,7 +526,7 @@ float easeOutValue(float value) {
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
     if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
-        NSLog(@"Wrong currentPageIndex recieved: %ld",(long)currentPageIndex);
+        NSLog(@"Wrong currentPageIndex received: %ld",(long)currentPageIndex);
         return;
     }
     
