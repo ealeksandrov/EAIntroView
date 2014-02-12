@@ -5,8 +5,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface EAIntroPage : NSObject
+typedef void (^VoidBlock)();
 
+@interface EAIntroPage : NSObject
 
 // backround used for cross-dissolve
 @property (nonatomic, strong) UIImage *bgImage;
@@ -20,17 +21,24 @@
 // title and description labels Y position - from bottom of the screen
 // all items from subviews array will be added on page
 @property (nonatomic, strong) UIImage *titleImage;
+
 @property (nonatomic, assign) CGFloat imgPositionY;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) UIFont *titleFont;
 @property (nonatomic, strong) UIColor *titleColor;
 @property (nonatomic, assign) CGFloat titlePositionY;
+
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) UIFont *descFont;
 @property (nonatomic, strong) UIColor *descColor;
 @property (nonatomic, assign) CGFloat descPositionY;
-@property (nonatomic, assign) CGFloat maximumDescriptionLabelWidth;
+@property (nonatomic, assign) CGFloat descriptionLabelMaximumWidth;
+
 @property (nonatomic, strong) NSArray *subviews;
+
+@property (nonatomic,copy) VoidBlock onPageDidLoad;
+@property (nonatomic,copy) VoidBlock onPageDidAppear;
+@property (nonatomic,copy) VoidBlock onPageDidDisappear;
 
 
 // if customView is set - all other default properties are ignored
@@ -41,9 +49,5 @@
 + (instancetype)page;
 + (instancetype)pageWithCustomView:(UIView *)customV;
 + (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName;
-
-- (void)pageDidLoad;
-- (void)pageDidAppear;
-- (void)pageDidDisappear;
 
 @end

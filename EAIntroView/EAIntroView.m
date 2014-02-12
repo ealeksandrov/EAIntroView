@@ -193,7 +193,7 @@
         EAIntroPage *page = _pages[idx];
         page.pageView = [self viewForPage:page atXIndex:&contentXIndex];
         [self.scrollView addSubview:page.pageView];
-        [page pageDidLoad];
+        if(page.onPageDidLoad) page.onPageDidLoad();
     }
     
     [self makePanelVisibleAtIndex:0];
@@ -273,7 +273,7 @@
         [pageView addSubview:descLabel];
         
         descLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:page.maximumDescriptionLabelWidth]];
+        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:page.descriptionLabelMaximumWidth]];
         
         [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:pageView attribute:NSLayoutAttributeTop multiplier:1 constant:descLabelFrame.origin.y]];
 
@@ -436,8 +436,11 @@ float easeOutValue(float value) {
 
 - (void)notifyDelegateWithPreviousPage:(NSInteger)previousPageIndex andCurrentPage:(NSInteger)currentPageIndex {
     if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
-        [_pages[previousPageIndex] pageDidDisappear];
-        [_pages[currentPageIndex] pageDidAppear];
+        EAIntroPage* previousPage = _pages[previousPageIndex];
+        EAIntroPage* currentPage = _pages[currentPageIndex];
+        if(previousPage.onPageDidDisappear) previousPage.onPageDidDisappear();
+        if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
+        
         if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
             [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
         }
@@ -520,7 +523,9 @@ float easeOutValue(float value) {
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 1;
     } completion:^(BOOL finished) {
-        [_pages[self.currentPageIndex] pageDidAppear];
+        EAIntroPage* currentPage = _pages[self.currentPageIndex];
+        if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
+        
         if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
             [self.delegate intro:self pageAppeared:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
         }

@@ -6,9 +6,7 @@
 #import "EAIntroPage.h"
 
 @interface EAIntroPage ()
-
 @property(nonatomic, strong, readwrite) UIView *pageView;
-
 @end
 
 @implementation EAIntroPage
@@ -16,7 +14,7 @@
 #pragma mark - Page lifecycle
 
 + (instancetype)page {
-    EAIntroPage *newPage = [[super alloc] init];
+    EAIntroPage *newPage = [[self alloc] init];
     newPage.imgPositionY    = 50.0f;
     newPage.titlePositionY  = 160.0f;
     newPage.descPositionY   = 140.0f;
@@ -32,29 +30,15 @@
 }
 
 + (instancetype)pageWithCustomView:(UIView *)customV {
-    EAIntroPage *newPage = [[super alloc] init];
+    EAIntroPage *newPage = [[self alloc] init];
     newPage.customView = customV;
-    
     return newPage;
 }
 
 + (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName {
-    EAIntroPage *newPage = [[super alloc] init];
-    newPage.customView = [[NSBundle mainBundle] loadNibNamed:nibName owner:nil options:nil][0];
-    
+    EAIntroPage *newPage = [[self alloc] init];
+    newPage.customView = [[[NSBundle mainBundle] loadNibNamed:nibName owner:nil options:nil] firstObject];
     return newPage;
-}
-
-- (void)pageDidLoad {
-    //override
-}
-
-- (void)pageDidAppear {
-    //override
-}
-
-- (void)pageDidDisappear {
-    //override
 }
 
 @end
