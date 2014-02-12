@@ -28,6 +28,7 @@
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) UIFont *descFont;
 @property (nonatomic, strong) UIColor *descColor;
+@property (nonatomic) CGFloat descWidth;
 @property (nonatomic, assign) CGFloat descPositionY;
 @property (nonatomic, strong) NSArray *subviews;
 

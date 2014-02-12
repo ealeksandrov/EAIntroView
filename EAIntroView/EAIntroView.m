@@ -129,7 +129,7 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
+        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _scrollView.pagingEnabled = YES;
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
@@ -259,7 +259,15 @@
     }
     
     if([page.desc length]) {
-        CGRect descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+        CGRect descLabelFrame; 
+        
+        if(page.descWidth != 0){
+            
+            descLabelFrame = CGRectMake((self.frame.size.width - page.descWidth)/2, self.frame.size.height - page.descPositionY, page.descWidth, 500);
+        }else{
+            descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+            
+        }
         
         UITextView *descLabel = [[UITextView alloc] initWithFrame:descLabelFrame];
         descLabel.text = page.desc;
@@ -270,6 +278,7 @@
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
         //[descLabel sizeToFit];
+        
         [pageView addSubview:descLabel];
     }
     
