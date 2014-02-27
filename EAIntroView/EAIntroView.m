@@ -222,11 +222,11 @@
         return pageView;
     }
     
-    if(page.titleImage) {
-        UIImageView *titleImageView = [[UIImageView alloc] initWithImage:page.titleImage];
+    if(page.titleIconView) {
+        UIView *titleImageView = page.titleIconView;
         CGRect rect1 = titleImageView.frame;
         rect1.origin.x = (self.scrollView.frame.size.width - rect1.size.width)/2;
-        rect1.origin.y = page.imgPositionY;
+        rect1.origin.y = page.titleIconPositionY;
         titleImageView.frame = rect1;
         [pageView addSubview:titleImageView];
     }
@@ -269,14 +269,18 @@
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
-        //[descLabel sizeToFit];
         [pageView addSubview:descLabel];
         
         descLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:page.descriptionLabelMaximumWidth]];
+        
+        if(page.descriptionLabelMaximumWidth){
+            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:page.descriptionLabelMaximumWidth]];
+        } else {
+            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1 constant:-page.descriptionLabelSidePadding]];
+        }
         
         [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:pageView attribute:NSLayoutAttributeTop multiplier:1 constant:descLabelFrame.origin.y]];
-
+        
     }
     
     if(page.subviews) {
