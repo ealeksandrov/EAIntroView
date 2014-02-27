@@ -4,7 +4,6 @@
 //  Copyright (c) 2013 Evgeny Aleksandrov. License: MIT.
 
 #import "ViewController.h"
-#import "PageSubclass.h"
 #import "SMPageControl.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -204,11 +203,14 @@ static NSString * const sampleDesc4 = @"Nam libero tempore, cum soluta nobis est
     page1.bgImage = [UIImage imageNamed:@"bg1"];
     page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
     
-    PageSubclass *page2 = [PageSubclass page];
+    EAIntroPage *page2 = [EAIntroPage page];
     page2.title = @"This is page 2";
     page2.desc = sampleDesc2;
     page2.bgImage = [UIImage imageNamed:@"bg2"];
     page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title2"]];
+    page2.onPageDidAppear = ^{
+        NSLog(@"Page 2 did appear.");
+    };
     
     EAIntroPage *page3 = [EAIntroPage page];
     page3.title = @"This is page 3";
