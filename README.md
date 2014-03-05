@@ -10,14 +10,14 @@ Some features (remember, most features are optional and can be turned off):
 	* customizability is unlimited, one can make complex introView with animations and interactive pages, so do not limit yourself with existing examples
 * for each basic page: 
 	* background (with cross-dissolve transition between pages)
-	* title image (+ Y position)
+	* title view (+ Y position)
 	* title text (+ font, color and Y position)
 	* description text (+ font, color and Y position)
 	* subviews array (added to page after building default layout)
 * possibility to set your own custom view for page:
 	* pageWithCustomView:
 	* pageWithCustomViewFromNibNamed:
-* possibility to make sublass of EAIntroPage and react to actions:
+* possibility to set block action on page events:
 	* pageDidLoad
 	* pageDidAppear
 	* pageDidDisappear
@@ -44,7 +44,7 @@ License: MIT.
 
 [CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project. 
 
-* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 2.2.0'`
+* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 2.3.0'`
 * Run `pod install`.
 * Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
@@ -66,17 +66,17 @@ Each page created with `[EAIntroPage page]` class method. Then you can customize
 // basic
 EAIntroPage *page1 = [EAIntroPage page];
 page1.title = @"Hello world";
-page1.desc = sampleDesc1;
+page1.desc = sampleDescription1;
 // custom
 EAIntroPage *page2 = [EAIntroPage page];
 page2.title = @"This is page 2";
 page2.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:20];
 page2.titlePositionY = 220;
-page2.desc = sampleDesc2;
+page2.desc = sampleDescription2;
 page2.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
 page2.descPositionY = 200;
-page2.titleImage = [UIImage imageNamed:@"title3"];
-page2.imgPositionY = 100;
+page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title2"]];
+page2.titleIconPositionY = 100;
 // custom view from nib
 EAIntroPage *page3 = [EAIntroPage pageWithCustomViewFromNibNamed:@"IntroPage"];
 page3.bgImage = [UIImage imageNamed:@"bg2"];
