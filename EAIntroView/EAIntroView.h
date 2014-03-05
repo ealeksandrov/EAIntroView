@@ -23,6 +23,7 @@
 // titleView Y position - from top of the screen
 // pageControl Y position - from bottom of the screen
 @property (nonatomic, assign) bool swipeToExit;
+@property (nonatomic, assign) bool tapToNext;
 @property (nonatomic, assign) bool hideOffscreenPages;
 @property (nonatomic, assign) bool easeOutCrossDisolves;
 @property (nonatomic, assign) bool showSkipButtonOnlyOnLastPage;

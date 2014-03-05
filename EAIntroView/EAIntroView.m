@@ -222,6 +222,11 @@
         return pageView;
     }
     
+    UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    tapToNextButton.frame = pageView.bounds;
+    [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];
+    [pageView addSubview:tapToNextButton];
+    
     if(page.titleIconView) {
         UIView *titleImageView = page.titleIconView;
         CGRect rect1 = titleImageView.frame;
@@ -554,6 +559,17 @@ float easeOutValue(float value) {
     float offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
+}
+
+- (IBAction)goToNext:(id)sender {
+    if(!self.tapToNext) {
+        return;
+    }
+    if(self.currentPageIndex + 1 >= [self.pages count]) {
+        [self hideWithFadeOutDuration:0.3];
+    } else {
+        [self setCurrentPageIndex:self.currentPageIndex + 1 animated:YES];
+    }
 }
 
 @end

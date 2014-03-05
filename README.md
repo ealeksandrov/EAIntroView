@@ -23,6 +23,7 @@ Some features (remember, most features are optional and can be turned off):
 	* pageDidDisappear
 * many options to customize parent view:
 	* swipe from last page to close
+	* switching pages with one simple tap
 	* custom background image or color
 	* custom page control
 	* custom skip button

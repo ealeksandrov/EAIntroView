@@ -209,7 +209,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     page2.bgImage = [UIImage imageNamed:@"bg2"];
     page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title2"]];
     page2.onPageDidAppear = ^{
-        NSLog(@"Page 2 did appear.");
+        NSLog(@"Page 2 did appear block");
     };
     
     EAIntroPage *page3 = [EAIntroPage page];
@@ -272,9 +272,8 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
     intro.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bigLogo"]];
     intro.titleViewY = 120;
-    
+    intro.tapToNext = YES;
     [intro setDelegate:self];
-    
     
     SMPageControl *pageControl = [[SMPageControl alloc] init];
     pageControl.pageIndicatorImage = [UIImage imageNamed:@"pageDot"];
