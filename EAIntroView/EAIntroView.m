@@ -556,6 +556,8 @@ float easeOutValue(float value) {
         return;
     }
     
+    _currentPageIndex = currentPageIndex;
+    
     float offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
