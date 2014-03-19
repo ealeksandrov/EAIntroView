@@ -18,7 +18,7 @@
 
 @interface EAIntroView : UIView <UIScrollViewDelegate>
 
-@property (nonatomic, assign) id<EAIntroDelegate> delegate;
+@property (nonatomic, weak) id<EAIntroDelegate> delegate;
 
 // titleView Y position - from top of the screen
 // pageControl Y position - from bottom of the screen
