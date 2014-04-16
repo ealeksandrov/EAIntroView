@@ -27,6 +27,7 @@
 @property (nonatomic, assign) bool hideOffscreenPages;
 @property (nonatomic, assign) bool easeOutCrossDisolves;
 @property (nonatomic, assign) bool showSkipButtonOnlyOnLastPage;
+@property (nonatomic, assign) bool showParallaxAnimation;
 @property (nonatomic, strong) UIImage *bgImage;
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, assign) CGFloat titleViewY;
