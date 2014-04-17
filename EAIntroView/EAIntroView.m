@@ -5,6 +5,8 @@
 
 #import "EAIntroView.h"
 
+#define PARALLAX_SIZE 40
+
 @interface EAIntroView()
 
 @property (nonatomic, strong) UIImageView *bgImageView;
@@ -185,6 +187,38 @@
     [self addSubview:self.bgImageView];
     [self addSubview:self.pageBgBack];
     [self addSubview:self.pageBgFront];
+    
+    if (self.showParallaxAnimation) {
+        CGRect parallaxFrame = CGRectMake(-PARALLAX_SIZE, -PARALLAX_SIZE, self.frame.size.width + (PARALLAX_SIZE * 2), self.frame.size.height + (PARALLAX_SIZE * 2));
+        [self.pageBgFront setFrame:parallaxFrame];
+        [self.pageBgBack setFrame:parallaxFrame];
+        [self.bgImageView setFrame:parallaxFrame];
+        
+        // Set vertical effect
+        UIInterpolatingMotionEffect *verticalMotionEffect =
+        [[UIInterpolatingMotionEffect alloc]
+         initWithKeyPath:@"center.y"
+         type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+        verticalMotionEffect.minimumRelativeValue = @(PARALLAX_SIZE);
+        verticalMotionEffect.maximumRelativeValue = @(-PARALLAX_SIZE);
+        
+        // Set horizontal effect
+        UIInterpolatingMotionEffect *horizontalMotionEffect =
+        [[UIInterpolatingMotionEffect alloc]
+         initWithKeyPath:@"center.x"
+         type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+        horizontalMotionEffect.minimumRelativeValue = @(PARALLAX_SIZE);
+        horizontalMotionEffect.maximumRelativeValue = @(-PARALLAX_SIZE);
+        
+        // Create group to combine both
+        UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+        group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+        
+        // Add both effects to all background image views
+        [self.bgImageView addMotionEffect:group];
+        [self.pageBgFront addMotionEffect:group];
+        [self.pageBgBack addMotionEffect:group];
+    }
 }
 
 - (void)buildScrollView {
@@ -526,6 +560,11 @@ float easeOutValue(float value) {
     
     float offset = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     [self crossDissolveForOffset:offset];
+}
+
+-(void)setShowParallaxAnimation:(bool)showParallaxAnimation {
+    _showParallaxAnimation = showParallaxAnimation;
+    [self applyDefaultsToSelfDuringInitializationWithframe:self.frame pages:self.pages];
 }
 
 #pragma mark - Actions
