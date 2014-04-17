@@ -56,6 +56,7 @@
     self.hideOffscreenPages = YES;
     self.titleViewY = 20.0f;
     self.pageControlY = 60.0f;
+    self.bgViewContentMode = UIViewContentModeScaleAspectFill;
     _pages = [pagesArray copy];
     [self buildUI];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -63,7 +64,7 @@
 
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
     backgroundImageView.backgroundColor = [UIColor clearColor];
-    backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+    backgroundImageView.contentMode = self.bgViewContentMode;
     backgroundImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
@@ -465,6 +466,13 @@ float easeOutValue(float value) {
 - (void)setBgImage:(UIImage *)bgImage {
     _bgImage = bgImage;
     self.bgImageView.image = _bgImage;
+}
+
+- (void)setBgViewContentMode:(UIViewContentMode)bgViewContentMode {
+    _bgViewContentMode = bgViewContentMode;
+    self.bgImageView.contentMode = bgViewContentMode;
+    self.pageBgBack.contentMode = bgViewContentMode;
+    self.pageBgFront.contentMode = bgViewContentMode;
 }
 
 - (void)setSwipeToExit:(bool)swipeToExit {
