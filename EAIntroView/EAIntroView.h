@@ -28,6 +28,7 @@
 @property (nonatomic, assign) bool easeOutCrossDisolves;
 @property (nonatomic, assign) bool showSkipButtonOnlyOnLastPage;
 @property (nonatomic, strong) UIImage *bgImage;
+@property (nonatomic, assign) UIViewContentMode bgViewContentMode;
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, assign) CGFloat titleViewY;
 @property (nonatomic, strong) UIPageControl *pageControl;
