@@ -6,6 +6,11 @@ Designers _love_ to make beautifully custom page controls that fit in with all t
 
 Who can blame them?! SMPageControl makes it dead simple to give them what they want. Even better, SMPageControl is a _drop in_ replacement for UIPageControl. It mirrors all the functions of UIPageControl, with literally no changes beyond the class name.
 
+
+[Apps Currently Using SMPageControl](https://github.com/Spaceman-Labs/SMPageControl/wiki/Apps)
+
+**Using SMPageControl in your application? Let us know, and we'll add your app the list of apps!** <mailto:spaceman@spacemanlabs.com>
+
 ## Moar Customization!
 
 SMPageControl has a variety of simple (yet powerful) areas of customization, and most all of them support the UIAppearance Proxy available to iOS 5.0 and newer.
