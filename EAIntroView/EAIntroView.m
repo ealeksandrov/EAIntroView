@@ -556,6 +556,10 @@ float easeOutValue(float value) {
 #pragma mark - Motion effects actions
 
 - (void)addMotionEffectsOnBg {
+    if(![self respondsToSelector:@selector(setMotionEffects:)]) {
+        return;
+    }
+    
     CGRect parallaxFrame = CGRectMake(-self.motionEffectsRelativeValue, -self.motionEffectsRelativeValue, self.frame.size.width + (self.motionEffectsRelativeValue * 2), self.frame.size.height + (self.motionEffectsRelativeValue * 2));
     [self.pageBgFront setFrame:parallaxFrame];
     [self.pageBgBack setFrame:parallaxFrame];
@@ -590,6 +594,10 @@ float easeOutValue(float value) {
 }
 
 - (void)removeMotionEffectsOnBg {
+    if(![self respondsToSelector:@selector(removeMotionEffect:)]) {
+        return;
+    }
+    
     [UIView animateWithDuration:0.5f animations:^{
         [self.pageBgFront removeMotionEffect:self.pageBgFront.motionEffects[0]];
         [self.pageBgBack removeMotionEffect:self.pageBgBack.motionEffects[0]];
