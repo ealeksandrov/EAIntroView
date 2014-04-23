@@ -5,8 +5,6 @@
 
 #import "EAIntroView.h"
 
-#define PARALLAX_SIZE 40
-
 @interface EAIntroView()
 
 @property (nonatomic, strong) UIImageView *bgImageView;
@@ -59,6 +57,7 @@
     self.titleViewY = 20.0f;
     self.pageControlY = 60.0f;
     self.bgViewContentMode = UIViewContentModeScaleAspectFill;
+    self.motionEffectsRelativeValue = 40.0f;
     _pages = [pagesArray copy];
     [self buildUI];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -188,36 +187,8 @@
     [self addSubview:self.pageBgBack];
     [self addSubview:self.pageBgFront];
     
-    if (self.showParallaxAnimation) {
-        CGRect parallaxFrame = CGRectMake(-PARALLAX_SIZE, -PARALLAX_SIZE, self.frame.size.width + (PARALLAX_SIZE * 2), self.frame.size.height + (PARALLAX_SIZE * 2));
-        [self.pageBgFront setFrame:parallaxFrame];
-        [self.pageBgBack setFrame:parallaxFrame];
-        [self.bgImageView setFrame:parallaxFrame];
-        
-        // Set vertical effect
-        UIInterpolatingMotionEffect *verticalMotionEffect =
-        [[UIInterpolatingMotionEffect alloc]
-         initWithKeyPath:@"center.y"
-         type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-        verticalMotionEffect.minimumRelativeValue = @(PARALLAX_SIZE);
-        verticalMotionEffect.maximumRelativeValue = @(-PARALLAX_SIZE);
-        
-        // Set horizontal effect
-        UIInterpolatingMotionEffect *horizontalMotionEffect =
-        [[UIInterpolatingMotionEffect alloc]
-         initWithKeyPath:@"center.x"
-         type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-        horizontalMotionEffect.minimumRelativeValue = @(PARALLAX_SIZE);
-        horizontalMotionEffect.maximumRelativeValue = @(-PARALLAX_SIZE);
-        
-        // Create group to combine both
-        UIMotionEffectGroup *group = [UIMotionEffectGroup new];
-        group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
-        
-        // Add both effects to all background image views
-        [self.bgImageView addMotionEffect:group];
-        [self.pageBgFront addMotionEffect:group];
-        [self.pageBgBack addMotionEffect:group];
+    if (self.useMotionEffects) {
+        [self addMotionEffectsOnBg];
     }
 }
 
@@ -562,9 +533,68 @@ float easeOutValue(float value) {
     [self crossDissolveForOffset:offset];
 }
 
--(void)setShowParallaxAnimation:(bool)showParallaxAnimation {
-    _showParallaxAnimation = showParallaxAnimation;
-    [self applyDefaultsToSelfDuringInitializationWithframe:self.frame pages:self.pages];
+- (void)setUseMotionEffects:(bool)useMotionEffects {
+    if(_useMotionEffects == useMotionEffects) {
+        return;
+    }
+    _useMotionEffects = useMotionEffects;
+    
+    if(useMotionEffects) {
+        [self addMotionEffectsOnBg];
+    } else {
+        [self removeMotionEffectsOnBg];
+    }
+}
+
+- (void)setMotionEffectsRelativeValue:(CGFloat)motionEffectsRelativeValue {
+    _motionEffectsRelativeValue = motionEffectsRelativeValue;
+    if(self.useMotionEffects) {
+        [self addMotionEffectsOnBg];
+    }
+}
+
+#pragma mark - Motion effects actions
+
+- (void)addMotionEffectsOnBg {
+    CGRect parallaxFrame = CGRectMake(-self.motionEffectsRelativeValue, -self.motionEffectsRelativeValue, self.frame.size.width + (self.motionEffectsRelativeValue * 2), self.frame.size.height + (self.motionEffectsRelativeValue * 2));
+    [self.pageBgFront setFrame:parallaxFrame];
+    [self.pageBgBack setFrame:parallaxFrame];
+    [self.bgImageView setFrame:parallaxFrame];
+    
+    // Set vertical effect
+    UIInterpolatingMotionEffect *verticalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.y"
+     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+    verticalMotionEffect.minimumRelativeValue = @(self.motionEffectsRelativeValue);
+    verticalMotionEffect.maximumRelativeValue = @(-self.motionEffectsRelativeValue);
+    
+    // Set horizontal effect
+    UIInterpolatingMotionEffect *horizontalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.x"
+     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+    horizontalMotionEffect.minimumRelativeValue = @(self.motionEffectsRelativeValue);
+    horizontalMotionEffect.maximumRelativeValue = @(-self.motionEffectsRelativeValue);
+    
+    // Create group to combine both
+    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+    
+    // Add both effects to all background image views
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.pageBgFront setMotionEffects:@[group]];
+        [self.pageBgBack setMotionEffects:@[group]];
+        [self.bgImageView setMotionEffects:@[group]];
+    }];
+}
+
+- (void)removeMotionEffectsOnBg {
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.pageBgFront removeMotionEffect:self.pageBgFront.motionEffects[0]];
+        [self.pageBgBack removeMotionEffect:self.pageBgBack.motionEffects[0]];
+        [self.bgImageView removeMotionEffect:self.bgImageView.motionEffects[0]];
+    }];
 }
 
 #pragma mark - Actions
