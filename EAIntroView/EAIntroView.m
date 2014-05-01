@@ -285,10 +285,11 @@
         descLabel.translatesAutoresizingMaskIntoConstraints = NO;
         
         if(page.descriptionLabelMaximumWidth) {
-            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(page.descriptionLabelMaximumWidth - descLabel.superview.bounds.size.width)]];
+            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(page.descriptionLabelMaximumWidth - descLabel.superview.bounds.size.width)]]
         } else {
-            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-page.descriptionLabelSidePadding]];
+            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-page.descriptionLabelSidePadding]];
         }
+        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:descLabel.superview attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
         
         [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:pageView attribute:NSLayoutAttributeTop multiplier:1.0f constant:descLabelFrame.origin.y]];
         [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:descLabel.superview attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.f]];
