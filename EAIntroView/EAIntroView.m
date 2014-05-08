@@ -270,7 +270,13 @@
     }
     
     if([page.desc length]) {
-        CGRect descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+        CGRect descLabelFrame;
+        
+        if(page.descWidth != 0) {
+            descLabelFrame = CGRectMake((self.frame.size.width - page.descWidth)/2, self.frame.size.height - page.descPositionY, page.descWidth, 500);
+        } else {
+            descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+        }
         
         UITextView *descLabel = [[UITextView alloc] initWithFrame:descLabelFrame];
         descLabel.text = page.desc;
@@ -280,19 +286,8 @@
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
+        
         [pageView addSubview:descLabel];
-        
-        descLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        if(page.descriptionLabelMaximumWidth) {
-            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(page.descriptionLabelMaximumWidth - descLabel.superview.bounds.size.width)]];
-        } else {
-            [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:descLabel.superview attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-page.descriptionLabelSidePadding]];
-        }
-        
-        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:pageView attribute:NSLayoutAttributeTop multiplier:1.0f constant:descLabelFrame.origin.y]];
-        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:descLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:descLabel.superview attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.f]];
-        
     }
     
     if(page.subviews) {

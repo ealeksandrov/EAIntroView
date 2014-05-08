@@ -33,7 +33,6 @@
     newPage.descFont = DEFAULT_DESCRIPTION_FONT;
     newPage.descColor = DEFAULT_LABEL_COLOR;
     newPage.showTitleView = YES;
-    newPage.descriptionLabelSidePadding = DEFAULT_DESCRIPTION_LABEL_SIDE_PADDING;
     
     return newPage;
 }

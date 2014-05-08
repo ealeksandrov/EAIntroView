@@ -37,23 +37,8 @@ typedef void (^VoidBlock)();
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) UIFont *descFont;
 @property (nonatomic, strong) UIColor *descColor;
+@property (nonatomic, assign) CGFloat descWidth;
 @property (nonatomic, assign) CGFloat descPositionY;
-
-/**
- * Defines the maximum allowed with for the description label.
- * This may become useful if you have a large screen and you
- * want to restrict the label's width so that it doesn't fill the whole screen.
- * If this property is set to a value greater than 0 it takes priority over
- * the descriptionLabelSidePadding property.
- **/
-@property (nonatomic, assign) CGFloat descriptionLabelMaximumWidth;
-
-/**
- * Defines the padding of the description label on the left and the right side to
- * its super view. If the descriptionLabelMaximumWidth property is set, setting the
- * side padding has no effect.
- **/
-@property (nonatomic, assign) CGFloat descriptionLabelSidePadding;
 
 @property (nonatomic, strong) NSArray *subviews;
 
