@@ -13,7 +13,7 @@ Some features (remember, most features are optional and can be turned off):
 	* custom iOS7 motion effects (parallax) on background
 	* title view (+ Y position)
 	* title text (+ font, color and Y position)
-	* description text (+ font, color and Y position)
+	* description text (+ font, color, width and Y position)
 	* subviews array (added to page after building default layout)
 * possibility to set your own custom view for page:
 	* pageWithCustomView:
@@ -38,7 +38,6 @@ Some features (remember, most features are optional and can be turned off):
 	* hideWithFadeOutDuration:
 	* setCurrentPageIndex:animated:
 * storyboard/IB support
-* autoresize support
 
 License: MIT.
 
