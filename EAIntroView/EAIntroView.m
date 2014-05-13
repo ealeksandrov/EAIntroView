@@ -107,6 +107,11 @@
     _currentPageIndex = newPageIndex;
     
     if (self.currentPageIndex == (_pages.count)) {
+        
+        //if run here, it means you cann't  call _pages[self.currentPageIndex],
+        //to be safe, set to the biggest index
+        self.currentPageIndex = _pages.count - 1;
+        
         [self finishIntroductionAndRemoveSelf];
     }
 }
