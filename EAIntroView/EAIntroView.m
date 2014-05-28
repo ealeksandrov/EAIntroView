@@ -271,6 +271,8 @@
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.numberOfLines = 0;
+        titleLabel.tag = 155;
+
         [pageView addSubview:titleLabel];
     }
     
@@ -291,6 +293,7 @@
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
+        descLabel.tag = 156;
         
         [pageView addSubview:descLabel];
     }
