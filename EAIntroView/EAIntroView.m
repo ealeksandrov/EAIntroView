@@ -229,6 +229,7 @@
     *xIndex += self.scrollView.frame.size.width;
     
     if(page.customView) {
+        page.customView.frame = pageView.bounds;
         [pageView addSubview:page.customView];
         return pageView;
     }
