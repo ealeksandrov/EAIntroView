@@ -6,6 +6,12 @@
 #import <UIKit/UIKit.h>
 #import "EAIntroPage.h"
 
+enum EAIntroViewTags {
+    kTitleLabelTag = 1,
+    kDescLabelTag,
+    kTitleImageViewTag
+};
+
 @class EAIntroView;
 
 @protocol EAIntroDelegate

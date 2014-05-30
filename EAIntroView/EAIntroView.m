@@ -245,6 +245,8 @@
         rect1.origin.x = (self.scrollView.frame.size.width - rect1.size.width)/2;
         rect1.origin.y = page.titleIconPositionY;
         titleImageView.frame = rect1;
+        titleImageView.tag = kTitleImageViewTag;
+        
         [pageView addSubview:titleImageView];
     }
     
@@ -272,6 +274,8 @@
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.numberOfLines = 0;
+        titleLabel.tag = kTitleLabelTag;
+        
         [pageView addSubview:titleLabel];
     }
     
@@ -292,6 +296,7 @@
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
+        descLabel.tag = kDescLabelTag;
         
         [pageView addSubview:descLabel];
     }
