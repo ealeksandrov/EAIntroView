@@ -424,6 +424,9 @@ float easeOutValue(float value) {
             [self.skipButton setAlpha:alphaValue];
         }
     }
+    if ([(id)self.delegate respondsToSelector:@selector(intro:isScrollingBetweenPageWithIndex:andPageWithIndex:atProportion:)]) {
+        [(id)self.delegate intro:self isScrollingBetweenPageWithIndex:page andPageWithIndex:page+1 atProportion:alphaValue];
+    }
 }
 
 - (UIImage *)bgForPage:(NSInteger)idx {

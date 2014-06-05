@@ -14,6 +14,7 @@
 - (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSInteger)pageIndex;
 - (void)intro:(EAIntroView *)introView pageStartScrolling:(EAIntroPage *)page withIndex:(NSInteger)pageIndex;
 - (void)intro:(EAIntroView *)introView pageEndScrolling:(EAIntroPage *)page withIndex:(NSInteger)pageIndex;
+- (void)intro:(EAIntroView *)introView isScrollingBetweenPageWithIndex:(NSInteger)leftPageIndex andPageWithIndex:(NSInteger)rightPageIndex atProportion:(CGFloat)proportionFromLeft;
 @end
 
 @interface EAIntroView : UIView <UIScrollViewDelegate>
