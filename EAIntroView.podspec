@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "EAIntroView"
-  s.version      = "2.6.0"
+  s.version      = "2.6.1"
   s.summary      = "Highly customizable drop-in solution for introduction views."
   s.homepage     = "https://github.com/ealeksandrov/EAIntroView"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
