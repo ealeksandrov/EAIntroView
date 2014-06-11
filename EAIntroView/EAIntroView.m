@@ -1,7 +1,7 @@
 //
 //  EAIntroView.m
 //
-//  Copyright (c) 2013 Evgeny Aleksandrov. License: MIT.
+//  Copyright (c) 2013-2014 Evgeny Aleksandrov. License: MIT.
 
 #import "EAIntroView.h"
 
@@ -56,26 +56,16 @@
     self.hideOffscreenPages = YES;
     self.titleViewY = 20.0f;
     self.pageControlY = 60.0f;
+    self.bgViewContentMode = UIViewContentModeScaleAspectFill;
+    self.motionEffectsRelativeValue = 40.0f;
     _pages = [pagesArray copy];
     [self buildUI];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
-- (void)setAspectFillBackgroundImages:(bool)aspectFillBackgroundImages
-{
-    _aspectFillBackgroundImages = aspectFillBackgroundImages;
-    [self applyDefaultsToBackgroundImageView:_pageBgBack];
-    [self applyDefaultsToBackgroundImageView:_pageBgFront];
-    [self applyDefaultsToBackgroundImageView:_bgImageView];
-}
-
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
     backgroundImageView.backgroundColor = [UIColor clearColor];
-    if (self.aspectFillBackgroundImages) {
-        backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
-    } else {
-        backgroundImageView.contentMode = UIViewContentModeScaleToFill;
-    }
+    backgroundImageView.contentMode = self.bgViewContentMode;
     backgroundImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
@@ -117,6 +107,11 @@
     _currentPageIndex = newPageIndex;
     
     if (self.currentPageIndex == (_pages.count)) {
+        
+        //if run here, it means you cann't  call _pages[self.currentPageIndex],
+        //to be safe, set to the biggest index
+        self.currentPageIndex = _pages.count - 1;
+        
         [self finishIntroductionAndRemoveSelf];
     }
 }
@@ -141,7 +136,8 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
+        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView.accessibilityIdentifier = @"intro_scroll";
         _scrollView.pagingEnabled = YES;
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
@@ -196,6 +192,10 @@
     [self addSubview:self.bgImageView];
     [self addSubview:self.pageBgBack];
     [self addSubview:self.pageBgFront];
+    
+    if (self.useMotionEffects) {
+        [self addMotionEffectsOnBg];
+    }
 }
 
 - (void)buildScrollView {
@@ -205,14 +205,10 @@
         EAIntroPage *page = _pages[idx];
         page.pageView = [self viewForPage:page atXIndex:&contentXIndex];
         [self.scrollView addSubview:page.pageView];
-        [page pageDidLoad];
+        if(page.onPageDidLoad) page.onPageDidLoad();
     }
     
     [self makePanelVisibleAtIndex:0];
-    [_pages[0] pageDidAppear];
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
-        [self.delegate intro:self pageAppeared:_pages[0] withIndex:0];
-    }
     
     if (self.swipeToExit) {
         [self appendCloseViewAtXIndex:&contentXIndex];
@@ -234,16 +230,24 @@
     *xIndex += self.scrollView.frame.size.width;
     
     if(page.customView) {
+        page.customView.frame = pageView.bounds;
         [pageView addSubview:page.customView];
         return pageView;
     }
     
-    if(page.titleImage) {
-        UIImageView *titleImageView = [[UIImageView alloc] initWithImage:page.titleImage];
+    UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    tapToNextButton.frame = pageView.bounds;
+    [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];
+    [pageView addSubview:tapToNextButton];
+    
+    if(page.titleIconView) {
+        UIView *titleImageView = page.titleIconView;
         CGRect rect1 = titleImageView.frame;
         rect1.origin.x = (self.scrollView.frame.size.width - rect1.size.width)/2;
-        rect1.origin.y = page.imgPositionY;
+        rect1.origin.y = page.titleIconPositionY;
         titleImageView.frame = rect1;
+        titleImageView.tag = kTitleImageViewTag;
+        
         [pageView addSubview:titleImageView];
     }
     
@@ -271,11 +275,19 @@
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.numberOfLines = 0;
+        titleLabel.tag = kTitleLabelTag;
+        
         [pageView addSubview:titleLabel];
     }
     
     if([page.desc length]) {
-        CGRect descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+        CGRect descLabelFrame;
+        
+        if(page.descWidth != 0) {
+            descLabelFrame = CGRectMake((self.frame.size.width - page.descWidth)/2, self.frame.size.height - page.descPositionY, page.descWidth, 500);
+        } else {
+            descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+        }
         
         UITextView *descLabel = [[UITextView alloc] initWithFrame:descLabelFrame];
         descLabel.text = page.desc;
@@ -285,7 +297,8 @@
         descLabel.backgroundColor = [UIColor clearColor];
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
-        //[descLabel sizeToFit];
+        descLabel.tag = kDescLabelTag;
+        
         [pageView addSubview:descLabel];
     }
     
@@ -294,6 +307,8 @@
             [pageView addSubview:subV];
         }
     }
+    
+    pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
     
     return pageView;
 }
@@ -326,11 +341,19 @@
     [self addSubview:self.pageControl];
     
     self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y - ((30 - self.pageControl.frame.size.height)/2), 80, 30)];
-    
-    self.skipButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
     [self.skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.skipButton];
+    
+    if ([self respondsToSelector:@selector(addConstraint:)]) {
+        self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.skipButton attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    
+        self.skipButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-30]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-20]];
+    }
 }
 
 #pragma mark - UIScrollView Delegate
@@ -342,7 +365,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)]) {
+    if ([(id)self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)]) {
         [self.delegate intro:self pageEndScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
@@ -426,7 +449,7 @@ float easeOutValue(float value) {
     }
     if ([(id)self.delegate respondsToSelector:@selector(intro:isScrollingBetweenPageWithIndex:andPageWithIndex:atProportion:)]) {
         [(id)self.delegate intro:self isScrollingBetweenPageWithIndex:page andPageWithIndex:page+1 atProportion:alphaValue];
-    }
+}
 }
 
 - (UIImage *)bgForPage:(NSInteger)idx {
@@ -440,8 +463,11 @@ float easeOutValue(float value) {
 
 - (void)notifyDelegateWithPreviousPage:(NSInteger)previousPageIndex andCurrentPage:(NSInteger)currentPageIndex {
     if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
-        [_pages[previousPageIndex] pageDidDisappear];
-        [_pages[currentPageIndex] pageDidAppear];
+        EAIntroPage* previousPage = _pages[previousPageIndex];
+        EAIntroPage* currentPage = _pages[currentPageIndex];
+        if(previousPage.onPageDidDisappear) previousPage.onPageDidDisappear();
+        if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
+        
         if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
             [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
         }
@@ -459,6 +485,13 @@ float easeOutValue(float value) {
 - (void)setBgImage:(UIImage *)bgImage {
     _bgImage = bgImage;
     self.bgImageView.image = _bgImage;
+}
+
+- (void)setBgViewContentMode:(UIViewContentMode)bgViewContentMode {
+    _bgViewContentMode = bgViewContentMode;
+    self.bgImageView.contentMode = bgViewContentMode;
+    self.pageBgBack.contentMode = bgViewContentMode;
+    self.pageBgFront.contentMode = bgViewContentMode;
 }
 
 - (void)setSwipeToExit:(bool)swipeToExit {
@@ -514,6 +547,78 @@ float easeOutValue(float value) {
     [self crossDissolveForOffset:offset];
 }
 
+- (void)setUseMotionEffects:(bool)useMotionEffects {
+    if(_useMotionEffects == useMotionEffects) {
+        return;
+    }
+    _useMotionEffects = useMotionEffects;
+    
+    if(useMotionEffects) {
+        [self addMotionEffectsOnBg];
+    } else {
+        [self removeMotionEffectsOnBg];
+    }
+}
+
+- (void)setMotionEffectsRelativeValue:(CGFloat)motionEffectsRelativeValue {
+    _motionEffectsRelativeValue = motionEffectsRelativeValue;
+    if(self.useMotionEffects) {
+        [self addMotionEffectsOnBg];
+    }
+}
+
+#pragma mark - Motion effects actions
+
+- (void)addMotionEffectsOnBg {
+    if(![self respondsToSelector:@selector(setMotionEffects:)]) {
+        return;
+    }
+    
+    CGRect parallaxFrame = CGRectMake(-self.motionEffectsRelativeValue, -self.motionEffectsRelativeValue, self.frame.size.width + (self.motionEffectsRelativeValue * 2), self.frame.size.height + (self.motionEffectsRelativeValue * 2));
+    [self.pageBgFront setFrame:parallaxFrame];
+    [self.pageBgBack setFrame:parallaxFrame];
+    [self.bgImageView setFrame:parallaxFrame];
+    
+    // Set vertical effect
+    UIInterpolatingMotionEffect *verticalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.y"
+     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+    verticalMotionEffect.minimumRelativeValue = @(self.motionEffectsRelativeValue);
+    verticalMotionEffect.maximumRelativeValue = @(-self.motionEffectsRelativeValue);
+    
+    // Set horizontal effect
+    UIInterpolatingMotionEffect *horizontalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.x"
+     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+    horizontalMotionEffect.minimumRelativeValue = @(self.motionEffectsRelativeValue);
+    horizontalMotionEffect.maximumRelativeValue = @(-self.motionEffectsRelativeValue);
+    
+    // Create group to combine both
+    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+    
+    // Add both effects to all background image views
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.pageBgFront setMotionEffects:@[group]];
+        [self.pageBgBack setMotionEffects:@[group]];
+        [self.bgImageView setMotionEffects:@[group]];
+    }];
+}
+
+- (void)removeMotionEffectsOnBg {
+    if(![self respondsToSelector:@selector(removeMotionEffect:)]) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.pageBgFront removeMotionEffect:self.pageBgFront.motionEffects[0]];
+        [self.pageBgBack removeMotionEffect:self.pageBgBack.motionEffects[0]];
+        [self.bgImageView removeMotionEffect:self.bgImageView.motionEffects[0]];
+    }];
+}
+
 #pragma mark - Actions
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
@@ -523,6 +628,13 @@ float easeOutValue(float value) {
     
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 1;
+    } completion:^(BOOL finished) {
+        EAIntroPage* currentPage = _pages[self.currentPageIndex];
+        if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
+        
+        if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
+            [self.delegate intro:self pageAppeared:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
+        }
     }];
 }
 
@@ -540,13 +652,26 @@ float easeOutValue(float value) {
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
     if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
-        NSLog(@"Wrong currentPageIndex recieved: %ld",(long)currentPageIndex);
+        NSLog(@"Wrong currentPageIndex received: %ld",(long)currentPageIndex);
         return;
     }
+    
+    _currentPageIndex = currentPageIndex;
     
     float offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
+}
+
+- (IBAction)goToNext:(id)sender {
+    if(!self.tapToNext) {
+        return;
+    }
+    if(self.currentPageIndex + 1 >= [self.pages count]) {
+        [self hideWithFadeOutDuration:0.3];
+    } else {
+        [self setCurrentPageIndex:self.currentPageIndex + 1 animated:YES];
+    }
 }
 
 @end
