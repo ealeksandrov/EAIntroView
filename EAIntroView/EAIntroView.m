@@ -108,7 +108,7 @@
     
     if (self.currentPageIndex == (_pages.count)) {
         
-        //if run here, it means you cann't  call _pages[self.currentPageIndex],
+        //if run here, it means you can't  call _pages[self.currentPageIndex],
         //to be safe, set to the biggest index
         self.currentPageIndex = _pages.count - 1;
         
@@ -120,8 +120,11 @@
 	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
 		[self.delegate introDidFinish:self];
 	}
+    
+    //prevent last page flicker on disappearing
     self.alpha = 0;
-	//Calling removeFromSuperview from scrollViewDidEndDecelerating: method leads to crash on iOS versions < 7.0.
+    
+    //Calling removeFromSuperview from scrollViewDidEndDecelerating: method leads to crash on iOS versions < 7.0.
     //removeFromSuperview should be called after a delay
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)0);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
