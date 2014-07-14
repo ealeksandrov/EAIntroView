@@ -279,9 +279,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     pageControl.pageIndicatorImage = [UIImage imageNamed:@"pageDot"];
     pageControl.currentPageIndicatorImage = [UIImage imageNamed:@"selectedPageDot"];
     [pageControl sizeToFit];
-    [self.view addSubview:pageControl];
     intro.pageControl = (UIPageControl *)pageControl;
-    [intro addSubview:intro.pageControl];
     intro.pageControlY = 130.0f;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];

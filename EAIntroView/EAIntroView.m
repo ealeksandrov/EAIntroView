@@ -521,6 +521,12 @@ float easeOutValue(float value) {
     _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
 }
 
+- (void)setPageControl:(UIPageControl *)pageControl {
+    [_pageControl removeFromSuperview];
+    _pageControl = pageControl;
+    [self addSubview:_pageControl];
+}
+
 - (void)setPageControlY:(CGFloat)pageControlY {
     _pageControlY = pageControlY;
     self.pageControl.frame = CGRectMake(0, self.frame.size.height - pageControlY, self.frame.size.width, 20);
