@@ -21,20 +21,24 @@
 
 #pragma mark - Page lifecycle
 
+- (instancetype)init {
+    if (self = [super init]) {
+        _titleIconPositionY = DEFAULT_TITLE_IMAGE_Y_POSITION;
+        _titlePositionY  = DEFAULT_TITLE_LABEL_Y_POSITION;
+        _descPositionY   = DEFAULT_DESCRIPTION_LABEL_Y_POSITION;
+        _title = @"";
+        _titleFont = DEFAULT_TITLE_FONT;
+        _titleColor = DEFAULT_LABEL_COLOR;
+        _desc = @"";
+        _descFont = DEFAULT_DESCRIPTION_FONT;
+        _descColor = DEFAULT_LABEL_COLOR;
+        _showTitleView = YES;
+    }
+    return self;
+}
+
 + (instancetype)page {
-    EAIntroPage *newPage = [[self alloc] init];
-    newPage.titleIconPositionY = DEFAULT_TITLE_IMAGE_Y_POSITION;
-    newPage.titlePositionY  = DEFAULT_TITLE_LABEL_Y_POSITION;
-    newPage.descPositionY   = DEFAULT_DESCRIPTION_LABEL_Y_POSITION;
-    newPage.title = @"";
-    newPage.titleFont = DEFAULT_TITLE_FONT;
-    newPage.titleColor = DEFAULT_LABEL_COLOR;
-    newPage.desc = @"";
-    newPage.descFont = DEFAULT_DESCRIPTION_FONT;
-    newPage.descColor = DEFAULT_LABEL_COLOR;
-    newPage.showTitleView = YES;
-    
-    return newPage;
+    return [[self alloc] init];
 }
 
 + (instancetype)pageWithCustomView:(UIView *)customV {
