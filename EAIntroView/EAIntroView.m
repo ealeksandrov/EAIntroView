@@ -238,7 +238,9 @@
         [pageView addSubview:page.customView];
         return pageView;
     }
-    
+
+    pageView.backgroundColor = page.backgroundColor;
+
     UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     tapToNextButton.frame = pageView.bounds;
     [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];

@@ -12,6 +12,7 @@
 #define DEFAULT_TITLE_IMAGE_Y_POSITION 50.0f
 #define DEFAULT_TITLE_LABEL_Y_POSITION 160.0f
 #define DEFAULT_DESCRIPTION_LABEL_Y_POSITION 140.0f
+#define DEFAULT_PAGE_BACKGROUND_COLOR [UIColor clearColor];
 
 @interface EAIntroPage ()
 @property(nonatomic, strong, readwrite) UIView *pageView;
@@ -32,6 +33,7 @@
         _desc = @"";
         _descFont = DEFAULT_DESCRIPTION_FONT;
         _descColor = DEFAULT_LABEL_COLOR;
+        _backgroundColor = DEFAULT_PAGE_BACKGROUND_COLOR;
         _showTitleView = YES;
     }
     return self;
