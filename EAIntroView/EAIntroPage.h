@@ -40,6 +40,8 @@ typedef void (^VoidBlock)();
 @property (nonatomic, assign) CGFloat descWidth;
 @property (nonatomic, assign) CGFloat descPositionY;
 
+@property (nonatomic, strong) UIColor *backgroundColor;
+
 @property (nonatomic, strong) NSArray *subviews;
 
 @property (nonatomic,copy) VoidBlock onPageDidLoad;
