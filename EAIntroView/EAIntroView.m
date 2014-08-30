@@ -223,8 +223,10 @@
     
     self.pageBgBack.alpha = 0;
     self.pageBgBack.image = [self bgForPage:1];
+    self.pageBgBack.backgroundColor = [self bgColorForPage:1];
     self.pageBgFront.alpha = 1;
     self.pageBgFront.image = [self bgForPage:0];
+    self.pageBgFront.backgroundColor = [self bgColorForPage:0];
 }
 
 - (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat *)xIndex {
@@ -238,8 +240,6 @@
         [pageView addSubview:page.customView];
         return pageView;
     }
-
-    pageView.backgroundColor = page.backgroundColor;
 
     UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     tapToNextButton.frame = pageView.bounds;
@@ -416,8 +416,10 @@ float easeOutValue(float value) {
     
     self.pageBgFront.alpha = 1;
     self.pageBgFront.image = [self bgForPage:page];
+    self.pageBgFront.backgroundColor = [self bgColorForPage:page];
     self.pageBgBack.alpha = 0;
     self.pageBgBack.image = [self bgForPage:page+1];
+    self.pageBgBack.backgroundColor = [self bgColorForPage:page+1];
     
     float backLayerAlpha = alphaValue;
     float frontLayerAlpha = (1 - alphaValue);
@@ -460,6 +462,13 @@ float easeOutValue(float value) {
         return nil;
     
     return ((EAIntroPage *)_pages[idx]).bgImage;
+}
+
+- (UIColor *)bgColorForPage:(NSInteger)idx {
+    if(idx >= _pages.count || idx < 0)
+        return nil;
+    
+    return ((EAIntroPage *)_pages[idx]).backgroundColor;
 }
 
 #pragma mark - Custom setters
