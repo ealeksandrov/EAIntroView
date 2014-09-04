@@ -640,8 +640,18 @@ float easeOutValue(float value) {
 #pragma mark - Actions
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
+    [self showInView:view animateDuration:duration InitialPageIndex:0];
+}
+
+- (void)showInView:(UIView *)view animateDuration:(CGFloat)duration InitialPageIndex:(NSInteger)initialPageIndex {
+    if(initialPageIndex < 0 || initialPageIndex >= [self.pages count]) {
+        NSLog(@"Wrong initialPageIndex received: %ld",(long)initialPageIndex);
+        return;
+    }
+    self.currentPageIndex = initialPageIndex;
+    [self crossDissolveForOffset:initialPageIndex];
+    
     self.alpha = 0;
-    self.scrollView.contentOffset = CGPointZero;
     [view addSubview:self];
     
     [UIView animateWithDuration:duration animations:^{
