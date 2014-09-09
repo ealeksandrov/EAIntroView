@@ -630,6 +630,7 @@ float easeOutValue(float value) {
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
     self.alpha = 0;
+    _currentPageIndex = 0;
     self.scrollView.contentOffset = CGPointZero;
     [view addSubview:self];
     
