@@ -110,7 +110,7 @@
         
         //if run here, it means you can't  call _pages[self.currentPageIndex],
         //to be safe, set to the biggest index
-        self.currentPageIndex = _pages.count - 1;
+        _currentPageIndex = _pages.count - 1;
         
         [self finishIntroductionAndRemoveSelf];
     }
@@ -362,14 +362,14 @@
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)]) {
+    if ([(id)self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageStartScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)]) {
+    if ([(id)self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageEndScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
