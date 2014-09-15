@@ -10,6 +10,7 @@
 @property (nonatomic, strong) UIImageView *bgImageView;
 @property (nonatomic, strong) UIImageView *pageBgBack;
 @property (nonatomic, strong) UIImageView *pageBgFront;
+@property (nonatomic, assign) BOOL didFinish;
 
 @end
 
@@ -58,6 +59,7 @@
     self.pageControlY = 60.0f;
     self.bgViewContentMode = UIViewContentModeScaleAspectFill;
     self.motionEffectsRelativeValue = 40.0f;
+    self.didFinish = NO;
     _pages = [pagesArray copy];
     [self buildUI];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -110,7 +112,7 @@
         
         //if run here, it means you can't  call _pages[self.currentPageIndex],
         //to be safe, set to the biggest index
-        self.currentPageIndex = _pages.count - 1;
+        _currentPageIndex = _pages.count - 1;
         
         [self finishIntroductionAndRemoveSelf];
     }
@@ -120,6 +122,8 @@
 	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
 		[self.delegate introDidFinish:self];
 	}
+    
+    self.didFinish = YES;
     
     //prevent last page flicker on disappearing
     self.alpha = 0;
@@ -369,7 +373,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)]) {
+    if (!self.didFinish && [(id)self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)]) {
         [self.delegate intro:self pageEndScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
@@ -663,8 +667,6 @@ float easeOutValue(float value) {
         NSLog(@"Wrong currentPageIndex received: %ld",(long)currentPageIndex);
         return;
     }
-    
-    _currentPageIndex = currentPageIndex;
     
     float offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
