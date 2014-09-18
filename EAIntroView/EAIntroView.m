@@ -288,9 +288,9 @@
         CGRect descLabelFrame;
         
         if(page.descWidth != 0) {
-            descLabelFrame = CGRectMake((self.frame.size.width - page.descWidth)/2, self.frame.size.height - page.descPositionY, page.descWidth, 500);
+            descLabelFrame = CGRectMake((self.frame.size.width - page.descWidth)/2, (self.frame.size.height/2) + page.descPositionOffetFromCenter, page.descWidth, 500);
         } else {
-            descLabelFrame = CGRectMake(0, self.frame.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
+            descLabelFrame = CGRectMake(0, (self.frame.size.height/2) + page.descPositionOffetFromCenter, self.scrollView.frame.size.width, 500);
         }
         
         UITextView *descLabel = [[UITextView alloc] initWithFrame:descLabelFrame];
