@@ -93,9 +93,9 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     
     EAIntroPage *page2 = [EAIntroPage page];
     page2.title = @"This is page 2";
-    page2.titlePositionY = 180;
+    page2.titlePositionY = self.view.bounds.size.height/2 - 10;
     page2.desc = sampleDescription2;
-    page2.descPositionY = 160;
+    page2.descPositionY = self.view.bounds.size.height/2 - 50;
     page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title2"]];
     page2.titleIconPositionY = 70;
     
