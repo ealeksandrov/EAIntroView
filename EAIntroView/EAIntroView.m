@@ -353,7 +353,7 @@
         self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.skipButton attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
-    
+        
         self.skipButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-30]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-20]];
@@ -450,6 +450,9 @@ float easeOutValue(float value) {
         } else {
             [self.skipButton setAlpha:alphaValue];
         }
+    }
+    if ([(id)self.delegate respondsToSelector:@selector(intro:isScrollingBetweenPageWithIndex:andPageWithIndex:atProportion:)]) {
+        [(id)self.delegate intro:self isScrollingBetweenPageWithIndex:page andPageWithIndex:page+1 atProportion:alphaValue];
     }
 }
 
