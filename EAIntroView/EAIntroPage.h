@@ -38,7 +38,7 @@ typedef void (^VoidBlock)();
 @property (nonatomic, strong) UIFont *descFont;
 @property (nonatomic, strong) UIColor *descColor;
 @property (nonatomic, assign) CGFloat descWidth;
-@property (nonatomic, assign) CGFloat descPositionY;
+@property (nonatomic, assign) CGFloat descPositionOffetFromCenter;
 
 @property (nonatomic, strong) NSArray *subviews;
 
