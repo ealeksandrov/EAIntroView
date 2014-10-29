@@ -14,7 +14,7 @@ enum EAIntroViewTags {
 
 @class EAIntroView;
 
-@protocol EAIntroDelegate
+@protocol EAIntroDelegate<NSObject>
 @optional
 - (void)introDidFinish:(EAIntroView *)introView;
 - (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSInteger)pageIndex;
@@ -28,12 +28,12 @@ enum EAIntroViewTags {
 
 // titleView Y position - from top of the screen
 // pageControl Y position - from bottom of the screen
-@property (nonatomic, assign) bool swipeToExit;
-@property (nonatomic, assign) bool tapToNext;
-@property (nonatomic, assign) bool hideOffscreenPages;
-@property (nonatomic, assign) bool easeOutCrossDisolves;
-@property (nonatomic, assign) bool showSkipButtonOnlyOnLastPage;
-@property (nonatomic, assign) bool useMotionEffects;
+@property (nonatomic, assign) BOOL swipeToExit;
+@property (nonatomic, assign) BOOL tapToNext;
+@property (nonatomic, assign) BOOL hideOffscreenPages;
+@property (nonatomic, assign) BOOL easeOutCrossDisolves;
+@property (nonatomic, assign) BOOL showSkipButtonOnlyOnLastPage;
+@property (nonatomic, assign) BOOL useMotionEffects;
 @property (nonatomic, assign) CGFloat motionEffectsRelativeValue;
 @property (nonatomic, strong) UIImage *bgImage;
 @property (nonatomic, assign) UIViewContentMode bgViewContentMode;
@@ -43,8 +43,8 @@ enum EAIntroViewTags {
 @property (nonatomic, assign) CGFloat pageControlY;
 @property (nonatomic, strong) UIButton *skipButton;
 
-@property (nonatomic, assign) NSInteger currentPageIndex;
-@property (nonatomic, assign) NSInteger visiblePageIndex;
+@property (nonatomic, assign) NSUInteger currentPageIndex;
+@property (nonatomic, assign) NSUInteger visiblePageIndex;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSArray *pages;
 
@@ -53,7 +53,7 @@ enum EAIntroViewTags {
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
 
-- (void)setCurrentPageIndex:(NSInteger)currentPageIndex;
-- (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated;
+- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
+- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated;
 
 @end
