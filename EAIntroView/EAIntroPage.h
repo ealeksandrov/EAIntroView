@@ -50,7 +50,7 @@ typedef void (^VoidBlock)();
 // if customView is set - all other default properties are ignored
 @property (nonatomic, strong) UIView *customView;
 
-@property(nonatomic, strong, readonly) UIView *pageView;
+@property(nonatomic, strong, readwrite) UIView *pageView;
 
 + (instancetype)page;
 + (instancetype)pageWithCustomView:(UIView *)customV;

@@ -28,32 +28,38 @@ enum EAIntroViewTags {
 
 // titleView Y position - from top of the screen
 // pageControl Y position - from bottom of the screen
-@property (nonatomic, assign) BOOL swipeToExit;
-@property (nonatomic, assign) BOOL tapToNext;
-@property (nonatomic, assign) BOOL hideOffscreenPages;
-@property (nonatomic, assign) BOOL easeOutCrossDisolves;
-@property (nonatomic, assign) BOOL showSkipButtonOnlyOnLastPage;
-@property (nonatomic, assign) BOOL useMotionEffects;
-@property (nonatomic, assign) CGFloat motionEffectsRelativeValue;
-@property (nonatomic, strong) UIImage *bgImage;
-@property (nonatomic, assign) UIViewContentMode bgViewContentMode;
-@property (nonatomic, strong) UIView *titleView;
-@property (nonatomic, assign) CGFloat titleViewY;
-@property (nonatomic, strong) UIPageControl *pageControl;
-@property (nonatomic, assign) CGFloat pageControlY;
-@property (nonatomic, strong) UIButton *skipButton;
+@property (nonatomic, assign, readwrite) BOOL swipeToExit;
+@property (nonatomic, assign, readwrite) BOOL tapToNext;
+@property (nonatomic, assign, readwrite) BOOL hideOffscreenPages;
+@property (nonatomic, assign, readwrite) BOOL easeOutCrossDisolves;
+@property (nonatomic, assign, readwrite) BOOL showSkipButtonOnlyOnLastPage;
+@property (nonatomic, assign, readwrite) BOOL useMotionEffects;
+@property (nonatomic, assign, readwrite) CGFloat motionEffectsRelativeValue;
+@property (nonatomic, assign, readwrite) UIViewContentMode bgViewContentMode;
 
-@property (nonatomic, assign) NSUInteger currentPageIndex;
-@property (nonatomic, assign) NSUInteger visiblePageIndex;
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) NSArray *pages;
+// Page Control
+@property (nonatomic, strong, readwrite) UIPageControl *pageControl;
+@property (nonatomic, assign, readwrite) CGFloat pageControlY;
+@property (nonatomic, assign, readwrite) NSUInteger currentPageIndex;
+@property (nonatomic, assign, readonly) NSUInteger visiblePageIndex;
+
+// Title View
+@property (nonatomic, strong, readwrite) UIView *titleView;
+@property (nonatomic, assign, readwrite) CGFloat titleViewY;
+
+// Background image
+@property (nonatomic, strong, readwrite) UIImage *bgImage;
+
+@property (nonatomic, strong, readwrite) UIButton *skipButton;
+
+@property (nonatomic, strong, readwrite) UIScrollView *scrollView;
+@property (nonatomic, strong, readwrite) NSArray *pages;
 
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
 
-- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated;
 
 @end
