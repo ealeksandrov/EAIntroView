@@ -226,6 +226,23 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds];
     [intro setDelegate:self];
+    
+    // show skipButton only on 3rd page + animation
+    intro.skipButton.alpha = 0.0f;
+    intro.skipButton.enabled = NO;
+    page3.onPageDidAppear = ^{
+        intro.skipButton.enabled = YES;
+        [UIView animateWithDuration:0.3f animations:^{
+            intro.skipButton.alpha = 1.0f;
+        }];
+    };
+    page3.onPageDidDisappear = ^{
+        intro.skipButton.enabled = NO;
+        [UIView animateWithDuration:0.3f animations:^{
+            intro.skipButton.alpha = 0.0f;
+        }];
+    };
+    
     [intro setPages:@[page1,page2,page3,page4]];
     
     [intro showInView:rootView animateDuration:0.3];
