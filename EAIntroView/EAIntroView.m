@@ -446,10 +446,8 @@ float easeOutValue(float value) {
         }
     }
     
-    if(self.skipButton) {
-        if(!self.showSkipButtonOnlyOnLastPage) {
-            [self.skipButton setAlpha:1.0];
-        } else if(page < (long)[self.pages count] - 2) {
+    if(self.skipButton && self.showSkipButtonOnlyOnLastPage) {
+        if(page < (long)[self.pages count] - 2) {
             [self.skipButton setAlpha:0.0];
         } else if(page == [self.pages count] - 1) {
             [self.skipButton setAlpha:(1 - alphaValue)];
