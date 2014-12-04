@@ -20,12 +20,16 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 
 @implementation ViewController
 
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // using self.navigationController.view - to display EAIntroView above navigation bar
     rootView = self.navigationController.view;
 }
+
+#pragma mark - Demo
 
 - (void)showIntroWithCrossDissolve {
     EAIntroPage *page1 = [EAIntroPage page];
@@ -193,6 +197,11 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
     [intro setDelegate:self];
     
+    UISwitch *switchControl = (UISwitch *)[page2.pageView viewWithTag:1];
+    if(switchControl) {
+        [switchControl addTarget:self action:@selector(switchFlip:) forControlEvents:UIControlEventValueChanged];
+    }
+    
     [intro showInView:rootView animateDuration:0.3];
 }
 
@@ -307,10 +316,21 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     [intro showInView:rootView animateDuration:0.3];
 }
 
+#pragma mark - EAIntroView delegate
+
 - (void)introDidFinish:(EAIntroView *)introView {
     NSLog(@"introDidFinish callback");
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
+
+#pragma mark - Custom actions
+
+- (IBAction)switchFlip:(id)sender {
+    UISwitch *switchControl = (UISwitch *) sender;
+    NSLog(@"%@", switchControl.on ? @"On" : @"Off");
+}
+
+#pragma mark - UITableView delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
