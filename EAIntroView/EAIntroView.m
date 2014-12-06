@@ -5,31 +5,30 @@
 
 #import "EAIntroView.h"
 
+CGFloat easeOutValue(CGFloat value) {
+    CGFloat inverse = value - 1.f;
+    return (CGFloat) (1.f + inverse * inverse * inverse);
+}
+
 @interface EAIntroView()
 
 @property (nonatomic, strong) UIImageView *bgImageView;
 @property (nonatomic, strong) UIImageView *pageBgBack;
 @property (nonatomic, strong) UIImageView *pageBgFront;
-
-@property(nonatomic, strong) NSLayoutConstraint *pageControlYConstraint;
-
+@property (nonatomic, strong) NSMutableArray *pageControlConstraints;
 @end
 
-@interface EAIntroPage()
-
-@property(nonatomic, strong, readwrite) UIView *pageView;
-
-@end
-
-
-@implementation EAIntroView
+@implementation EAIntroView {
+    UIPageControl *_pageControl;
+    UIButton *_skipButton;
+}
 
 #pragma mark - Init
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self applyDefaultsToSelfDuringInitializationWithframe:frame pages:nil];
+        [self applyDefaultsToSelfDuringInitializationWithFrame:frame pages:nil];
     }
     return self;
 }
@@ -37,7 +36,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self applyDefaultsToSelfDuringInitializationWithframe:self.frame pages:nil];
+        [self applyDefaultsToSelfDuringInitializationWithFrame:self.frame pages:nil];
     }
     return self;
 }
@@ -45,14 +44,15 @@
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray {
     self = [super initWithFrame:frame];
     if (self) {
-        [self applyDefaultsToSelfDuringInitializationWithframe:self.frame pages:pagesArray];
+        [self applyDefaultsToSelfDuringInitializationWithFrame:self.frame pages:pagesArray];
     }
     return self;
 }
 
 #pragma mark - Private
 
-- (void)applyDefaultsToSelfDuringInitializationWithframe:(CGRect)frame pages:(NSArray *)pagesArray {
+- (void)applyDefaultsToSelfDuringInitializationWithFrame:(CGRect)frame pages:(NSArray *)pagesArray {
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.swipeToExit = YES;
     self.easeOutCrossDisolves = YES;
     self.hideOffscreenPages = YES;
@@ -60,9 +60,14 @@
     self.pageControlY = 60.0f;
     self.bgViewContentMode = UIViewContentModeScaleAspectFill;
     self.motionEffectsRelativeValue = 40.0f;
-    _pages = [pagesArray copy];
-    [self buildUI];
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.backgroundColor = [UIColor blackColor];
+
+    [self buildBackgroundImage];
+
+    // Build scrollView
+    self.pages = [pagesArray copy];
+
+    [self buildFooterView];
 }
 
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
@@ -72,9 +77,9 @@
     backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
 
-- (void)makePanelVisibleAtIndex:(NSInteger)panelIndex{
+- (void)makePanelVisibleAtIndex:(NSUInteger)panelIndex{
     [UIView animateWithDuration:0.3 animations:^{
-        for (int idx = 0; idx < _pages.count; idx++) {
+        for (NSUInteger idx = 0; idx < _pages.count; idx++) {
             if (idx == panelIndex) {
                 [[self viewForPageIndex:idx] setAlpha:1];
             } else {
@@ -86,12 +91,12 @@
     }];
 }
 
-- (UIView *)viewForPageIndex:(NSInteger)idx {
+- (UIView *)viewForPageIndex:(NSUInteger)idx {
     return ((EAIntroPage *)_pages[idx]).pageView;
 }
 
-- (BOOL)showTitleViewForPage:(NSInteger)idx {
-    if(idx >= _pages.count || idx < 0)
+- (BOOL)showTitleViewForPage:(NSUInteger)idx {
+    if(idx >= _pages.count)
         return NO;
     
     return ((EAIntroPage *)_pages[idx]).showTitleView;
@@ -104,7 +109,7 @@
 }
 
 - (void)checkIndexForScrollView:(UIScrollView *)scrollView {
-    NSInteger newPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
+    NSUInteger newPageIndex = (NSUInteger) ((scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width);
     [self notifyDelegateWithPreviousPage:self.currentPageIndex andCurrentPage:newPageIndex];
     _currentPageIndex = newPageIndex;
     
@@ -119,7 +124,7 @@
 }
 
 - (void)finishIntroductionAndRemoveSelf {
-	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
+	if ([self.delegate respondsToSelector:@selector(introDidFinish:)]) {
 		[self.delegate introDidFinish:self];
 	}
     
@@ -140,6 +145,13 @@
 
 #pragma mark - Properties
 
+- (NSMutableArray *)pageControlConstraints {
+    if (!_pageControlConstraints) {
+        _pageControlConstraints = [NSMutableArray array];
+    }
+    return _pageControlConstraints;
+}
+
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
@@ -156,6 +168,7 @@
 - (UIImageView *)bgImageView {
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc] initWithFrame:self.frame];
+        _bgImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self applyDefaultsToBackgroundImageView:_bgImageView];
     }
     return _bgImageView;
@@ -179,20 +192,34 @@
     return _pageBgFront;
 }
 
-#pragma mark - UI building
-
-- (void)buildUI {
-    self.backgroundColor = [UIColor blackColor];
-    
-    [self buildBackgroundImage];
-    [self buildScrollView];
-    
-    [self buildFooterView];
-    
-    self.bgImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.skipButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+- (UIPageControl *)pageControl {
+    if (!_pageControl) {
+        _pageControl = [[UIPageControl alloc] init];
+        _pageControl.defersCurrentPageDisplay = YES;
+        _pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
+        _pageControl.numberOfPages = _pages.count;
+        if ([_pageControl respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            _pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+        [_pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
+    }
+    return _pageControl;
 }
+
+- (UIButton *)skipButton {
+    if (!_skipButton) {
+        _skipButton = [[UIButton alloc] init];
+        [_skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
+        _skipButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [_skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
+        if ([_skipButton respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            _skipButton.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+    }
+    return _skipButton;
+}
+
+#pragma mark - UI building
 
 - (void)buildBackgroundImage {
     [self addSubview:self.bgImageView];
@@ -205,11 +232,11 @@
 }
 
 - (void)buildScrollView {
-    
     CGFloat contentXIndex = 0;
-    for (int idx = 0; idx < _pages.count; idx++) {
+    for (NSUInteger idx = 0; idx < _pages.count; idx++) {
         EAIntroPage *page = _pages[idx];
-        page.pageView = [self viewForPage:page atXIndex:&contentXIndex];
+        page.pageView = [self viewForPage:page atXIndex:contentXIndex];
+        contentXIndex += self.scrollView.frame.size.width;
         [self.scrollView addSubview:page.pageView];
         if(page.onPageDidLoad) page.onPageDidLoad();
     }
@@ -229,11 +256,8 @@
     self.pageBgFront.image = [self bgForPage:0];
 }
 
-- (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat *)xIndex {
-    
-    UIView *pageView = [[UIView alloc] initWithFrame:CGRectMake(*xIndex, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
-    
-    *xIndex += self.scrollView.frame.size.width;
+- (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat)xIndex {
+    UIView *pageView = [[UIView alloc] initWithFrame:CGRectMake(xIndex, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
     
     if(page.customView) {
         page.customView.frame = pageView.bounds;
@@ -337,45 +361,51 @@
 }
 
 - (void)buildFooterView {
-    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20)];
-    
-    self.pageControl.defersCurrentPageDisplay = YES;
-    
-    self.pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
-    [self.pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
-    self.pageControl.numberOfPages = _pages.count;
-    [self addSubview:self.pageControl];
-    
-    self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y - ((30 - self.pageControl.frame.size.height)/2), 80, 30)];
-    [self.skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
-    [self.skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.skipButton];
-    
+    if (!self.pageControl.superview) {
+        [self insertSubview:self.pageControl aboveSubview:self.scrollView];
+    }
+
+    if (!self.skipButton.superview) {
+        [self insertSubview:self.skipButton aboveSubview:self.scrollView];
+    }
+
+    //@TODO should be on top, but need to be changed in future
+    [self.pageControl.superview bringSubviewToFront:self.pageControl];
+    [self.skipButton.superview bringSubviewToFront:self.skipButton];
+
     if ([self respondsToSelector:@selector(addConstraint:)]) {
-        self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-        
-        //store Y constraint
-        //at launch - page control centered with skip button by Y. If Y is set manually, Y constraint turns to bottom constraint
-        self.pageControlYConstraint = [NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.skipButton attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
-        [self addConstraint:self.pageControlYConstraint];
-        
-        self.skipButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-30]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-20]];
+        if (self.pageControlConstraints.count) {
+            [self removeConstraints:self.pageControlConstraints];
+            [self.pageControlConstraints removeAllObjects];
+        }
+
+        NSDictionary *views = @{@"pageControl" : self.pageControl, @"skipButton" : self.skipButton};
+        NSDictionary *metrics = @{@"bottomPadding" : @(self.pageControlY), @"pageControlHeight" : @20, @"width" : @(self.frame.size.width)};
+        [self.pageControlConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[pageControl(width)]-0-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
+        [self.pageControlConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[pageControl(pageControlHeight)]-bottomPadding-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
+
+        if (self.skipButton && !self.skipButton.hidden) {
+            [self.pageControlConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[skipButton]-10-|" options:NSLayoutFormatAlignAllRight metrics:metrics views:views]];
+            [self.pageControlConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[skipButton]-bottomPadding-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
+        }
+
+        [self addConstraints:self.pageControlConstraints];
+
+        [self.pageControl setNeedsUpdateConstraints];
+        [self.skipButton setNeedsUpdateConstraints];
     }
 }
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
+    if ([self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageStartScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
-    if ([(id)self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
+    if ([self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageEndScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
@@ -385,7 +415,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    self.visiblePageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
+    _visiblePageIndex = (NSUInteger) ((scrollView.contentOffset.x + scrollView.bounds.size.width / 2) / self.scrollView.frame.size.width);
     
     float offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     NSInteger page = (NSInteger)(offset);
@@ -403,14 +433,9 @@
     }
 }
 
-float easeOutValue(float value) {
-    float inverse = value - 1.0;
-    return 1.0 + inverse * inverse * inverse;
-}
-
-- (void)crossDissolveForOffset:(float)offset {
-    NSInteger page = (NSInteger)(offset);
-    float alphaValue = offset - page;
+- (void)crossDissolveForOffset:(CGFloat)offset {
+    NSUInteger page = (NSUInteger)(offset);
+    CGFloat alphaValue = offset - page;
     
     if (alphaValue < 0 && self.visiblePageIndex == 0){
         self.pageBgBack.image = nil;
@@ -457,8 +482,8 @@ float easeOutValue(float value) {
     }
 }
 
-- (UIImage *)bgForPage:(NSInteger)idx {
-    if(idx >= _pages.count || idx < 0)
+- (UIImage *)bgForPage:(NSUInteger)idx {
+    if(idx >= _pages.count)
         return nil;
     
     return ((EAIntroPage *)_pages[idx]).bgImage;
@@ -466,7 +491,7 @@ float easeOutValue(float value) {
 
 #pragma mark - Custom setters
 
-- (void)notifyDelegateWithPreviousPage:(NSInteger)previousPageIndex andCurrentPage:(NSInteger)currentPageIndex {
+- (void)notifyDelegateWithPreviousPage:(NSUInteger)previousPageIndex andCurrentPage:(NSUInteger)currentPageIndex {
     if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
         EAIntroPage* previousPage = _pages[previousPageIndex];
         EAIntroPage* currentPage = _pages[currentPageIndex];
@@ -490,6 +515,8 @@ float easeOutValue(float value) {
 - (void)setBgImage:(UIImage *)bgImage {
     _bgImage = bgImage;
     self.bgImageView.image = _bgImage;
+
+    [self setNeedsDisplay];
 }
 
 - (void)setBgViewContentMode:(UIViewContentMode)bgViewContentMode {
@@ -497,9 +524,11 @@ float easeOutValue(float value) {
     self.bgImageView.contentMode = bgViewContentMode;
     self.pageBgBack.contentMode = bgViewContentMode;
     self.pageBgFront.contentMode = bgViewContentMode;
+
+    [self setNeedsDisplay];
 }
 
-- (void)setSwipeToExit:(bool)swipeToExit {
+- (void)setSwipeToExit:(BOOL)swipeToExit {
     if (swipeToExit != _swipeToExit) {
         CGFloat contentXIndex = self.scrollView.contentSize.width;
         if(swipeToExit) {
@@ -515,61 +544,53 @@ float easeOutValue(float value) {
 - (void)setTitleView:(UIView *)titleView {
     [_titleView removeFromSuperview];
     _titleView = titleView;
-    _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
-    
+
     float offset = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     [self crossDissolveForOffset:offset];
     
     [self addSubview:_titleView];
+
+    [self setNeedsDisplay];
 }
 
 - (void)setTitleViewY:(CGFloat)titleViewY {
     _titleViewY = titleViewY;
-    _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
+
+    [self setNeedsDisplay];
 }
 
 - (void)setPageControl:(UIPageControl *)pageControl {
     [_pageControl removeFromSuperview];
     _pageControl = pageControl;
     [self addSubview:_pageControl];
+
+    [self setNeedsDisplay];
 }
 
 - (void)setPageControlY:(CGFloat)pageControlY {
     _pageControlY = pageControlY;
-    self.pageControl.frame = CGRectMake(self.pageControl.frame.origin.y, self.frame.size.width - pageControlY, self.frame.size.width, self.pageControl.frame.size.height);
-    
-    if (self.pageControlYConstraint) {
-        [self removeConstraint:self.pageControlYConstraint];
-        if (self.pageControlYConstraint.firstAttribute != NSLayoutAttributeBottom || self.pageControlYConstraint.secondAttribute != NSLayoutAttributeBottom) {
-            self.pageControlYConstraint = [NSLayoutConstraint constraintWithItem:self.pageControl
-                                                                       attribute:NSLayoutAttributeBottom
-                                                                       relatedBy:NSLayoutRelationEqual
-                                                                          toItem:self
-                                                                       attribute:NSLayoutAttributeBottom
-                                                                      multiplier:1
-                                                                        constant:-pageControlY];
-        } else {
-            self.pageControlYConstraint.constant = -pageControlY;
-        }
-        [self addConstraint:self.pageControlYConstraint];
-    }
+    [self buildFooterView];
+
+    [self setNeedsDisplay];
 }
 
 - (void)setSkipButton:(UIButton *)skipButton {
     [_skipButton removeFromSuperview];
     _skipButton = skipButton;
     [_skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_skipButton];
+    [self buildFooterView];
+
+    [self setNeedsDisplay];
 }
 
-- (void)setShowSkipButtonOnlyOnLastPage:(bool)showSkipButtonOnlyOnLastPage {
+- (void)setShowSkipButtonOnlyOnLastPage:(BOOL)showSkipButtonOnlyOnLastPage {
     _showSkipButtonOnlyOnLastPage = showSkipButtonOnlyOnLastPage;
     
     float offset = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     [self crossDissolveForOffset:offset];
 }
 
-- (void)setUseMotionEffects:(bool)useMotionEffects {
+- (void)setUseMotionEffects:(BOOL)useMotionEffects {
     if(_useMotionEffects == useMotionEffects) {
         return;
     }
@@ -669,12 +690,12 @@ float easeOutValue(float value) {
 	}];
 }
 
-- (void)setCurrentPageIndex:(NSInteger)currentPageIndex {
+- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex {
     [self setCurrentPageIndex:currentPageIndex animated:NO];
 }
 
-- (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
-    if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
+- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated {
+    if(currentPageIndex >= [self.pages count]) {
         NSLog(@"Wrong currentPageIndex received: %ld",(long)currentPageIndex);
         return;
     }
@@ -693,6 +714,17 @@ float easeOutValue(float value) {
     } else {
         [self setCurrentPageIndex:self.currentPageIndex + 1 animated:YES];
     }
+}
+
+#pragma mark - Layout
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    // if we haven't autolayout, use layoutsubviews
+    _pageControl.frame = CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20);
+    _skipButton.frame = CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y - ((30 - self.pageControl.frame.size.height)/2), 80, 30);
+    _titleView.frame = CGRectMake((self.frame.size.width-_titleView.frame.size.width)/2, self.titleViewY, _titleView.frame.size.width, _titleView.frame.size.height);
 }
 
 @end

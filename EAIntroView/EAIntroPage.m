@@ -13,10 +13,6 @@
 #define DEFAULT_TITLE_LABEL_Y_POSITION 160.0f
 #define DEFAULT_DESCRIPTION_LABEL_Y_POSITION 140.0f
 
-@interface EAIntroPage ()
-@property(nonatomic, strong, readwrite) UIView *pageView;
-@end
-
 @implementation EAIntroPage
 
 #pragma mark - Page lifecycle
