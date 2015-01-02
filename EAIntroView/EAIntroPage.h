@@ -42,6 +42,8 @@ typedef void (^VoidBlock)();
 
 @property (nonatomic, strong) NSArray *subviews;
 
+@property (nonatomic, assign) CGFloat alpha;
+
 @property (nonatomic,copy) VoidBlock onPageDidLoad;
 @property (nonatomic,copy) VoidBlock onPageDidAppear;
 @property (nonatomic,copy) VoidBlock onPageDidDisappear;

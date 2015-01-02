@@ -76,7 +76,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         for (int idx = 0; idx < _pages.count; idx++) {
             if (idx == panelIndex) {
-                [[self viewForPageIndex:idx] setAlpha:1];
+                [[self viewForPageIndex:idx] setAlpha:[self alphaForPageIndex:idx]];
             } else {
                 if(!self.hideOffscreenPages) {
                     [[self viewForPageIndex:idx] setAlpha:0];
@@ -86,8 +86,19 @@
     }];
 }
 
+- (EAIntroPage *)pageForIndex:(NSInteger)idx {
+    return (EAIntroPage *)_pages[idx];
+}
+
+- (CGFloat)alphaForPageIndex:(NSInteger)idx {
+    if(idx >= _pages.count) {
+        return 1.0f;
+    }
+    return [self pageForIndex:idx].alpha;
+}
+
 - (UIView *)viewForPageIndex:(NSInteger)idx {
-    return ((EAIntroPage *)_pages[idx]).pageView;
+    return [self pageForIndex:idx].pageView;
 }
 
 - (BOOL)showTitleViewForPage:(NSInteger)idx {
@@ -225,7 +236,7 @@
     
     self.pageBgBack.alpha = 0;
     self.pageBgBack.image = [self bgForPage:1];
-    self.pageBgFront.alpha = 1;
+    self.pageBgFront.alpha = [self alphaForPageIndex:0];
     self.pageBgFront.image = [self bgForPage:0];
 }
 
@@ -315,6 +326,12 @@
     }
     
     pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
+    
+    if(page.alpha < 1.0f) {
+        self.backgroundColor = [UIColor clearColor];
+    }
+    
+    pageView.alpha = page.alpha;
     
     return pageView;
 }
@@ -414,11 +431,10 @@ float easeOutValue(float value) {
     
     if (alphaValue < 0 && self.visiblePageIndex == 0){
         self.pageBgBack.image = nil;
-        self.pageBgFront.alpha = (1 + alphaValue);
         return;
     }
     
-    self.pageBgFront.alpha = 1;
+    self.pageBgFront.alpha = [self alphaForPageIndex:page];
     self.pageBgFront.image = [self bgForPage:page];
     self.pageBgBack.alpha = 0;
     self.pageBgBack.image = [self bgForPage:page+1];
@@ -431,8 +447,8 @@ float easeOutValue(float value) {
         frontLayerAlpha = easeOutValue(frontLayerAlpha);
     }
     
-    self.pageBgBack.alpha = backLayerAlpha;
-    self.pageBgFront.alpha = frontLayerAlpha;
+    self.pageBgBack.alpha = MIN(backLayerAlpha,[self alphaForPageIndex:page+1]);
+    self.pageBgFront.alpha = MIN(frontLayerAlpha,[self alphaForPageIndex:page]);
     
     if(self.titleView) {
         if([self showTitleViewForPage:page] && [self showTitleViewForPage:page+1]) {

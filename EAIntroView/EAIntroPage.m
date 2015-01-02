@@ -33,6 +33,7 @@
         _descFont = DEFAULT_DESCRIPTION_FONT;
         _descColor = DEFAULT_LABEL_COLOR;
         _showTitleView = YES;
+        _alpha = 1.0f;
     }
     return self;
 }
