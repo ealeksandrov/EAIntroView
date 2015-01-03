@@ -9,8 +9,10 @@ typedef void (^VoidBlock)();
 
 @interface EAIntroPage : NSObject
 
-// background used for cross-dissolve
+// background image or color used for cross-dissolve
 @property (nonatomic, strong) UIImage *bgImage;
+@property (nonatomic, strong) UIColor *bgColor;
+
 // show or hide EAIntroView titleView on this page (default YES)
 @property (nonatomic, assign) bool showTitleView;
 

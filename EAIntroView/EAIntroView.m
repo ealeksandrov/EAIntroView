@@ -87,25 +87,39 @@
 }
 
 - (EAIntroPage *)pageForIndex:(NSInteger)idx {
+    if(idx >= _pages.count || idx < 0) {
+        return nil;
+    }
+    
     return (EAIntroPage *)_pages[idx];
 }
 
 - (CGFloat)alphaForPageIndex:(NSInteger)idx {
-    if(idx >= _pages.count) {
+    if(![self pageForIndex:idx]) {
         return 1.0f;
     }
+    
     return [self pageForIndex:idx].alpha;
+}
+
+- (BOOL)showTitleViewForPage:(NSInteger)idx {
+    if(![self pageForIndex:idx]) {
+        return NO;
+    }
+    
+    return [self pageForIndex:idx].showTitleView;
 }
 
 - (UIView *)viewForPageIndex:(NSInteger)idx {
     return [self pageForIndex:idx].pageView;
 }
 
-- (BOOL)showTitleViewForPage:(NSInteger)idx {
-    if(idx >= _pages.count || idx < 0)
-        return NO;
-    
-    return ((EAIntroPage *)_pages[idx]).showTitleView;
+- (UIImage *)bgImageForPage:(NSInteger)idx {
+    return [self pageForIndex:idx].bgImage;
+}
+
+- (UIColor *)bgColorForPage:(NSInteger)idx {
+    return [self pageForIndex:idx].bgColor;
 }
 
 - (void)showPanelAtPageControl {
@@ -235,9 +249,11 @@
     self.scrollView.contentSize = CGSizeMake(contentXIndex, self.scrollView.frame.size.height);
     
     self.pageBgBack.alpha = 0;
-    self.pageBgBack.image = [self bgForPage:1];
+    self.pageBgBack.image = [self bgImageForPage:1];
+    self.pageBgBack.backgroundColor = [self bgColorForPage:1];
     self.pageBgFront.alpha = [self alphaForPageIndex:0];
-    self.pageBgFront.image = [self bgForPage:0];
+    self.pageBgFront.image = [self bgImageForPage:0];
+    self.pageBgFront.backgroundColor = [self bgColorForPage:0];
 }
 
 - (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat *)xIndex {
@@ -327,7 +343,7 @@
     
     pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
     
-    if(page.alpha < 1.0f) {
+    if(page.alpha < 1.0f || !page.bgImage) {
         self.backgroundColor = [UIColor clearColor];
     }
     
@@ -410,6 +426,7 @@
     if (page == (_pages.count - 1) && self.swipeToExit) {
         self.alpha = ((self.scrollView.frame.size.width*_pages.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
     } else {
+        self.alpha = 1.0f;
         [self crossDissolveForOffset:offset];
     }
     
@@ -435,9 +452,11 @@ float easeOutValue(float value) {
     }
     
     self.pageBgFront.alpha = [self alphaForPageIndex:page];
-    self.pageBgFront.image = [self bgForPage:page];
+    self.pageBgFront.image = [self bgImageForPage:page];
+    self.pageBgFront.backgroundColor = [self bgColorForPage:page];
     self.pageBgBack.alpha = 0;
-    self.pageBgBack.image = [self bgForPage:page+1];
+    self.pageBgBack.image = [self bgImageForPage:page+1];
+    self.pageBgBack.backgroundColor = [self bgColorForPage:page+1];
     
     float backLayerAlpha = alphaValue;
     float frontLayerAlpha = (1 - alphaValue);
@@ -471,13 +490,6 @@ float easeOutValue(float value) {
             [self.skipButton setAlpha:alphaValue];
         }
     }
-}
-
-- (UIImage *)bgForPage:(NSInteger)idx {
-    if(idx >= _pages.count || idx < 0)
-        return nil;
-    
-    return ((EAIntroPage *)_pages[idx]).bgImage;
 }
 
 #pragma mark - Custom setters
