@@ -672,15 +672,24 @@ float easeOutValue(float value) {
 #pragma mark - Actions
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration {
-    self.alpha = 0;
-    _currentPageIndex = 0;
-    self.scrollView.contentOffset = CGPointZero;
-    [view addSubview:self];
+    [self showInView:view animateDuration:duration withInitialPageIndex:0];
+}
+
+- (void)showInView:(UIView *)view animateDuration:(CGFloat)duration withInitialPageIndex:(NSInteger)initialPageIndex {
+    if(![self pageForIndex:initialPageIndex]) {
+        NSLog(@"Wrong initialPageIndex received: %ld",(long)initialPageIndex);
+        return;
+    }
     
+    self.currentPageIndex = initialPageIndex;
+    self.alpha = 0;
+
+    [view addSubview:self];
+   
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 1;
     } completion:^(BOOL finished) {
-        EAIntroPage* currentPage = _pages[self.currentPageIndex];
+        EAIntroPage *currentPage = _pages[self.currentPageIndex];
         if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
         
         if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
@@ -702,7 +711,7 @@ float easeOutValue(float value) {
 }
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex animated:(BOOL)animated {
-    if(currentPageIndex < 0 || currentPageIndex >= [self.pages count]) {
+    if(![self pageForIndex:currentPageIndex]) {
         NSLog(@"Wrong currentPageIndex received: %ld",(long)currentPageIndex);
         return;
     }

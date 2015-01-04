@@ -51,6 +51,7 @@ enum EAIntroViewTags {
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
 
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;
+- (void)showInView:(UIView *)view animateDuration:(CGFloat)duration withInitialPageIndex:(NSInteger)initialPageIndex;
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex;
