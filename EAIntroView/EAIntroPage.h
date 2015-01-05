@@ -14,7 +14,7 @@ typedef void (^VoidBlock)();
 @property (nonatomic, strong) UIColor *bgColor;
 
 // show or hide EAIntroView titleView on this page (default YES)
-@property (nonatomic, assign) bool showTitleView;
+@property (nonatomic, assign) BOOL showTitleView;
 
 
 // properties for default EAIntroPage layout
