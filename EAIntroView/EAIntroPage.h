@@ -1,7 +1,7 @@
 //
 //  EAIntroPage.h
 //
-//  Copyright (c) 2013-2014 Evgeny Aleksandrov. License: MIT.
+//  Copyright (c) 2013-2015 Evgeny Aleksandrov. License: MIT.
 
 #import <Foundation/Foundation.h>
 
