@@ -24,6 +24,9 @@
 
 @implementation EAIntroView
 
+@synthesize pageControl = _pageControl;
+@synthesize skipButton = _skipButton;
+
 #pragma mark - Init
 
 - (id)initWithFrame:(CGRect)frame {
@@ -53,6 +56,7 @@
 #pragma mark - Private
 
 - (void)applyDefaultsToSelfDuringInitializationWithFrame:(CGRect)frame pages:(NSArray *)pagesArray {
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.swipeToExit = YES;
     self.easeOutCrossDisolves = YES;
     self.hideOffscreenPages = YES;
@@ -60,9 +64,13 @@
     self.pageControlY = 60.0f;
     self.bgViewContentMode = UIViewContentModeScaleAspectFill;
     self.motionEffectsRelativeValue = 40.0f;
-    _pages = [pagesArray copy];
-    [self buildUI];
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.backgroundColor = [UIColor blackColor];
+    
+    [self buildBackgroundImage];
+    
+    self.pages = [pagesArray copy];
+    
+    [self buildFooterView];
 }
 
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
@@ -181,6 +189,7 @@
 - (UIImageView *)bgImageView {
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc] initWithFrame:self.frame];
+        _bgImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self applyDefaultsToBackgroundImageView:_bgImageView];
     }
     return _bgImageView;
@@ -204,20 +213,34 @@
     return _pageBgFront;
 }
 
-#pragma mark - UI building
-
-- (void)buildUI {
-    self.backgroundColor = [UIColor blackColor];
-    
-    [self buildBackgroundImage];
-    [self buildScrollView];
-    
-    [self buildFooterView];
-    
-    self.bgImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.skipButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+- (UIPageControl *)pageControl {
+    if (!_pageControl) {
+        _pageControl = [[UIPageControl alloc] init];
+        _pageControl.defersCurrentPageDisplay = YES;
+        _pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
+        _pageControl.numberOfPages = _pages.count;
+        if ([_pageControl respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            _pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+        [_pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
+    }
+    return _pageControl;
 }
+
+- (UIButton *)skipButton {
+    if (!_skipButton) {
+        _skipButton = [[UIButton alloc] init];
+        [_skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
+        _skipButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [_skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
+        if ([_skipButton respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            _skipButton.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+    }
+    return _skipButton;
+}
+
+#pragma mark - UI building
 
 - (void)buildBackgroundImage {
     [self addSubview:self.bgImageView];
@@ -367,18 +390,17 @@
 }
 
 - (void)buildFooterView {
-    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.pageControlY, self.frame.size.width, 20)];
-    self.pageControl.defersCurrentPageDisplay = YES;
-    self.pageControl.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
-    [self.pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
-    self.pageControl.numberOfPages = _pages.count;
-    [self addSubview:self.pageControl];
+    if (!self.pageControl.superview) {
+        [self insertSubview:self.pageControl aboveSubview:self.scrollView];
+    }
     
-    self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 80, self.pageControl.frame.origin.y - ((30 - self.pageControl.frame.size.height)/2), 80, 30)];
-    [self.skipButton setTitle:NSLocalizedString(@"Skip", nil) forState:UIControlStateNormal];
-    [self.skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.skipButton];
-
+    if (!self.skipButton.superview) {
+        [self insertSubview:self.skipButton aboveSubview:self.scrollView];
+    }
+    
+    [self.pageControl.superview bringSubviewToFront:self.pageControl];
+    [self.skipButton.superview bringSubviewToFront:self.skipButton];
+    
     if ([self respondsToSelector:@selector(addConstraint:)]) {
         self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
@@ -391,6 +413,9 @@
         self.skipButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-30]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-20]];
+        
+        [self.pageControl setNeedsUpdateConstraints];
+        [self.skipButton setNeedsUpdateConstraints];
     }
 }
 
