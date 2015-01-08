@@ -446,7 +446,10 @@
     if (page == (_pages.count - 1) && self.swipeToExit) {
         self.alpha = ((self.scrollView.frame.size.width*_pages.count)-self.scrollView.contentOffset.x)/self.scrollView.frame.size.width;
     } else {
-        self.alpha = 1.0f;
+        if([self pageForIndex:page]) {
+            self.alpha = 1.0f;
+        }
+        
         [self crossDissolveForOffset:offset];
     }
     
