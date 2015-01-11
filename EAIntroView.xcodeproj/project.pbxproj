@@ -78,7 +78,6 @@
 		5513592E17E440C500B41A90 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		5513592F17E440C500B41A90 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		5513593117E440C500B41A90 /* EAIntroView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "EAIntroView-Info.plist"; sourceTree = "<group>"; };
-		5513593217E440C500B41A90 /* EAIntroView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EAIntroView-Prefix.pch"; sourceTree = "<group>"; };
 		5513593317E440C500B41A90 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -207,7 +206,6 @@
 			isa = PBXGroup;
 			children = (
 				5513593117E440C500B41A90 /* EAIntroView-Info.plist */,
-				5513593217E440C500B41A90 /* EAIntroView-Prefix.pch */,
 				5513593317E440C500B41A90 /* main.m */,
 			);
 			path = "Supporting-files";
@@ -367,8 +365,6 @@
 		5513591F17E4406000B41A90 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Supporting-files/EAIntroView-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting-files/EAIntroView-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -379,8 +375,6 @@
 		5513592017E4406000B41A90 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Supporting-files/EAIntroView-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting-files/EAIntroView-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
