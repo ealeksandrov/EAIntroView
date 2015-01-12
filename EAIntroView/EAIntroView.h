@@ -6,10 +6,18 @@
 #import <UIKit/UIKit.h>
 #import "EAIntroPage.h"
 
+#define EA_EMPTY_PROPERTY 9999.f
+
 enum EAIntroViewTags {
     kTitleLabelTag = 1,
     kDescLabelTag,
     kTitleImageViewTag
+};
+
+typedef NS_ENUM(NSUInteger, EAViewAlignment) {
+    EAViewAlignmentLeft,
+    EAViewAlignmentCenter,
+    EAViewAlignmentRight,
 };
 
 @class EAIntroView;
@@ -47,8 +55,11 @@ enum EAIntroViewTags {
 @property (nonatomic, assign) NSUInteger currentPageIndex;
 @property (nonatomic, assign, readonly) NSUInteger visiblePageIndex;
 
-// Skip button
+// Skip button (Y position - from bottom of the screen)
 @property (nonatomic, strong) UIButton *skipButton;
+@property (nonatomic, assign) CGFloat skipButtonY;
+@property (nonatomic, assign) CGFloat skipButtonSideMargin;
+@property (nonatomic, assign) EAViewAlignment skipButtonAlignment;
 @property (nonatomic, assign) BOOL showSkipButtonOnlyOnLastPage;
 
 @property (nonatomic, strong) UIScrollView *scrollView;

@@ -35,7 +35,7 @@
         _descColor = DEFAULT_LABEL_COLOR;
         _bgColor = DEFAULT_BG_COLOR;
         _showTitleView = YES;
-        _alpha = 1.0f;
+        _alpha = 1.f;
     }
     return self;
 }
