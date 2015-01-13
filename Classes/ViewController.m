@@ -84,7 +84,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     UIImageView *titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
     intro.titleView = titleView;
     intro.titleViewY = 90;
-    intro.backgroundColor = [UIColor colorWithRed:0.0f green:0.49f blue:0.96f alpha:1.0f]; //iOS7 dark blue
+    intro.backgroundColor = [UIColor colorWithRed:0.f green:0.49f blue:0.96f alpha:1.f]; //iOS7 dark blue
 
     [intro showInView:rootView animateDuration:0.3];
 }
@@ -121,16 +121,18 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
     intro.bgImage = [UIImage imageNamed:@"bg2"];
     
-    intro.pageControlY = 250.0f;
+    intro.pageControlY = 250.f;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btn setFrame:CGRectMake((320-230)/2, [UIScreen mainScreen].bounds.size.height - 60, 230, 40)];
+    [btn setFrame:CGRectMake(0, 0, 230, 40)];
     [btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    btn.layer.borderWidth = 2.0f;
+    btn.layer.borderWidth = 2.f;
     btn.layer.cornerRadius = 10;
     btn.layer.borderColor = [[UIColor whiteColor] CGColor];
     intro.skipButton = btn;
+    intro.skipButtonY = 60.f;
+    intro.skipButtonAlignment = EAViewAlignmentCenter;
     
     [intro setDelegate:self];
     [intro showInView:rootView animateDuration:0.3];
@@ -238,18 +240,18 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     [intro setDelegate:self];
     
     // show skipButton only on 3rd page + animation
-    intro.skipButton.alpha = 0.0f;
+    intro.skipButton.alpha = 0.f;
     intro.skipButton.enabled = NO;
     page3.onPageDidAppear = ^{
         intro.skipButton.enabled = YES;
         [UIView animateWithDuration:0.3f animations:^{
-            intro.skipButton.alpha = 1.0f;
+            intro.skipButton.alpha = 1.f;
         }];
     };
     page3.onPageDidDisappear = ^{
         intro.skipButton.enabled = NO;
         [UIView animateWithDuration:0.3f animations:^{
-            intro.skipButton.alpha = 0.0f;
+            intro.skipButton.alpha = 0.f;
         }];
     };
     
@@ -307,12 +309,14 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     pageControl.currentPageIndicatorImage = [UIImage imageNamed:@"selectedPageDot"];
     [pageControl sizeToFit];
     intro.pageControl = (UIPageControl *)pageControl;
-    intro.pageControlY = 130.0f;
+    intro.pageControlY = 130.f;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setBackgroundImage:[UIImage imageNamed:@"skipButton"] forState:UIControlStateNormal];
-    [btn setFrame:CGRectMake((320-270)/2, [UIScreen mainScreen].bounds.size.height - 80, 270, 50)];
+    [btn setFrame:CGRectMake(0, 0, 270, 50)];
     intro.skipButton = btn;
+    intro.skipButtonY = 80.f;
+    intro.skipButtonAlignment = EAViewAlignmentCenter;
     
     [intro showInView:rootView animateDuration:0.3];
 }
