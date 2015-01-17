@@ -113,3 +113,7 @@ Since 1.3.0 EAIntroView supports init from IB. Since 2.0.0 EAIntroPage supports 
 4. Connect `IBOutlet` with `EAIntroView` in IB.
 5. Build array of pages (you can use `pageWithCustomViewFromNibNamed:` here with separate nibs for each page).
 6. Pass pages array to `EAIntroView` property in `setPages:`.
+
+##Author
+
+Created and maintained by Evgeny Aleksandrov ([@EAleksandrov](https://twitter.com/EAleksandrov)).
