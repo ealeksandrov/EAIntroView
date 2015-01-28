@@ -1,0 +1,15 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'EAIntroView', :exclusive => true do
+  pod 'EAIntroView', :path => '../'
+  pod 'SMPageControl', '~> 1.2'
+end
+
+target 'Tests', :exclusive => true do
+    pod 'EAIntroView', :path => '../'
+    
+    pod 'Specta', '~> 0.2.1'
+    pod 'Expecta'
+    pod 'FBSnapshotTestCase'
+    pod 'Expecta+Snapshots'
+end

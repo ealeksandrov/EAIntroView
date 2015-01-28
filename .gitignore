@@ -6,25 +6,28 @@ profile
 *.swp
 *.out
 *.bak*
-*.lock
 
 #Other CSM
 .hg
 .svn
 CVS
 
-
 #Xcode noise
 *.log
 *~.nib
 *.moved-aside
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
+Example/*.xcodeproj/*
+!Example/*.xcodeproj/project.pbxproj
+Example/*.xcworkspace/*
+!Example/*.xcworkspace/contents.xcworkspacedata
 !xcshareddata
+*.xccheckout
 
 #Project files
 [Bb]uild/
 DerivedData/
 
 #CocoaPods
-Pods
+#Pods
+Example/Pods/*.xcodeproj/*
+!Example/Pods/*.xcodeproj/project.pbxproj
