@@ -13,6 +13,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 
 @interface ViewController () {
     UIView *rootView;
+    EAIntroView *_intro;
 }
 
 @end
@@ -205,6 +206,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     }
     
     [intro showInView:rootView animateDuration:0.3];
+    _intro = intro;
 }
 
 - (void)showIntroWithSeparatePagesInitAndPageCallback {
@@ -332,6 +334,16 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 - (IBAction)switchFlip:(id)sender {
     UISwitch *switchControl = (UISwitch *) sender;
     NSLog(@"%@", switchControl.on ? @"On" : @"Off");
+    
+    // limit scrolling on one, currently visible page (can't go previous or next page)
+    //[_intro setScrollingEnabled:switchControl.on];
+    
+    if(!switchControl.on) {
+        // scroll no further selected page (can go previous pages, but not next)
+        [_intro limitScrollingToPage:_intro.visiblePageIndex];
+    } else {
+        [_intro setScrollingEnabled:YES];
+    }
 }
 
 #pragma mark - UITableView delegate

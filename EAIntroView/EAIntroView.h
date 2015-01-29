@@ -4,6 +4,7 @@
 //  Copyright (c) 2013-2015 Evgeny Aleksandrov. License: MIT.
 
 #import <UIKit/UIKit.h>
+#import <EARestrictedScrollView/EARestrictedScrollView.h>
 #import "EAIntroPage.h"
 
 #define EA_EMPTY_PROPERTY 9999.f
@@ -62,7 +63,8 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 @property (nonatomic, assign) EAViewAlignment skipButtonAlignment;
 @property (nonatomic, assign) BOOL showSkipButtonOnlyOnLastPage;
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) EARestrictedScrollView *scrollView;
+@property (nonatomic, assign) BOOL scrollingEnabled;
 @property (nonatomic, strong) NSArray *pages;
 
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
@@ -73,5 +75,7 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated;
+
+- (void)limitScrollingToPage:(NSUInteger)lastPageIndex;
 
 @end

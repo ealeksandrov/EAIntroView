@@ -2,6 +2,7 @@
   "name": "EAIntroView",
   "version": "2.6.4",
   "summary": "Highly customizable drop-in solution for introduction views.",
+  "screenshots": "https://raw.githubusercontent.com/ealeksandrov/EARestrictedScrollView/master/Screenshot01.png",
   "homepage": "https://github.com/ealeksandrov/EAIntroView",
   "license": {
     "type": "MIT",
@@ -19,5 +20,11 @@
     "tag": "2.6.4"
   },
   "source_files": "EAIntroView/EAIntro{Page,View}.{h,m}",
-  "requires_arc": true
+  "requires_arc": true,
+  "public_header_files": "EAIntroView/EAIntro{Page,View}.h",
+  "dependencies": {
+    "EARestrictedScrollView": [
+      "~> 0.1.0"
+    ]
+  }
 }

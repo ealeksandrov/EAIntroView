@@ -64,6 +64,7 @@
     self.bgViewContentMode = UIViewContentModeScaleAspectFill;
     self.motionEffectsRelativeValue = 40.f;
     self.backgroundColor = [UIColor blackColor];
+    _scrollingEnabled = YES;
     _titleViewY = 20.f;
     _pageControlY = 50.f;
     _skipButtonY = EA_EMPTY_PROPERTY;
@@ -141,7 +142,7 @@
     [self setCurrentPageIndex:self.pageControl.currentPage animated:YES];
 }
 
-- (void)checkIndexForScrollView:(UIScrollView *)scrollView {
+- (void)checkIndexForScrollView:(EARestrictedScrollView *)scrollView {
     NSUInteger newPageIndex = (scrollView.contentOffset.x + scrollView.bounds.size.width/2)/self.scrollView.frame.size.width;
     [self notifyDelegateWithPreviousPage:self.currentPageIndex andCurrentPage:newPageIndex];
     _currentPageIndex = newPageIndex;
@@ -176,19 +177,37 @@
     [self hideWithFadeOutDuration:0.3];
 }
 
+- (void)notifyDelegateWithPreviousPage:(NSUInteger)previousPageIndex andCurrentPage:(NSUInteger)currentPageIndex {
+    if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
+        EAIntroPage* previousPage = _pages[previousPageIndex];
+        EAIntroPage* currentPage = _pages[currentPageIndex];
+        if(previousPage.onPageDidDisappear) previousPage.onPageDidDisappear();
+        if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
+        
+        if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
+            [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
+        }
+    }
+}
+
 #pragma mark - Properties
 
-- (UIScrollView *)scrollView {
+- (EARestrictedScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView = [[EARestrictedScrollView alloc] initWithFrame:self.bounds];
         _scrollView.accessibilityIdentifier = @"intro_scroll";
         _scrollView.pagingEnabled = YES;
+        _scrollView.alwaysBounceHorizontal = YES;
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
         _scrollView.delegate = self;
         _scrollView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     }
     return _scrollView;
+}
+
+- (NSUInteger)visiblePageIndex {
+    return (NSUInteger) ((self.scrollView.contentOffset.x + self.scrollView.bounds.size.width/2) / self.scrollView.frame.size.width);
 }
 
 - (UIImageView *)bgImageView {
@@ -490,25 +509,27 @@
 }
 
 #pragma mark - UIScrollView Delegate
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+- (void)scrollViewWillBeginDragging:(EARestrictedScrollView *)scrollView{
     if ([self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageStartScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDecelerating:(EARestrictedScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
     if ([self.delegate respondsToSelector:@selector(intro:pageEndScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageEndScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndScrollingAnimation:(EARestrictedScrollView *)scrollView {
     [self checkIndexForScrollView:scrollView];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    _visiblePageIndex = (NSUInteger) ((scrollView.contentOffset.x + scrollView.bounds.size.width/2) / self.scrollView.frame.size.width);
+- (void)scrollViewDidScroll:(EARestrictedScrollView *)scrollView {
+    if(!self.scrollingEnabled) {
+        return;
+    }
     
     CGFloat offset = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     NSUInteger page = (NSUInteger)(offset);
@@ -587,17 +608,14 @@ CGFloat easeOutValue(CGFloat value) {
 
 #pragma mark - Custom setters
 
-- (void)notifyDelegateWithPreviousPage:(NSUInteger)previousPageIndex andCurrentPage:(NSUInteger)currentPageIndex {
-    if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
-        EAIntroPage* previousPage = _pages[previousPageIndex];
-        EAIntroPage* currentPage = _pages[currentPageIndex];
-        if(previousPage.onPageDidDisappear) previousPage.onPageDidDisappear();
-        if(currentPage.onPageDidAppear) currentPage.onPageDidAppear();
-        
-        if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
-            [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
-        }
+- (void)setScrollingEnabled:(BOOL)scrollingEnabled {
+    if(!scrollingEnabled) {
+        self.scrollView.restrictionArea = CGRectMake(self.visiblePageIndex * self.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+    } else {
+        self.scrollView.restrictionArea = CGRectZero;
     }
+    
+    _scrollingEnabled = scrollingEnabled;
 }
 
 - (void)setPages:(NSArray *)pages {
@@ -853,6 +871,16 @@ CGFloat easeOutValue(CGFloat value) {
     } else {
         [self setCurrentPageIndex:self.currentPageIndex + 1 animated:YES];
     }
+}
+
+- (void)limitScrollingToPage:(NSUInteger)lastPageIndex {
+    if (lastPageIndex >= [self.pages count]) {
+        self.scrollingEnabled = YES;
+        return;
+    }
+    
+    _scrollingEnabled = YES;
+    self.scrollView.restrictionArea = CGRectMake(0, 0, (lastPageIndex + 1) * self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
 }
 
 #pragma mark - Layout

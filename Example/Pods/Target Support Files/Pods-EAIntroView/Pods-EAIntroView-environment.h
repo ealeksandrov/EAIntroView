@@ -12,6 +12,12 @@
 #define COCOAPODS_VERSION_MINOR_EAIntroView 6
 #define COCOAPODS_VERSION_PATCH_EAIntroView 4
 
+// EARestrictedScrollView
+#define COCOAPODS_POD_AVAILABLE_EARestrictedScrollView
+#define COCOAPODS_VERSION_MAJOR_EARestrictedScrollView 0
+#define COCOAPODS_VERSION_MINOR_EARestrictedScrollView 1
+#define COCOAPODS_VERSION_PATCH_EARestrictedScrollView 0
+
 // SMPageControl
 #define COCOAPODS_POD_AVAILABLE_SMPageControl
 #define COCOAPODS_VERSION_MAJOR_SMPageControl 1
