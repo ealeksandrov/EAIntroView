@@ -51,6 +51,7 @@ Some features (remember, most features are optional and can be turned off):
 ##Manual installation
 
 * Add `EAIntroPage` and `EAIntroView` headers and implementations to your project (4 files total).
+* Add [EARestrictedScrollView](https://github.com/ealeksandrov/EARestrictedScrollView) header and implementation to your project (2 files total).
 * Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
 
