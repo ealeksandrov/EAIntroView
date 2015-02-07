@@ -243,9 +243,7 @@
 - (void)applyDefaultsToPageControl {
     _pageControl.defersCurrentPageDisplay = YES;
     _pageControl.numberOfPages = _pages.count;
-    if ([_pageControl respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
-        _pageControl.translatesAutoresizingMaskIntoConstraints = NO;
-    }
+    _pageControl.translatesAutoresizingMaskIntoConstraints = NO;
     [_pageControl addTarget:self action:@selector(showPanelAtPageControl) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -259,10 +257,8 @@
 }
 
 - (void)applyDefaultsToSkipButton {
+    _skipButton.translatesAutoresizingMaskIntoConstraints = NO;
     [_skipButton addTarget:self action:@selector(skipIntroduction) forControlEvents:UIControlEventTouchUpInside];
-    if ([_skipButton respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
-        _skipButton.translatesAutoresizingMaskIntoConstraints = NO;
-    }
 }
 
 - (NSMutableArray *)footerConstraints {
@@ -344,18 +340,9 @@
     }
     
     if(page.title.length) {
-        CGFloat titleHeight;
-        
-        if ([page.title respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
-            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:page.title attributes:@{ NSFontAttributeName: page.titleFont }];
-            CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.scrollView.frame.size.width - 20, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-            titleHeight = ceilf(rect.size.height);
-        } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            titleHeight = [page.title sizeWithFont:page.titleFont constrainedToSize:CGSizeMake(self.scrollView.frame.size.width - 20, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height;
-#pragma clang diagnostic pop
-        }
+        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:page.title attributes:@{ NSFontAttributeName: page.titleFont }];
+        CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.scrollView.frame.size.width - 20, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+        CGFloat titleHeight = ceilf(rect.size.height);
         
         CGRect titleLabelFrame = CGRectMake(10, self.bounds.size.height - page.titlePositionY, self.scrollView.frame.size.width - 20, titleHeight);
         
@@ -433,24 +420,22 @@
         [self addSubview:self.titleView];
     }
     
-    if ([self respondsToSelector:@selector(addConstraint:)]) {
-        if (self.titleViewConstraints.count) {
-            [self removeConstraints:self.titleViewConstraints];
-            [self.titleViewConstraints removeAllObjects];
-        }
-        
-        NSDictionary *views = @{@"titleView" : self.titleView};
-        NSDictionary *metrics = @{@"titleViewTopPadding" : @(self.titleViewY), @"titleViewHeight" : @(self.titleView.frame.size.height), @"titleViewWidth" : @(self.titleView.frame.size.width)};
-        
-        [self.titleViewConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-titleViewTopPadding-[titleView(titleViewHeight)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
-        [self.titleViewConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[titleView(titleViewWidth)]" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
-        [self.titleViewConstraints addObject:[NSLayoutConstraint constraintWithItem:self.titleView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
-        
-        self.titleView.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addConstraints:self.titleViewConstraints];
-        
-        [self.titleView setNeedsUpdateConstraints];
+    if (self.titleViewConstraints.count) {
+        [self removeConstraints:self.titleViewConstraints];
+        [self.titleViewConstraints removeAllObjects];
     }
+    
+    NSDictionary *views = @{@"titleView" : self.titleView};
+    NSDictionary *metrics = @{@"titleViewTopPadding" : @(self.titleViewY), @"titleViewHeight" : @(self.titleView.frame.size.height), @"titleViewWidth" : @(self.titleView.frame.size.width)};
+    
+    [self.titleViewConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-titleViewTopPadding-[titleView(titleViewHeight)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [self.titleViewConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[titleView(titleViewWidth)]" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
+    [self.titleViewConstraints addObject:[NSLayoutConstraint constraintWithItem:self.titleView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+    
+    self.titleView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addConstraints:self.titleViewConstraints];
+    
+    [self.titleView setNeedsUpdateConstraints];
 }
 
 - (void)buildFooterView {
@@ -465,44 +450,43 @@
     [self.pageControl.superview bringSubviewToFront:self.pageControl];
     [self.skipButton.superview bringSubviewToFront:self.skipButton];
     
-    if ([self respondsToSelector:@selector(addConstraint:)]) {
-        if (self.footerConstraints.count) {
-            [self removeConstraints:self.footerConstraints];
-            [self.footerConstraints removeAllObjects];
-        }
-        
-        NSDictionary *views = @{@"pageControl" : self.pageControl, @"skipButton" : self.skipButton};
-        NSDictionary *metrics = @{@"pageControlBottomPadding" : @(self.pageControlY - self.pageControl.frame.size.height), @"pageControlHeight" : @(self.pageControl.frame.size.height), @"skipButtonBottomPadding" : @(self.skipButtonY - self.skipButton.frame.size.height), @"skipButtonSideMargin" : @(self.skipButtonSideMargin), @"frameWidth" : @(self.bounds.size.width), @"skipButtonWidth" : @(self.skipButton.frame.size.width)};
-        
-        [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[pageControl(frameWidth)]-0-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
-        [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[pageControl(pageControlHeight)]-pageControlBottomPadding-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
-        
-        if (self.skipButton && !self.skipButton.hidden) {
-            if(self.skipButtonAlignment == EAViewAlignmentCenter) {
-                [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[skipButton(skipButtonWidth)]" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
-                [self.footerConstraints addObject:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
-            } else if(self.skipButtonAlignment == EAViewAlignmentLeft) {
-                [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-skipButtonSideMargin-[skipButton]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
-            } else if(self.skipButtonAlignment == EAViewAlignmentRight) {
-                [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[skipButton]-skipButtonSideMargin-|" options:NSLayoutFormatAlignAllRight metrics:metrics views:views]];
-            }
-            
-            if(self.skipButtonY == EA_EMPTY_PROPERTY) {
-                [self.footerConstraints addObject:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.skipButton attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
-            } else {
-                [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[skipButton]-skipButtonBottomPadding-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
-            }
-        }
-        
-        [self addConstraints:self.footerConstraints];
-        
-        [self.pageControl setNeedsUpdateConstraints];
-        [self.skipButton setNeedsUpdateConstraints];
+    if (self.footerConstraints.count) {
+        [self removeConstraints:self.footerConstraints];
+        [self.footerConstraints removeAllObjects];
     }
+    
+    NSDictionary *views = @{@"pageControl" : self.pageControl, @"skipButton" : self.skipButton};
+    NSDictionary *metrics = @{@"pageControlBottomPadding" : @(self.pageControlY - self.pageControl.frame.size.height), @"pageControlHeight" : @(self.pageControl.frame.size.height), @"skipButtonBottomPadding" : @(self.skipButtonY - self.skipButton.frame.size.height), @"skipButtonSideMargin" : @(self.skipButtonSideMargin), @"frameWidth" : @(self.bounds.size.width), @"skipButtonWidth" : @(self.skipButton.frame.size.width)};
+    
+    [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[pageControl(frameWidth)]-0-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
+    [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[pageControl(pageControlHeight)]-pageControlBottomPadding-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
+    
+    if (self.skipButton && !self.skipButton.hidden) {
+        if(self.skipButtonAlignment == EAViewAlignmentCenter) {
+            [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[skipButton(skipButtonWidth)]" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
+            [self.footerConstraints addObject:[NSLayoutConstraint constraintWithItem:self.skipButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+        } else if(self.skipButtonAlignment == EAViewAlignmentLeft) {
+            [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-skipButtonSideMargin-[skipButton]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+        } else if(self.skipButtonAlignment == EAViewAlignmentRight) {
+            [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[skipButton]-skipButtonSideMargin-|" options:NSLayoutFormatAlignAllRight metrics:metrics views:views]];
+        }
+        
+        if(self.skipButtonY == EA_EMPTY_PROPERTY) {
+            [self.footerConstraints addObject:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.skipButton attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+        } else {
+            [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[skipButton]-skipButtonBottomPadding-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
+        }
+    }
+    
+    [self addConstraints:self.footerConstraints];
+    
+    [self.pageControl setNeedsUpdateConstraints];
+    [self.skipButton setNeedsUpdateConstraints];
 }
 
 #pragma mark - UIScrollView Delegate
-- (void)scrollViewWillBeginDragging:(EARestrictedScrollView *)scrollView{
+
+- (void)scrollViewWillBeginDragging:(EARestrictedScrollView *)scrollView {
     if ([self.delegate respondsToSelector:@selector(intro:pageStartScrolling:withIndex:)] && self.currentPageIndex < [self.pages count]) {
         [self.delegate intro:self pageStartScrolling:_pages[self.currentPageIndex] withIndex:self.currentPageIndex];
     }
