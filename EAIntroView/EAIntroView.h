@@ -69,8 +69,13 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 
 - (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray;
 
+- (void)showFullscreen;
+- (void)showFullscreenWithAnimateDuration:(CGFloat)duration;
+- (void)showFullscreenWithAnimateDuration:(CGFloat)duration andInitialPageIndex:(NSUInteger)initialPageIndex;
+- (void)showInView:(UIView *)view;
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration;
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration withInitialPageIndex:(NSUInteger)initialPageIndex;
+
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
 
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
