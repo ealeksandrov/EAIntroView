@@ -57,6 +57,7 @@
 + (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName bundle:(NSBundle*)aBundle {
     EAIntroPage *newPage = [[self alloc] init];
     newPage.customView = [[aBundle loadNibNamed:nibName owner:newPage options:nil] firstObject];
+    [newPage.customView setTranslatesAutoresizingMaskIntoConstraints:NO];
     return newPage;
 }
 

@@ -321,9 +321,17 @@
 - (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat)xIndex {
     UIView *pageView = [[UIView alloc] initWithFrame:CGRectMake(xIndex, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
     
+    pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
+    
     if(page.customView) {
-        page.customView.frame = pageView.bounds;
         [pageView addSubview:page.customView];
+        
+        NSMutableArray *constraints = @[].mutableCopy;
+        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[customView]-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
+        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[customView]-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
+        
+        [pageView addConstraints:constraints];
+        
         return pageView;
     }
     
@@ -390,8 +398,6 @@
             [pageView addSubview:subV];
         }
     }
-    
-    pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
     
     if(page.alpha < 1.f || !page.bgImage) {
         self.backgroundColor = [UIColor clearColor];
