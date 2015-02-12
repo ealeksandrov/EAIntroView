@@ -1,1 +1,1 @@
-../../../Specta/src/XCTestCase+Specta.h
+../../../Specta/Specta/Specta/XCTestCase+Specta.h

@@ -30,7 +30,6 @@
 
 {
     FBSnapshotTestController *snapshotController = [[FBSnapshotTestController alloc] initWithTestClass:[testCase class]];
-    snapshotController.renderAsLayer = YES;
     snapshotController.recordMode = record;
     snapshotController.referenceImagesDirectory = referenceDirectory;
 
@@ -219,8 +218,7 @@ EXPMatcherImplementationEnd
 
 
 EXPMatcherImplementationBegin(recordSnapshot, (void)) {
-    __block NSError *error = nil;
-
+    
     prerequisite(^BOOL{
         return NO;
     });

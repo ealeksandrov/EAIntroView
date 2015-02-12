@@ -1,1 +1,1 @@
-../../../Expecta/src/EXPExpect.h
+../../../Expecta/Expecta/EXPExpect.h

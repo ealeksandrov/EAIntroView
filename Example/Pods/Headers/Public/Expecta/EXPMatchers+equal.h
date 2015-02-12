@@ -1,1 +1,1 @@
-../../../Expecta/src/matchers/EXPMatchers+equal.h
+../../../Expecta/Expecta/Matchers/EXPMatchers+equal.h

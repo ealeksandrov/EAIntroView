@@ -8,7 +8,7 @@ end
 target 'Tests', :exclusive => true do
     pod 'EAIntroView', :path => '../'
     
-    pod 'Specta', '~> 0.2.1'
+    pod 'Specta'
     pod 'Expecta'
     pod 'FBSnapshotTestCase'
     pod 'Expecta+Snapshots'

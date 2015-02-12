@@ -1,1 +1,1 @@
-../../../Specta/src/SPTExample.h
+../../../Specta/Specta/Specta/SPTExample.h

@@ -1,1 +1,1 @@
-../../../Specta/src/SPTSharedExampleGroups.h
+../../../Specta/Specta/Specta/SPTSharedExampleGroups.h
