@@ -11,14 +11,14 @@
 @property (nonatomic, strong) UIImageView *pageBgBack;
 @property (nonatomic, strong) UIImageView *pageBgFront;
 
-@property(nonatomic, strong) NSMutableArray *footerConstraints;
-@property(nonatomic, strong) NSMutableArray *titleViewConstraints;
+@property (nonatomic, strong) NSMutableArray *footerConstraints;
+@property (nonatomic, strong) NSMutableArray *titleViewConstraints;
 
 @end
 
 @interface EAIntroPage()
 
-@property(nonatomic, strong, readwrite) UIView *pageView;
+@property (nonatomic, strong, readwrite) UIView *pageView;
 
 @end
 
@@ -685,8 +685,14 @@ CGFloat easeOutValue(CGFloat value) {
 }
 
 - (void)setSkipButton:(UIButton *)skipButton {
+    if(!skipButton) {
+        _skipButton.hidden = YES;
+        return;
+    }
+    
     [_skipButton removeFromSuperview];
     _skipButton = skipButton;
+    _skipButton.hidden = NO;
     [self applyDefaultsToSkipButton];
     
     [self buildFooterView];
