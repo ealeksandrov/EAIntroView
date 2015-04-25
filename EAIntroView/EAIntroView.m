@@ -667,6 +667,11 @@ CGFloat easeOutValue(CGFloat value) {
 }
 
 - (void)setPageControl:(UIPageControl *)pageControl {
+    if(!pageControl) {
+        _pageControl.hidden = YES;
+        return;
+    }
+    
     [_pageControl removeFromSuperview];
     _pageControl = pageControl;
     [self applyDefaultsToPageControl];
