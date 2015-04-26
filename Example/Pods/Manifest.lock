@@ -1,5 +1,5 @@
 PODS:
-  - EAIntroView (2.7.1):
+  - EAIntroView (2.7.3):
     - EARestrictedScrollView (~> 0.1.0)
   - EARestrictedScrollView (0.1.0)
   - Expecta (0.4.2)
@@ -23,7 +23,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EAIntroView: 3ee38a5e99ccca876d5d75ab43e69a2e0ec6bba2
+  EAIntroView: bedde44388280d71c9798ce36c82720901596355
   EARestrictedScrollView: 5ab3eadd9ea55282cc72df0daecb09803059e3a0
   Expecta: 78b4e8b0c8291fa4524d7f74016b6065c2e391ec
   Expecta+Snapshots: 40c5ec43b43da3bae957f14fed5dc9177d08ec8b
