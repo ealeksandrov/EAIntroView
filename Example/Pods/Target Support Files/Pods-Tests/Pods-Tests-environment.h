@@ -10,7 +10,7 @@
 #define COCOAPODS_POD_AVAILABLE_EAIntroView
 #define COCOAPODS_VERSION_MAJOR_EAIntroView 2
 #define COCOAPODS_VERSION_MINOR_EAIntroView 7
-#define COCOAPODS_VERSION_PATCH_EAIntroView 0
+#define COCOAPODS_VERSION_PATCH_EAIntroView 1
 
 // EARestrictedScrollView
 #define COCOAPODS_POD_AVAILABLE_EARestrictedScrollView
@@ -22,7 +22,7 @@
 #define COCOAPODS_POD_AVAILABLE_Expecta
 #define COCOAPODS_VERSION_MAJOR_Expecta 0
 #define COCOAPODS_VERSION_MINOR_Expecta 4
-#define COCOAPODS_VERSION_PATCH_Expecta 0
+#define COCOAPODS_VERSION_PATCH_Expecta 2
 
 // Expecta+Snapshots
 #define COCOAPODS_POD_AVAILABLE_Expecta_Snapshots
