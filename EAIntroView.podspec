@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'EAIntroView'
-  s.version      = '2.7.0'
+  s.version      = '2.7.1'
   s.summary      = 'Highly customizable drop-in solution for introduction views.'
   s.screenshot   = 'https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png'
   s.homepage     = 'https://github.com/ealeksandrov/EAIntroView'
