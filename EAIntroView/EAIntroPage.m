@@ -47,6 +47,7 @@
 + (instancetype)pageWithCustomView:(UIView *)customV {
     EAIntroPage *newPage = [[self alloc] init];
     newPage.customView = customV;
+    newPage.bgColor = customV.backgroundColor;
     return newPage;
 }
 
@@ -58,6 +59,7 @@
     EAIntroPage *newPage = [[self alloc] init];
     newPage.customView = [[aBundle loadNibNamed:nibName owner:newPage options:nil] firstObject];
     [newPage.customView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    newPage.bgColor = newPage.customView.backgroundColor;
     return newPage;
 }
 
