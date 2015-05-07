@@ -327,8 +327,8 @@
         [pageView addSubview:page.customView];
         
         NSMutableArray *constraints = @[].mutableCopy;
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[customView]-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[customView]-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
+        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[customView]-0-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
+        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[customView]-0-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
         
         [pageView addConstraints:constraints];
         
