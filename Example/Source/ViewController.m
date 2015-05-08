@@ -145,8 +145,8 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     page1.bgImage = [UIImage imageNamed:@"bg1"];
     page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
     
-    UIView *viewForPage2 = [[UIView alloc] initWithFrame:self.view.bounds];
-    UILabel *labelForPage2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 300, 300, 30)];
+    UIView *viewForPage2 = [[UIView alloc] initWithFrame:rootView.bounds];
+    UILabel *labelForPage2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 300, rootView.bounds.size.width, 30)];
     labelForPage2.text = @"Some custom view";
     labelForPage2.font = [UIFont systemFontOfSize:32];
     labelForPage2.textColor = [UIColor whiteColor];
