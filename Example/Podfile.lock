@@ -1,9 +1,9 @@
 PODS:
-  - EAIntroView (2.7.3):
+  - EAIntroView (2.7.4):
     - EARestrictedScrollView (~> 0.2.0)
   - EARestrictedScrollView (0.2.0)
   - Expecta (0.4.2)
-  - Expecta+Snapshots (1.3.2):
+  - Expecta+Snapshots (1.3.3):
     - Expecta (~> 0.3)
     - FBSnapshotTestCase (= 1.6)
   - FBSnapshotTestCase (1.6)
@@ -23,10 +23,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EAIntroView: b3494a17278215bd391b3e5832ef5d75feda2f0d
+  EAIntroView: 50b85eedf414260e61330070ffe5947e72493a62
   EARestrictedScrollView: f86d61e16c61d3e93c84f8e96e83122a2a3b7631
   Expecta: 78b4e8b0c8291fa4524d7f74016b6065c2e391ec
-  Expecta+Snapshots: 40c5ec43b43da3bae957f14fed5dc9177d08ec8b
+  Expecta+Snapshots: dcf32672f1bbc23e86e7eeb7f30aa6884894e2ec
   FBSnapshotTestCase: 9d5fe43b29ae3a0ed8fc829477971b281038f748
   SMPageControl: 922892813001cfaf059e86e6801f46a967e9ee29
   Specta: 9cec98310dca411f7c7ffd6943552b501622abfe
