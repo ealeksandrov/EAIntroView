@@ -8,10 +8,9 @@
 @interface EARestrictedScrollView : UIScrollView
 
 /**
- *  This is the rect property which defines restriction area in coordinate space of `contentView`. Use CGRectZero to reset restriction.
+ *  This property leads to containerView.subviews - all subviews except scroll indicators are stored there.
  */
-@property (nonatomic, assign) CGRect restrictionArea;
-
+@property (nonatomic, copy, readonly) NSArray *containedSubviews;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -20,6 +19,11 @@
  */
 @property (nonatomic, assign, getter=alignedContentOffset, setter=setAlignedContentOffset:) CGPoint contentOffset;
 #pragma GCC diagnostic pop
+
+/**
+ *  This is the rect property which defines restriction area in coordinate space of `contentView`. Use CGRectZero to reset restriction.
+ */
+@property (nonatomic, assign) CGRect restrictionArea;
 
 /**
  *  Should not be used, since it changes parent contentOffset that is being manipulated by subclass.

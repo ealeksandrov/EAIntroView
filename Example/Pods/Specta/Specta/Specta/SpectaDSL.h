@@ -48,6 +48,15 @@ OBJC_EXTERN void sharedExamples(NSString *name, void (^block)(NSDictionary *data
 #define      itBehavesLike(...) spt_itShouldBehaveLike_(@(__FILE__), __LINE__, __VA_ARGS__)
 
 OBJC_EXTERN void waitUntil(void (^block)(DoneCallback done));
+/**
+ * Runs the @c block and waits until the @c done block is called or the
+ * @c timeout has passed.
+ *
+ * @param timeout timeout for this @c block only; does not affect the global
+ *      timeout, as @c setAsyncSpecTimeout() does.
+ * @param ^block  runs test code
+ */
+OBJC_EXTERN void waitUntilTimeout(NSTimeInterval timeout, void (^block)(DoneCallback done));
 
 OBJC_EXTERN void setAsyncSpecTimeout(NSTimeInterval timeout);
 

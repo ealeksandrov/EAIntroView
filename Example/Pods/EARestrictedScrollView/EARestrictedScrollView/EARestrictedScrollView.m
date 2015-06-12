@@ -51,7 +51,7 @@
     return [self.containerView viewWithTag:tag];
 }
 
-- (NSArray *)subviews {
+- (NSArray *)containedSubviews {
     return self.containerView.subviews;
 }
 

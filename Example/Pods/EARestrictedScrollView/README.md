@@ -15,7 +15,7 @@ In plain `UIScrollView` only `contentSize` can be changed, but not the origin of
 
 [CocoaPods](http://cocoapods.org/) is the recommended way to use EARestrictedScrollView in your project.
 
-* Simply add this line to your `Podfile`: `pod 'EARestrictedScrollView', '~> 0.1.0'`
+* Simply add this line to your `Podfile`: `pod 'EARestrictedScrollView', '~> 0.2.0'`
 * Run `pod install`.
 * Include with `#import "EARestrictedScrollView.h"` to use it wherever you need.
 
@@ -27,6 +27,8 @@ In plain `UIScrollView` only `contentSize` can be changed, but not the origin of
 ##How To Use It
 
 Change scrolling area with new `restrictionArea` property. Reset restriction with passing `CGRectZero` to `restrictionArea`.
+
+To access subviews use `containedSubviews` property. It was added in version 0.2.0 since `subviews` override caused some [troubles with autolayout](https://github.com/ealeksandrov/EAIntroView/issues/100).
 
 ##Author
 

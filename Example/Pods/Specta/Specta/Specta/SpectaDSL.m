@@ -162,13 +162,16 @@ void sharedExamples(NSString *name, void (^block)(NSDictionary *data)) {
 }
 
 void waitUntil(void (^block)(DoneCallback done)) {
+  waitUntilTimeout(asyncSpecTimeout, block);
+}
+
+void waitUntilTimeout(NSTimeInterval timeout, void (^block)(DoneCallback done)) {
   __block uint32_t complete = 0;
   dispatch_async(dispatch_get_main_queue(), ^{
     block(^{
       OSAtomicOr32Barrier(1, &complete);
     });
   });
-  NSTimeInterval timeout = asyncSpecTimeout;
   NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:timeout];
   while (!complete && [timeoutDate timeIntervalSinceNow] > 0) {
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
