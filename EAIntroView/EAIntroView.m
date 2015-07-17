@@ -77,6 +77,13 @@
     self.pages = [pagesArray copy];
     
     [self buildFooterView];
+    
+    // Add observer for device orientation:
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deviceOrientationDidChange:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
 }
 
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
@@ -162,6 +169,10 @@
 		[self.delegate introDidFinish:self];
 	}
     
+    // Remove observer for rotation
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    
     //prevent last page flicker on disappearing
     self.alpha = 0;
     
@@ -201,7 +212,7 @@
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
         _scrollView.delegate = self;
-        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
     return _scrollView;
 }
@@ -347,6 +358,7 @@
         rect1.origin.y = page.titleIconPositionY;
         titleImageView.frame = rect1;
         titleImageView.tag = kTitleImageViewTag;
+        titleImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
         
         [pageView addSubview:titleImageView];
     }
@@ -367,6 +379,7 @@
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.numberOfLines = 0;
         titleLabel.tag = kTitleLabelTag;
+        titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
         
         [pageView addSubview:titleLabel];
     }
@@ -389,6 +402,7 @@
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
         descLabel.tag = kDescLabelTag;
+        descLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
         
         [pageView addSubview:descLabel];
     }
@@ -590,6 +604,44 @@ CGFloat easeOutValue(CGFloat value) {
         } else {
             [self.skipButton setAlpha:alphaValue];
         }
+    }
+}
+
+#pragma mark - Notifications
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification {
+    // Get amount of pages:
+    NSInteger numberOfPages = _pages.count;
+    
+    // Increase with 1 page when feature enabled:
+    if (self.swipeToExit) {
+        numberOfPages = numberOfPages + 1;
+    }
+    
+    // Adjust contentSize of ScrollView:
+    self.scrollView.contentSize = CGSizeMake(numberOfPages * self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    
+    // Adjust frame of each page:
+    NSUInteger i = 0;
+    for (EAIntroPage *page in _pages) {
+        page.pageView.frame = CGRectMake(i * self.scrollView.bounds.size.width,
+                                         0,
+                                         self.scrollView.bounds.size.width,
+                                         self.scrollView.bounds.size.height);
+        i++;
+    }
+    
+    // Adjust scrolling to fit resized page:
+    CGFloat offset = self.currentPageIndex * self.scrollView.frame.size.width;
+    CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
+    [self.scrollView scrollRectToVisible:pageRect animated:NO];
+    
+    // Adjust restricted scroll area:
+    if(!self.scrollingEnabled) {
+        self.scrollView.restrictionArea = CGRectMake(self.visiblePageIndex * self.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+    }
+    else {
+        self.scrollView.restrictionArea = CGRectZero;
     }
 }
 
