@@ -353,24 +353,16 @@
     
     if(page.titleIconView) {
         UIView *titleImageView = page.titleIconView;
-        CGRect rect1 = titleImageView.frame;
-        rect1.origin.x = (self.scrollView.frame.size.width - rect1.size.width)/2;
-        rect1.origin.y = page.titleIconPositionY;
-        titleImageView.frame = rect1;
         titleImageView.tag = kTitleImageViewTag;
-        titleImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+        titleImageView.translatesAutoresizingMaskIntoConstraints = NO;
         
         [pageView addSubview:titleImageView];
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topSpace@750-[titleImageView]" options:NSLayoutFormatAlignAllTop metrics:@{@"topSpace" : @(page.titleIconPositionY)} views:@{@"titleImageView" : titleImageView}]];
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[superview]-(<=1)-[titleImageView]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"superview" : pageView, @"titleImageView" : titleImageView}]];
     }
     
     if(page.title.length) {
-        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:page.title attributes:@{ NSFontAttributeName: page.titleFont }];
-        CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.scrollView.frame.size.width - 20, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-        CGFloat titleHeight = ceilf(rect.size.height);
-        
-        CGRect titleLabelFrame = CGRectMake(10, self.bounds.size.height - page.titlePositionY, self.scrollView.frame.size.width - 20, titleHeight);
-        
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleLabelFrame];
+        UILabel *titleLabel = [[UILabel alloc] init];
         titleLabel.text = page.title;
         titleLabel.font = page.titleFont;
         titleLabel.textColor = page.titleColor;
@@ -379,21 +371,15 @@
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.numberOfLines = 0;
         titleLabel.tag = kTitleLabelTag;
-        titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         
         [pageView addSubview:titleLabel];
+        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:pageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeTop multiplier:1.0 constant:page.titlePositionY]];
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[titleLabel]-10-|" options:NSLayoutFormatAlignAllTop metrics:nil views:@{@"titleLabel" : titleLabel}]];
     }
     
     if([page.desc length]) {
-        CGRect descLabelFrame;
-        
-        if(page.descWidth != 0) {
-            descLabelFrame = CGRectMake((self.bounds.size.width - page.descWidth)/2, self.bounds.size.height - page.descPositionY, page.descWidth, 500);
-        } else {
-            descLabelFrame = CGRectMake(0, self.bounds.size.height - page.descPositionY, self.scrollView.frame.size.width, 500);
-        }
-        
-        UITextView *descLabel = [[UITextView alloc] initWithFrame:descLabelFrame];
+        UITextView *descLabel = [[UITextView alloc] init];
         descLabel.text = page.desc;
         descLabel.scrollEnabled = NO;
         descLabel.font = page.descFont;
@@ -402,9 +388,11 @@
         descLabel.textAlignment = NSTextAlignmentCenter;
         descLabel.userInteractionEnabled = NO;
         descLabel.tag = kDescLabelTag;
-        descLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+        descLabel.translatesAutoresizingMaskIntoConstraints = NO;
         
         [pageView addSubview:descLabel];
+        [pageView addConstraint:[NSLayoutConstraint constraintWithItem:pageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:descLabel attribute:NSLayoutAttributeTop multiplier:1.0 constant:page.descPositionY]];
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[descLabel]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:@{@"descLabel" : descLabel}]];
     }
     
     if(page.subviews) {
