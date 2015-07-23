@@ -348,8 +348,14 @@
     
     UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     tapToNextButton.frame = pageView.bounds;
+    tapToNextButton.translatesAutoresizingMaskIntoConstraints = NO;
     [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];
     [pageView addSubview:tapToNextButton];
+    
+    NSMutableArray *constraints = @[].mutableCopy;
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tapToNextButton]-0-|" options:0 metrics:nil views:@{@"tapToNextButton": tapToNextButton}]];
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tapToNextButton]-0-|" options:0 metrics:nil views:@{@"tapToNextButton": tapToNextButton}]];
+    [pageView addConstraints:constraints];
     
     UIView *titleImageView;
     if(page.titleIconView) {
@@ -404,7 +410,11 @@
     }
     
     // Constraints for handling landscape orientation
-    [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleImageView]->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleImageView" : titleImageView, @"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
+    if(titleImageView && titleLabel && descLabel) {
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleImageView]->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleImageView" : titleImageView, @"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
+    } else if(!titleImageView && titleLabel && descLabel) {
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
+    }
     
     if(page.subviews) {
         for (UIView *subV in page.subviews) {
@@ -618,7 +628,17 @@ CGFloat easeOutValue(CGFloat value) {
     }
     
     // Adjust contentSize of ScrollView:
-    self.scrollView.contentSize = CGSizeMake(numberOfPages * self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    CGSize newContentSize = CGSizeMake(numberOfPages * self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    if(self.scrollView.contentOffset.x > newContentSize.width) {
+        CGPoint newOffset = self.scrollView.contentOffset;
+        if (self.swipeToExit) {
+            newOffset.x = newContentSize.width - (self.scrollView.frame.size.width * 2);
+        } else {
+            newOffset.x = newContentSize.width - self.scrollView.frame.size.width;
+        }
+        self.scrollView.contentOffset = newOffset;
+    }
+    self.scrollView.contentSize = newContentSize;
     
     // Adjust frame of each page:
     NSUInteger i = 0;
@@ -638,8 +658,7 @@ CGFloat easeOutValue(CGFloat value) {
     // Adjust restricted scroll area:
     if(!self.scrollingEnabled) {
         self.scrollView.restrictionArea = CGRectMake(self.visiblePageIndex * self.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
-    }
-    else {
+    } else {
         self.scrollView.restrictionArea = CGRectZero;
     }
 }
