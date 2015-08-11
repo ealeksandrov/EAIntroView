@@ -410,9 +410,7 @@
     }
     
     // Constraints for handling landscape orientation
-    if(titleImageView && titleLabel && descLabel) {
-        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleImageView]->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleImageView" : titleImageView, @"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
-    } else if(!titleImageView && titleLabel && descLabel) {
+    if(titleLabel && descLabel) {
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
     }
     
