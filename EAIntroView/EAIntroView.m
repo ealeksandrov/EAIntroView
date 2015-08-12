@@ -406,13 +406,11 @@
         NSLayoutConstraint *weakConstraint = [NSLayoutConstraint constraintWithItem:pageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:descLabel attribute:NSLayoutAttributeTop multiplier:1.0 constant:page.descPositionY];
         weakConstraint.priority = UILayoutPriorityDefaultLow;
         [pageView addConstraint:weakConstraint];
-        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[descLabel]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:@{@"descLabel" : descLabel}]];
+        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-descMargin-[descLabel]-descMargin-|" options:NSLayoutFormatAlignAllTop metrics:@{@"descMargin" : @(page.descSideMargin)} views:@{@"descLabel" : descLabel}]];
     }
     
     // Constraints for handling landscape orientation
-    if(titleImageView && titleLabel && descLabel) {
-        [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleImageView]->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleImageView" : titleImageView, @"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
-    } else if(!titleImageView && titleLabel && descLabel) {
+    if(titleLabel && descLabel) {
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
     }
     
@@ -489,7 +487,7 @@
     }
     
     NSDictionary *views = @{@"pageControl" : self.pageControl, @"skipButton" : self.skipButton};
-    NSDictionary *metrics = @{@"pageControlBottomPadding" : @(self.pageControlY - self.pageControl.frame.size.height), @"pageControlHeight" : @(self.pageControl.frame.size.height), @"skipButtonBottomPadding" : @(self.skipButtonY - self.skipButton.frame.size.height), @"skipButtonSideMargin" : @(self.skipButtonSideMargin), @"skipButtonWidth" : @(self.skipButton.frame.size.width), @"skipButtonHeight" : @(self.skipButton.frame.size.height)};
+    NSDictionary *metrics = @{@"pageControlBottomPadding" : @(self.pageControlY - self.pageControl.frame.size.height), @"pageControlHeight" : @(self.pageControl.frame.size.height), @"skipButtonBottomPadding" : @(self.skipButtonY - self.skipButton.frame.size.height), @"skipButtonSideMargin" : @(self.skipButtonSideMargin), @"skipButtonWidth" : @(self.skipButton.frame.size.width)};
     
     [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[pageControl]-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
     [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[pageControl(pageControlHeight)]-pageControlBottomPadding@250-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
@@ -507,7 +505,7 @@
         if(self.skipButtonY == EA_EMPTY_PROPERTY) {
             [self.footerConstraints addObject:[NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.skipButton attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
         } else {
-            [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[skipButton(skipButtonHeight)]-skipButtonBottomPadding-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
+            [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[skipButton]-skipButtonBottomPadding-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
         }
     }
     
