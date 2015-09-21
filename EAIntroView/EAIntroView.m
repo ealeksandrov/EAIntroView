@@ -186,6 +186,10 @@
 
 - (void)skipIntroduction {
     [self hideWithFadeOutDuration:0.3];
+    
+    if ([(id)self.delegate respondsToSelector:@selector(introSkipped:)]) {
+        [self.delegate introSkipped:self];
+    }
 }
 
 - (void)notifyDelegateWithPreviousPage:(NSUInteger)previousPageIndex andCurrentPage:(NSUInteger)currentPageIndex {
