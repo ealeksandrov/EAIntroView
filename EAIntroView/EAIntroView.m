@@ -313,6 +313,8 @@
     }
     
     [self makePanelVisibleAtIndex:0];
+    // to fix a crash when you invoke setPages and then try to scroll
+    _currentPageIndex = 0;
     
     if (self.swipeToExit) {
         [self appendCloseViewAtXIndex:&contentXIndex];
