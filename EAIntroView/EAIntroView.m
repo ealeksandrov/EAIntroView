@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSMutableArray *footerConstraints;
 @property (nonatomic, strong) NSMutableArray *titleViewConstraints;
 
+@property (nonatomic, assign) BOOL skipped;
+
 @end
 
 @interface EAIntroPage()
@@ -70,6 +72,7 @@
     _skipButtonY = EA_EMPTY_PROPERTY;
     _skipButtonSideMargin = 10.f;
     _skipButtonAlignment = EAViewAlignmentRight;
+	_skipped = NO;
     _limitPageIndex = -1;
     
     [self buildBackgroundImage];
@@ -176,8 +179,8 @@
     //removeFromSuperview should be called after a delay
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)0);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
-            [self.delegate introDidFinish:self];
+        if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:wasSkipped:)]) {
+            [self.delegate introDidFinish:self wasSkipped:self.skipped];
         }
         
         [self removeFromSuperview];
@@ -185,6 +188,7 @@
 }
 
 - (void)skipIntroduction {
+	self.skipped = YES;
     [self hideWithFadeOutDuration:0.3];
 }
 
@@ -928,7 +932,8 @@ CGFloat easeOutValue(CGFloat value) {
         NSLog(@"Wrong initialPageIndex received: %ld",(long)initialPageIndex);
         return;
     }
-    
+
+	self.skipped = NO;
     self.currentPageIndex = initialPageIndex;
     self.alpha = 0;
 
