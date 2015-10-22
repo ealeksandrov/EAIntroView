@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSMutableArray *footerConstraints;
 @property (nonatomic, strong) NSMutableArray *titleViewConstraints;
 
+@property (nonatomic, assign) BOOL skipped;
+
 @end
 
 @interface EAIntroPage()
@@ -70,6 +72,7 @@
     _skipButtonY = EA_EMPTY_PROPERTY;
     _skipButtonSideMargin = 10.f;
     _skipButtonAlignment = EAViewAlignmentRight;
+	_skipped = NO;
     
     
     [self buildBackgroundImage];
@@ -165,8 +168,8 @@
 }
 
 - (void)finishIntroductionAndRemoveSelf {
-	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
-		[self.delegate introDidFinish:self];
+	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:wasSkipped:)]) {
+		[self.delegate introDidFinish:self wasSkipped:self.skipped];
 	}
     
     // Remove observer for rotation
@@ -185,6 +188,7 @@
 }
 
 - (void)skipIntroduction {
+	self.skipped = YES;
     [self hideWithFadeOutDuration:0.3];
 }
 
@@ -919,7 +923,8 @@ CGFloat easeOutValue(CGFloat value) {
         NSLog(@"Wrong initialPageIndex received: %ld",(long)initialPageIndex);
         return;
     }
-    
+
+	self.skipped = NO;
     self.currentPageIndex = initialPageIndex;
     self.alpha = 0;
 
