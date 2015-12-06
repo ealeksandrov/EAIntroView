@@ -679,8 +679,12 @@ CGFloat easeOutValue(CGFloat value) {
     _pages = [pages copy];
     [self.scrollView removeFromSuperview];
     self.scrollView = nil;
-    [self buildScrollView];
+    
+    _currentPageIndex = 0;
     self.pageControl.numberOfPages = _pages.count;
+    self.pageControl.currentPage = self.currentPageIndex;
+    
+    [self buildScrollView];
 }
 
 - (void)setBgImage:(UIImage *)bgImage {
