@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## Version 2.8.0
+
 * Adds rotation support
 * Adds autolayout to page elements
 * Fixes constraints for custom skip button Y position
