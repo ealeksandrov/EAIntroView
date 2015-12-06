@@ -1,0 +1,6 @@
+framework module EARestrictedScrollView {
+  umbrella header "EARestrictedScrollView-umbrella.h"
+
+  export *
+  module * { export * }
+}
