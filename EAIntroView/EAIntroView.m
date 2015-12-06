@@ -550,9 +550,9 @@
         if([self pageForIndex:page]) {
             self.alpha = 1.f;
         }
-        
-        [self crossDissolveForOffset:offset];
     }
+    
+    [self crossDissolveForOffset:offset];
     
     if (self.visiblePageIndex < _pages.count) {
         self.pageControl.currentPage = self.visiblePageIndex;
@@ -966,6 +966,11 @@ CGFloat easeOutValue(CGFloat value) {
     CGFloat offset = currentPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
+    
+    if(!animated) {
+        _currentPageIndex = currentPageIndex;
+        [self scrollViewDidScroll:self.scrollView];
+    }
 }
 
 - (IBAction)goToNext:(id)sender {

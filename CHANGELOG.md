@@ -8,6 +8,7 @@
 * Fixes import statement to support manual installation
 * Fixes delegate method `introDidFinish:` fired too early
 * Fixes `currentPage` property on `-setPages:`
+* Fixes `-setCurrentPageIndex:` called with `animated:NO`
 * Updates pod deployment target to iOS 6
 
 ## Version 2.7.4
