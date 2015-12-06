@@ -1,5 +1,7 @@
 #EAIntroView - simple iOS Introductions
 
+[![CI Status](http://img.shields.io/travis/ealeksandrov/EAIntroView.svg?style=flat)](https://travis-ci.org/ealeksandrov/EAIntroView)
+
 ![BackgroundImage](https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png)
 ![BackgroundImage](https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot02.png)
 
