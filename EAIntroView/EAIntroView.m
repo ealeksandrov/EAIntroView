@@ -165,11 +165,7 @@
 }
 
 - (void)finishIntroductionAndRemoveSelf {
-	if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
-		[self.delegate introDidFinish:self];
-	}
-    
-    // Remove observer for rotation
+	// Remove observer for rotation
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     
@@ -180,6 +176,10 @@
     //removeFromSuperview should be called after a delay
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)0);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if ([(id)self.delegate respondsToSelector:@selector(introDidFinish:)]) {
+            [self.delegate introDidFinish:self];
+        }
+        
         [self removeFromSuperview];
     });
 }

@@ -5,6 +5,7 @@
 * Adds rotation support
 * Adds autolayout to page elements
 * Fixes constraints for custom skip button Y position
+* Fixes delegate method `introDidFinish:` fired too early
 * Updates pod deployment target to iOS 6
 * Updates import statement to support manual installation
 
