@@ -13,6 +13,7 @@
 #define DEFAULT_TITLE_IMAGE_Y_POSITION 50.0f
 #define DEFAULT_TITLE_LABEL_Y_POSITION 160.0f
 #define DEFAULT_DESCRIPTION_LABEL_Y_POSITION 140.0f
+#define DEFAULT_DESCRIPTION_LABEL_SIDE_MARGIN 10.0f
 
 @interface EAIntroPage ()
 @property(nonatomic, strong, readwrite) UIView *pageView;
@@ -27,6 +28,7 @@
         _titleIconPositionY = DEFAULT_TITLE_IMAGE_Y_POSITION;
         _titlePositionY  = DEFAULT_TITLE_LABEL_Y_POSITION;
         _descPositionY   = DEFAULT_DESCRIPTION_LABEL_Y_POSITION;
+        _descSideMargin   = DEFAULT_DESCRIPTION_LABEL_SIDE_MARGIN;
         _title = @"";
         _titleFont = DEFAULT_TITLE_FONT;
         _titleColor = DEFAULT_LABEL_COLOR;
