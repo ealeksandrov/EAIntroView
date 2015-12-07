@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+* Adds description label side margins property
+
 ## Version 2.8.0
 
 * Adds rotation support
