@@ -4,6 +4,10 @@
 
 * Adds description label side margins property
 
+## Version 2.8.1
+
+* Fixes import statement to support swift installation
+
 ## Version 2.8.0
 
 * Adds rotation support
