@@ -60,5 +60,6 @@ typedef void (^VoidBlock)();
 + (instancetype)page;
 + (instancetype)pageWithCustomView:(UIView *)customV;
 + (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName;
++ (instancetype)pageWithCustomViewFromNibNamed:(NSString *)nibName bundle:(NSBundle*)aBundle;
 
 @end
