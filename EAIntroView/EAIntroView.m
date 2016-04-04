@@ -334,6 +334,10 @@
     
     pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
     
+    if(page.alpha < 1.f || !page.bgImage) {
+        self.backgroundColor = [UIColor clearColor];
+    }
+
     if(page.customView) {
         [pageView addSubview:page.customView];
         
@@ -420,10 +424,6 @@
         for (UIView *subV in page.subviews) {
             [pageView addSubview:subV];
         }
-    }
-    
-    if(page.alpha < 1.f || !page.bgImage) {
-        self.backgroundColor = [UIColor clearColor];
     }
     
     pageView.alpha = page.alpha;
