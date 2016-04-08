@@ -4,6 +4,10 @@
 
 * Adds description label side margins property
 
+## Version 2.8.2
+
+* Adds Exposed [EAIntroView pageWithCustomViewFromNibNamed:bundle:] to allow choosing a bundle
+
 ## Version 2.8.1
 
 * Fixes import statement to support swift installation
