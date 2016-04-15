@@ -341,7 +341,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     
     if(!switchControl.on) {
         // scroll no further selected page (can go previous pages, but not next)
-        [_intro limitScrollingToPage:_intro.visiblePageIndex];
+        _intro.limitPageIndex = _intro.visiblePageIndex;
     } else {
         [_intro setScrollingEnabled:YES];
     }

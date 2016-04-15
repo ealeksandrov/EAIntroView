@@ -63,6 +63,8 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 @property (nonatomic, assign) EAViewAlignment skipButtonAlignment;
 @property (nonatomic, assign) BOOL showSkipButtonOnlyOnLastPage;
 
+@property (nonatomic, assign) NSInteger limitPageIndex;
+
 @property (nonatomic, strong) EARestrictedScrollView *scrollView;
 @property (nonatomic, assign) BOOL scrollingEnabled;
 @property (nonatomic, strong) NSArray *pages;
@@ -80,7 +82,5 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated;
-
-- (void)limitScrollingToPage:(NSUInteger)lastPageIndex;
 
 @end

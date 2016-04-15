@@ -70,7 +70,7 @@
     _skipButtonY = EA_EMPTY_PROPERTY;
     _skipButtonSideMargin = 10.f;
     _skipButtonAlignment = EAViewAlignmentRight;
-    
+    _limitPageIndex = -1;
     
     [self buildBackgroundImage];
     
@@ -627,6 +627,11 @@ CGFloat easeOutValue(CGFloat value) {
         numberOfPages = numberOfPages + 1;
     }
     
+    // Descrease to limited index when scrolling is restricted:
+    if (self.limitPageIndex != -1) {
+        numberOfPages = self.limitPageIndex + 1;
+    }
+    
     // Adjust contentSize of ScrollView:
     CGSize newContentSize = CGSizeMake(numberOfPages * self.scrollView.frame.size.width, self.scrollView.frame.size.height);
     if(self.scrollView.contentOffset.x > newContentSize.width) {
@@ -985,14 +990,16 @@ CGFloat easeOutValue(CGFloat value) {
     }
 }
 
-- (void)limitScrollingToPage:(NSUInteger)lastPageIndex {
-    if (lastPageIndex >= [self.pages count]) {
+- (void)setLimitPageIndex:(NSInteger)limitPageIndex {
+    _limitPageIndex = limitPageIndex;
+    
+    if (limitPageIndex < 0 || limitPageIndex >= self.pages.count) {
+        _limitPageIndex = -1;
         self.scrollingEnabled = YES;
         return;
+    } else {
+        self.scrollView.restrictionArea = CGRectMake(0, 0, (self.limitPageIndex + 1) * self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
     }
-    
-    _scrollingEnabled = YES;
-    self.scrollView.restrictionArea = CGRectMake(0, 0, (lastPageIndex + 1) * self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
 }
 
 @end
