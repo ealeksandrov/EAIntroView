@@ -2,6 +2,10 @@
 
 ## Upcoming
 
+## Version 2.8.3
+
+* Fixes scrolling restriction
+* Replaces `limitScrollingToPage:` method with `limitPageIndex` property
 
 ## Version 2.8.2
 

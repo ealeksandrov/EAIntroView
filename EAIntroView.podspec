@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'EAIntroView'
-  s.version      = '2.8.2'
+  s.version      = '2.8.3'
   s.summary      = 'Highly customizable drop-in solution for introduction views.'
   s.screenshot   = 'https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png'
   s.homepage     = 'https://github.com/ealeksandrov/EAIntroView'
@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.public_header_files = 'EAIntroView/EAIntro{Page,View}.h'
 
-  s.dependency 'EARestrictedScrollView', '~> 0.2.0'
+  s.dependency 'EARestrictedScrollView', '~> 1.1.0'
 
 end
