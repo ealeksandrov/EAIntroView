@@ -1,6 +1,6 @@
 {
   "name": "EAIntroView",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "summary": "Highly customizable drop-in solution for introduction views.",
   "screenshots": "https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png",
   "homepage": "https://github.com/ealeksandrov/EAIntroView",
@@ -17,14 +17,14 @@
   },
   "source": {
     "git": "https://github.com/ealeksandrov/EAIntroView.git",
-    "tag": "2.8.2"
+    "tag": "2.8.3"
   },
   "source_files": "EAIntroView/EAIntro{Page,View}.{h,m}",
   "requires_arc": true,
   "public_header_files": "EAIntroView/EAIntro{Page,View}.h",
   "dependencies": {
     "EARestrictedScrollView": [
-      "~> 0.2.0"
+      "~> 1.1.0"
     ]
   }
 }

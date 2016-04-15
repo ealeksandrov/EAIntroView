@@ -1,7 +1,7 @@
 //
 //  EARestrictedScrollView.m
 //
-//  Copyright (c) 2015 Evgeny Aleksandrov. License: MIT.
+//  Copyright (c) 2015-2016 Evgeny Aleksandrov. License: MIT.
 
 #import "EARestrictedScrollView.h"
 
@@ -44,7 +44,11 @@
 }
 
 - (void)sendSubviewToBack:(UIView *)view {
-    [self.containerView sendSubviewToBack:view];
+    if(view.superview == self) {
+        [super sendSubviewToBack:view];
+    } else {
+        [self.containerView sendSubviewToBack:view];
+    }
 }
 
 - (UIView *)viewWithTag:(NSInteger)tag {
@@ -104,13 +108,11 @@
     if(CGRectEqualToRect(restrictionArea, CGRectZero)) {
         [super setContentOffset:CGPointMake([super contentOffset].x - self.containerView.frame.origin.x, [super contentOffset].y - self.containerView.frame.origin.y)];
         [self.containerView setFrame:CGRectMake(0.f, 0.f, self.containerView.frame.size.width, self.containerView.frame.size.height)];
-        [super setContentSize:CGSizeMake(self.containerView.frame.size.width, self.containerView.frame.size.height)];
+        [super setContentSize:self.containerView.frame.size];
     } else {
-        CGPoint currentOffset = [super contentOffset];
-        
         [self.containerView setFrame:CGRectMake(-restrictionArea.origin.x, -restrictionArea.origin.y, self.containerView.frame.size.width, self.containerView.frame.size.height)];
-        [super setContentOffset:CGPointMake(currentOffset.x - restrictionArea.origin.x,currentOffset.y - restrictionArea.origin.y)];
-        [super setContentSize:CGSizeMake(restrictionArea.size.width, restrictionArea.size.height)];
+        [super setContentOffset:CGPointMake([super contentOffset].x - restrictionArea.origin.x, [super contentOffset].y - restrictionArea.origin.y)];
+        [super setContentSize:restrictionArea.size];
     }
 }
 
