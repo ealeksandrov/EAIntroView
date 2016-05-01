@@ -36,12 +36,14 @@ typedef void (^VoidBlock)();
 @property (nonatomic, strong) UIFont *titleFont;
 @property (nonatomic, strong) UIColor *titleColor;
 @property (nonatomic, assign) CGFloat titlePositionY;
+@property (nonatomic, assign) NSTextAlignment titleAlignment;
 
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) UIFont *descFont;
 @property (nonatomic, strong) UIColor *descColor;
 @property (nonatomic, assign) CGFloat descPositionY;
 @property (nonatomic, assign) CGFloat descSideMargin;
+@property (nonatomic, assign) NSTextAlignment descAlignment;
 
 @property (nonatomic, strong) NSArray *subviews;
 

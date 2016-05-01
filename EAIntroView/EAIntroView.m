@@ -380,7 +380,7 @@
         titleLabel.font = page.titleFont;
         titleLabel.textColor = page.titleColor;
         titleLabel.backgroundColor = [UIColor clearColor];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.textAlignment = page.titleAlignment;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.numberOfLines = 0;
         titleLabel.tag = kTitleLabelTag;
@@ -401,7 +401,7 @@
         descLabel.font = page.descFont;
         descLabel.textColor = page.descColor;
         descLabel.backgroundColor = [UIColor clearColor];
-        descLabel.textAlignment = NSTextAlignmentCenter;
+        descLabel.textAlignment = page.descAlignment;
         descLabel.userInteractionEnabled = NO;
         descLabel.tag = kDescLabelTag;
         descLabel.translatesAutoresizingMaskIntoConstraints = NO;
