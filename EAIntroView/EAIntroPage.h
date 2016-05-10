@@ -26,8 +26,8 @@ typedef void (^VoidBlock)();
 
 /**
 * The title view that is presented above the title label.
-* The view can be a normal UIImageView or any other kind uf
-* UIView. This allows to attach animated views as well.
+* The view can be a normal UIImageView or any other kind of
+* UIView. This allows you to attach animated views as well.
 */
 @property (nonatomic, strong) UIView * titleIconView;
 
