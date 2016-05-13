@@ -2,7 +2,11 @@
 
 ## Upcoming
 
+## Version 2.9.0
+
+* Adds Cocoapods 1.0.0 support for example project
 * Adds text alignment to title and description labels
+* Updates accessibility (better VoiceOver support)
 * Replaces delegate call `introDidFinish:` with `introDidFinish:wasSkipped:` to include flag if intro was skipped
 
 ## Version 2.8.3
