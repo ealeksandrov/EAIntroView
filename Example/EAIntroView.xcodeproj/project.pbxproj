@@ -198,12 +198,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5537CCA51A7C04220096FE20 /* Build configuration list for PBXNativeTarget "EAIntroView" */;
 			buildPhases = (
-				8FCD43DDD683DA594D1DC12C /* 📦 Check Pods Manifest.lock */,
+				8FCD43DDD683DA594D1DC12C /* [CP] Check Pods Manifest.lock */,
 				5537CC7E1A7C04220096FE20 /* Sources */,
 				5537CC7F1A7C04220096FE20 /* Frameworks */,
 				5537CC801A7C04220096FE20 /* Resources */,
-				9E1DB9891F98165C74C2EE0C /* 📦 Embed Pods Frameworks */,
-				99090C24CBC3972049FF3D4A /* 📦 Copy Pods Resources */,
+				9E1DB9891F98165C74C2EE0C /* [CP] Embed Pods Frameworks */,
+				99090C24CBC3972049FF3D4A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -276,14 +276,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8FCD43DDD683DA594D1DC12C /* 📦 Check Pods Manifest.lock */ = {
+		8FCD43DDD683DA594D1DC12C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,14 +291,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		99090C24CBC3972049FF3D4A /* 📦 Copy Pods Resources */ = {
+		99090C24CBC3972049FF3D4A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,14 +306,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EAIntroView/Pods-EAIntroView-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9E1DB9891F98165C74C2EE0C /* 📦 Embed Pods Frameworks */ = {
+		9E1DB9891F98165C74C2EE0C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
