@@ -363,6 +363,7 @@
 }
 
 - (void)configurePageView:(UIView *)pageView withCustomView:(UIView *)customView {
+    [self addTapToNextActionToPageView:customView];
     [pageView addSubview:customView];
 
     NSMutableArray *constraints = @[].mutableCopy;
@@ -373,19 +374,8 @@
 }
 
 - (void)configurePageView:(UIView *)pageView forPage:(EAIntroPage *)page {
-    UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    tapToNextButton.frame = pageView.bounds;
-    tapToNextButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];
-
-    [self applyAccessibilityLabelForPage:page toButton:tapToNextButton];
-
-    [pageView addSubview:tapToNextButton];
-
-    NSMutableArray *constraints = @[].mutableCopy;
-    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tapToNextButton]-0-|" options:0 metrics:nil views:@{@"tapToNextButton": tapToNextButton}]];
-    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tapToNextButton]-0-|" options:0 metrics:nil views:@{@"tapToNextButton": tapToNextButton}]];
-    [pageView addConstraints:constraints];
+    [self addTapToNextActionToPageView:pageView];
+    [self applyAccessibilityLabelForPage:page toView:pageView];
 
     UIView *titleImageView;
     if(page.titleIconView) {
@@ -457,12 +447,19 @@
     pageView.alpha = page.alpha;
 }
 
-- (void)applyAccessibilityLabelForPage:(EAIntroPage *)page toButton:(UIButton *)button {
+- (void)addTapToNextActionToPageView:(UIView *)pageView {
+    UITapGestureRecognizer *tapRecognizer =
+            [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleBackgroundTap:)];
+
+    [pageView addGestureRecognizer:tapRecognizer];
+}
+
+- (void)applyAccessibilityLabelForPage:(EAIntroPage *)page toView:(UIView *)view {
     NSString *accessibilityLabel = [self accessibilityLabelForPage:page];
     if (accessibilityLabel.length > 0) {
-        button.isAccessibilityElement = YES;
-        button.accessibilityLabel = accessibilityLabel;
-        button.accessibilityTraits = UIAccessibilityTraitButton;
+        view.isAccessibilityElement = YES;
+        view.accessibilityLabel = accessibilityLabel;
+        view.accessibilityTraits = UIAccessibilityTraitButton;
     }
 }
 
@@ -1026,6 +1023,12 @@ CGFloat easeOutValue(CGFloat value) {
     
     if(!animated) {
         [self scrollViewDidScroll:self.scrollView];
+    }
+}
+
+- (void)handleBackgroundTap:(UIGestureRecognizer *)tapRecognizer {
+    if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
+        [self goToNext:tapRecognizer];
     }
 }
 
