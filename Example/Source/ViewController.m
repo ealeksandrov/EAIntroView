@@ -173,6 +173,7 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
     [intro.skipButton setTitle:@"Skip now" forState:UIControlStateNormal];
     [intro setDelegate:self];
+    intro.tapToNext = YES;
     
     [intro showInView:rootView animateDuration:0.3];
 }
