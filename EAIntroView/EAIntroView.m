@@ -4,6 +4,7 @@
 //  Copyright (c) 2013-2015 Evgeny Aleksandrov. License: MIT.
 
 #import "EAIntroView.h"
+#import "EARestrictedScrollView.h"
 
 @interface EAIntroView()
 
@@ -377,12 +378,7 @@
     tapToNextButton.translatesAutoresizingMaskIntoConstraints = NO;
     [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];
 
-    NSString *accessibilityLabel = [self accessibilityLabelForPage:page];
-    if (accessibilityLabel.length > 0) {
-        tapToNextButton.isAccessibilityElement = YES;
-        tapToNextButton.accessibilityLabel = accessibilityLabel;
-        tapToNextButton.accessibilityTraits = UIAccessibilityTraitButton;
-    }
+    [self applyAccessibilityLabelForPage:page toButton:tapToNextButton];
 
     [pageView addSubview:tapToNextButton];
 
@@ -461,18 +457,24 @@
     pageView.alpha = page.alpha;
 }
 
-- (NSString*)accessibilityLabelForPage:(EAIntroPage*)page
-{
+- (void)applyAccessibilityLabelForPage:(EAIntroPage *)page toButton:(UIButton *)button {
+    NSString *accessibilityLabel = [self accessibilityLabelForPage:page];
+    if (accessibilityLabel.length > 0) {
+        button.isAccessibilityElement = YES;
+        button.accessibilityLabel = accessibilityLabel;
+        button.accessibilityTraits = UIAccessibilityTraitButton;
+    }
+}
+
+- (NSString*)accessibilityLabelForPage:(EAIntroPage*)page {
     NSString *accessibilityLabel = nil;
     if (page.title) {
         if (page.desc) {
             accessibilityLabel = [NSString stringWithFormat:@"%@, %@", page.title, page.desc];
-        }
-        else {
+        } else {
             accessibilityLabel = page.title;
         }
-    }
-    else {
+    } else {
         accessibilityLabel = page.desc;
     }
     return accessibilityLabel;
