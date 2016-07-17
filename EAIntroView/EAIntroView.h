@@ -25,6 +25,7 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 
 @protocol EAIntroDelegate<NSObject>
 @optional
+- (void)introWillFinish:(EAIntroView *)introView wasSkipped:(BOOL)wasSkipped;
 - (void)introDidFinish:(EAIntroView *)introView wasSkipped:(BOOL)wasSkipped;
 - (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex;
 - (void)intro:(EAIntroView *)introView pageStartScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex;
