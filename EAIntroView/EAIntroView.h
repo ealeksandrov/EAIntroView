@@ -29,6 +29,11 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 - (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex;
 - (void)intro:(EAIntroView *)introView pageStartScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex;
 - (void)intro:(EAIntroView *)introView pageEndScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex;
+
+// Called for every incremental scroll event.
+// Parameter offset is some fraction of the currentPageIndex, between currentPageIndex-1 and currentPageIndex+1
+// For example, scrolling left and right from page 2 will values in the range [1..3], exclusive
+- (void)intro:(EAIntroView *)introView didScrollWithOffset:(CGFloat)offset;
 @end
 
 @interface EAIntroView : UIView <UIScrollViewDelegate>
