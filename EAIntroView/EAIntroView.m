@@ -1007,7 +1007,17 @@ CGFloat easeOutValue(CGFloat value) {
     
     _currentPageIndex = currentPageIndex;
     
-    CGFloat offset = currentPageIndex * self.scrollView.frame.size.width;
+    [self scrollToPageForIndex:currentPageIndex animated:animated];
+}
+
+- (void)scrollToPageForIndex:(NSUInteger)newPageIndex animated:(BOOL)animated
+{
+    if(![self pageForIndex:newPageIndex]) {
+        NSLog(@"Wrong newPageIndex received: %ld",(long)newPageIndex);
+        return;
+    }
+
+    CGFloat offset = newPageIndex * self.scrollView.frame.size.width;
     CGRect pageRect = { .origin.x = offset, .origin.y = 0.0, .size.width = self.scrollView.frame.size.width, .size.height = self.scrollView.frame.size.height };
     [self.scrollView scrollRectToVisible:pageRect animated:animated];
     
@@ -1023,7 +1033,9 @@ CGFloat easeOutValue(CGFloat value) {
     if(self.currentPageIndex + 1 >= [self.pages count]) {
         [self hideWithFadeOutDuration:0.3];
     } else {
-        [self setCurrentPageIndex:self.currentPageIndex + 1 animated:YES];
+        // Just scroll to the new page.
+        // After scrolling ends, we call -checkIndexForScrollView:, which itself sets the new currentPageIndex.
+        [self scrollToPageForIndex:self.currentPageIndex + 1 animated:YES];
     }
 }
 
