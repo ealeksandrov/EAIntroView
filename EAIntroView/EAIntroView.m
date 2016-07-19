@@ -599,6 +599,10 @@
         
         [self makePanelVisibleAtIndex:self.visiblePageIndex];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(intro:didScrollWithOffset:)]) {
+        [self.delegate intro:self didScrollWithOffset:offset];
+    }
 }
 
 CGFloat easeOutValue(CGFloat value) {
