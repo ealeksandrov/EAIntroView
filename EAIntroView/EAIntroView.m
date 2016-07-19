@@ -155,7 +155,11 @@
         //if run here, it means you can't  call _pages[self.currentPageIndex],
         //to be safe, set to the biggest index
         _currentPageIndex = _pages.count - 1;
-        
+
+        if ([self.delegate respondsToSelector:@selector(introWillFinish:wasSkipped:)]) {
+            [self.delegate introWillFinish:self wasSkipped:self.skipped];
+        }
+
         [self finishIntroductionAndRemoveSelf];
     }
 }
@@ -988,6 +992,10 @@ CGFloat easeOutValue(CGFloat value) {
 }
 
 - (void)hideWithFadeOutDuration:(CGFloat)duration {
+    if ([self.delegate respondsToSelector:@selector(introWillFinish:wasSkipped:)]) {
+        [self.delegate introWillFinish:self wasSkipped:self.skipped];
+    }
+
     [UIView animateWithDuration:duration animations:^{
         self.alpha = 0;
     } completion:^(BOOL finished){
