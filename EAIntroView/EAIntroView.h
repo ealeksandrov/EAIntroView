@@ -83,4 +83,7 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated;
 
+
+- (void)scrollToPageForIndex:(NSUInteger)newPageIndex animated:(BOOL)animated;
+
 @end
