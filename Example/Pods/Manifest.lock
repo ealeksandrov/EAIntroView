@@ -10,7 +10,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   EAIntroView:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   EAIntroView: 76f68cc56242f2e25359419e6ecc2344ee7e1756
