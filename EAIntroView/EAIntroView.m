@@ -4,6 +4,7 @@
 //  Copyright (c) 2013-2015 Evgeny Aleksandrov. License: MIT.
 
 #import "EAIntroView.h"
+#import "EARestrictedScrollView.h"
 
 @interface EAIntroView()
 
@@ -343,57 +344,55 @@
 }
 
 - (UIView *)viewForPage:(EAIntroPage *)page atXIndex:(CGFloat)xIndex {
+    UIView *pageView = [self createViewForPage:page atXIndex:xIndex];
+
+    if(page.customView) {
+        [self configurePageView:pageView withCustomView:page.customView];
+    } else {
+        [self configurePageView:pageView forPage:page];
+    }
+
+    return pageView;
+}
+
+- (UIView *)createViewForPage:(EAIntroPage *)page atXIndex:(CGFloat)xIndex {
     UIView *pageView = [[UIView alloc] initWithFrame:CGRectMake(xIndex, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
-    
+
     pageView.accessibilityLabel = [NSString stringWithFormat:@"intro_page_%lu",(unsigned long)[self.pages indexOfObject:page]];
-    
+
     if(page.alpha < 1.f || !page.bgImage) {
         self.backgroundColor = [UIColor clearColor];
     }
+    return pageView;
+}
 
-    if(page.customView) {
-        [pageView addSubview:page.customView];
-        
-        NSMutableArray *constraints = @[].mutableCopy;
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[customView]-0-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[customView]-0-|" options:0 metrics:nil views:@{@"customView": page.customView}]];
-        
-        [pageView addConstraints:constraints];
-        
-        return pageView;
-    }
-    
-    UIButton *tapToNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    tapToNextButton.frame = pageView.bounds;
-    tapToNextButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [tapToNextButton addTarget:self action:@selector(goToNext:) forControlEvents:UIControlEventTouchUpInside];
+- (void)configurePageView:(UIView *)pageView withCustomView:(UIView *)customView {
+    [self addTapToNextActionToPageView:customView];
+    [pageView addSubview:customView];
 
-    NSString *accessibilityLabel = [self accessibilityLabelForPage:page];
-    if (accessibilityLabel.length > 0) {
-        tapToNextButton.isAccessibilityElement = YES;
-        tapToNextButton.accessibilityLabel = accessibilityLabel;
-        tapToNextButton.accessibilityTraits = UIAccessibilityTraitButton;
-    }
-    
-    [pageView addSubview:tapToNextButton];
-    
     NSMutableArray *constraints = @[].mutableCopy;
-    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tapToNextButton]-0-|" options:0 metrics:nil views:@{@"tapToNextButton": tapToNextButton}]];
-    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tapToNextButton]-0-|" options:0 metrics:nil views:@{@"tapToNextButton": tapToNextButton}]];
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[customView]-0-|" options:0 metrics:nil views:@{@"customView": customView}]];
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[customView]-0-|" options:0 metrics:nil views:@{@"customView": customView}]];
+
     [pageView addConstraints:constraints];
-    
+}
+
+- (void)configurePageView:(UIView *)pageView forPage:(EAIntroPage *)page {
+    [self addTapToNextActionToPageView:pageView];
+    [self applyAccessibilityLabelForPage:page toView:pageView];
+
     UIView *titleImageView;
     if(page.titleIconView) {
         titleImageView = page.titleIconView;
         titleImageView.tag = kTitleImageViewTag;
         titleImageView.translatesAutoresizingMaskIntoConstraints = NO;
-        
+
         [pageView addSubview:titleImageView];
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topSpace@250-[titleImageView(imageHeight)]" options:NSLayoutFormatAlignAllTop metrics:@{@"imageHeight" : @(page.titleIconView.frame.size.height), @"topSpace" : @(page.titleIconPositionY)} views:@{@"titleImageView" : titleImageView}]];
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[titleImageView(imageWidth)]" options:0 metrics:@{@"imageWidth" : @(page.titleIconView.frame.size.width)} views:@{@"titleImageView" : titleImageView}]];
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[superview]-(<=1)-[titleImageView]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"superview" : pageView, @"titleImageView" : titleImageView}]];
     }
-    
+
     UILabel *titleLabel;
     if(page.title.length) {
         titleLabel = [[UILabel alloc] init];
@@ -407,14 +406,14 @@
         titleLabel.tag = kTitleLabelTag;
         titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         titleLabel.isAccessibilityElement = NO;
-        
+
         [pageView addSubview:titleLabel];
         NSLayoutConstraint *weakConstraint = [NSLayoutConstraint constraintWithItem:pageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeTop multiplier:1.0 constant:page.titlePositionY];
         weakConstraint.priority = UILayoutPriorityDefaultLow;
         [pageView addConstraint:weakConstraint];
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[titleLabel]-10-|" options:NSLayoutFormatAlignAllTop metrics:nil views:@{@"titleLabel" : titleLabel}]];
     }
-    
+
     UITextView *descLabel;
     if(page.desc.length) {
         descLabel = [[UITextView alloc] init];
@@ -428,44 +427,55 @@
         descLabel.tag = kDescLabelTag;
         descLabel.translatesAutoresizingMaskIntoConstraints = NO;
         descLabel.isAccessibilityElement = NO;
-        
+
         [pageView addSubview:descLabel];
         NSLayoutConstraint *weakConstraint = [NSLayoutConstraint constraintWithItem:pageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:descLabel attribute:NSLayoutAttributeTop multiplier:1.0 constant:page.descPositionY];
         weakConstraint.priority = UILayoutPriorityDefaultLow;
         [pageView addConstraint:weakConstraint];
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-descMargin-[descLabel]-descMargin-|" options:NSLayoutFormatAlignAllTop metrics:@{@"descMargin" : @(page.descSideMargin)} views:@{@"descLabel" : descLabel}]];
     }
-    
+
     // Constraints for handling landscape orientation
     if(titleImageView && titleLabel && descLabel) {
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleImageView]->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleImageView" : titleImageView, @"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
     } else if(!titleImageView && titleLabel && descLabel) {
         [pageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[titleLabel]->=0-[descLabel]" options:0 metrics:nil views:@{@"titleLabel" : titleLabel, @"descLabel" : descLabel}]];
     }
-    
+
     if(page.subviews) {
         for (UIView *subV in page.subviews) {
             [pageView addSubview:subV];
         }
     }
-    
+
     pageView.alpha = page.alpha;
-    
-    return pageView;
 }
 
-- (NSString*)accessibilityLabelForPage:(EAIntroPage*)page
-{
+- (void)addTapToNextActionToPageView:(UIView *)pageView {
+    UITapGestureRecognizer *tapRecognizer =
+            [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleBackgroundTap:)];
+
+    [pageView addGestureRecognizer:tapRecognizer];
+}
+
+- (void)applyAccessibilityLabelForPage:(EAIntroPage *)page toView:(UIView *)view {
+    NSString *accessibilityLabel = [self accessibilityLabelForPage:page];
+    if (accessibilityLabel.length > 0) {
+        view.isAccessibilityElement = YES;
+        view.accessibilityLabel = accessibilityLabel;
+        view.accessibilityTraits = UIAccessibilityTraitButton;
+    }
+}
+
+- (NSString*)accessibilityLabelForPage:(EAIntroPage*)page {
     NSString *accessibilityLabel = nil;
     if (page.title) {
         if (page.desc) {
             accessibilityLabel = [NSString stringWithFormat:@"%@, %@", page.title, page.desc];
-        }
-        else {
+        } else {
             accessibilityLabel = page.title;
         }
-    }
-    else {
+    } else {
         accessibilityLabel = page.desc;
     }
     return accessibilityLabel;
@@ -1035,6 +1045,12 @@ CGFloat easeOutValue(CGFloat value) {
     
     if(!animated) {
         [self scrollViewDidScroll:self.scrollView];
+    }
+}
+
+- (void)handleBackgroundTap:(UIGestureRecognizer *)tapRecognizer {
+    if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
+        [self goToNext:tapRecognizer];
     }
 }
 

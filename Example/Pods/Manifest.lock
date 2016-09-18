@@ -1,5 +1,5 @@
 PODS:
-  - EAIntroView (2.8.3):
+  - EAIntroView (2.9.0):
     - EARestrictedScrollView (~> 1.1.0)
   - EARestrictedScrollView (1.1.0)
   - SMPageControl (1.2)
@@ -10,13 +10,13 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   EAIntroView:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  EAIntroView: e948c83e642f30010d427e643c18a6f2b529afed
+  EAIntroView: 76f68cc56242f2e25359419e6ecc2344ee7e1756
   EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
   SMPageControl: 922892813001cfaf059e86e6801f46a967e9ee29
 
 PODFILE CHECKSUM: ccd78dd24340deb55420824d45fb13fac359a077
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.0.1

@@ -26,6 +26,9 @@ Example/*.xcworkspace/*
 [Bb]uild/
 DerivedData/
 
+#AppCode
+.idea/
+
 #CocoaPods
 #Pods
 Example/Pods/*.xcodeproj/*
