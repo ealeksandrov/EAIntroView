@@ -2,6 +2,12 @@
 
 ## Upcoming
 
+* Adds "Tap to next" support on custom views
+* Adds delegate method `introWillFinish:wasSkipped:`
+* Adds delegate method `intro:didScrollWithOffset:`
+* Fixes crash when removing EAIntroView from the view hierarchy (#168)
+* Fixes bug when tapping a page to advance does not call the delegate method `pageAppeared` (#174)
+
 ## Version 2.9.0
 
 * Adds Cocoapods 1.0.0 support for example project
