@@ -69,7 +69,7 @@
     self.backgroundColor = [UIColor blackColor];
     _scrollingEnabled = YES;
     _titleViewY = 20.f;
-    _pageControlY = 50.f;
+    _pageControlY = 70.f;
     _skipButtonY = EA_EMPTY_PROPERTY;
     _skipButtonSideMargin = 10.f;
     _skipButtonAlignment = EAViewAlignmentRight;
@@ -537,9 +537,13 @@
         [self removeConstraints:self.footerConstraints];
         [self.footerConstraints removeAllObjects];
     }
+
+    CGFloat pageControlHeight = self.pageControl.frame.size.height > 0 ? self.pageControl.frame.size.height : PAGE_CTRL_DEFAULT_HEIGHT;
+    CGFloat skipButtonWidth = self.skipButton.frame.size.width > 0 ? self.skipButton.frame.size.width : SKIP_BTN_DEFAULT_WIDTH;
+    CGFloat skipButtonHeight = self.skipButton.frame.size.height > 0 ? self.skipButton.frame.size.height : SKIP_BTN_DEFAULT_HEIGHT;
     
     NSDictionary *views = @{@"pageControl" : self.pageControl, @"skipButton" : self.skipButton};
-    NSDictionary *metrics = @{@"pageControlBottomPadding" : @(self.pageControlY - self.pageControl.frame.size.height), @"pageControlHeight" : @(self.pageControl.frame.size.height), @"skipButtonBottomPadding" : @(self.skipButtonY - self.skipButton.frame.size.height), @"skipButtonSideMargin" : @(self.skipButtonSideMargin), @"skipButtonWidth" : @(self.skipButton.frame.size.width)};
+    NSDictionary *metrics = @{@"pageControlBottomPadding" : @(self.pageControlY - pageControlHeight), @"pageControlHeight" : @(pageControlHeight), @"skipButtonBottomPadding" : @(self.skipButtonY - skipButtonHeight), @"skipButtonSideMargin" : @(self.skipButtonSideMargin), @"skipButtonWidth" : @(skipButtonWidth)};
     
     [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[pageControl]-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
     [self.footerConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[pageControl(pageControlHeight)]-pageControlBottomPadding@250-|" options:NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
