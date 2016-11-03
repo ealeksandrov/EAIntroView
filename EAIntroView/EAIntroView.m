@@ -199,22 +199,6 @@
     }
 }
 
--(void)willMoveToSuperview:(UIView *)newSuperview {
-    [super willMoveToSuperview:newSuperview];
-    if (self.superview == nil && newSuperview != nil) {
-        // Add observer for device orientation:
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(deviceOrientationDidChange:)
-                                                     name:UIDeviceOrientationDidChangeNotification
-                                                   object:nil];
-    } else if (self.superview != nil && newSuperview == nil) {
-        // Remove observer for rotation
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    }
-}
-
 #pragma mark - Properties
 
 - (EARestrictedScrollView *)scrollView {
@@ -670,9 +654,11 @@ CGFloat easeOutValue(CGFloat value) {
     }
 }
 
-#pragma mark - Notifications
+#pragma mark - UIView lifecycle calls
 
-- (void)deviceOrientationDidChange:(NSNotification *)notification {
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
     // Get amount of pages:
     NSInteger numberOfPages = _pages.count;
     
