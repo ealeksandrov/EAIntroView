@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## Version 2.10.0
+
 * Adds "Tap to next" support on custom views
 * Adds delegate method `introWillFinish:wasSkipped:`
 * Adds delegate method `intro:didScrollWithOffset:`

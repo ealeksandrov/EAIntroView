@@ -43,12 +43,13 @@ Some features (remember, most features are optional and can be turned off):
 	* hideWithFadeOutDuration:
 	* setCurrentPageIndex:animated:
 * storyboard/IB support
+* and many more...
 
 ##CocoaPods
 
 [CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project.
 
-* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 2.9.0'`
+* Simply add this line to your `Podfile`: `pod 'EAIntroView', '~> 2.10.0'`
 * Run `pod install`.
 * Include with `#import "EAIntroView.h"` to use it wherever you need.
 * Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
