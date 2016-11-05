@@ -46,7 +46,7 @@
 		5537CCC31A7C059F0096FE20 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5537CCC41A7C059F0096FE20 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5537CCCC1A7C06F00096FE20 /* EAIntroView.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = EAIntroView.podspec; path = ../EAIntroView.podspec; sourceTree = "<group>"; };
-		5537CCCD1A7C06F00096FE20 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		5537CCCD1A7C06F00096FE20 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = LICENSE.md; path = ../LICENSE.md; sourceTree = "<group>"; };
 		5537CCCE1A7C06F00096FE20 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		55BD96231A7C1CA600A32B7D /* bg1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg1@2x.png"; sourceTree = "<group>"; };
 		55BD96241A7C1CA600A32B7D /* bg2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg2@2x.png"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 				5537CCCC1A7C06F00096FE20 /* EAIntroView.podspec */,
 				5502D21B1C14C175008A2989 /* CHANGELOG.md */,
 				5537CCCE1A7C06F00096FE20 /* README.md */,
-				5537CCCD1A7C06F00096FE20 /* LICENSE */,
+				5537CCCD1A7C06F00096FE20 /* LICENSE.md */,
 			);
 			name = Metadata;
 			sourceTree = "<group>";

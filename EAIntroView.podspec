@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.summary      = 'Highly customizable drop-in solution for introduction views.'
   s.screenshot   = 'https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png'
   s.homepage     = 'https://github.com/ealeksandrov/EAIntroView'
-  s.license      = { :type => 'MIT', :file => 'LICENSE' }
+  s.license      = { :type => 'MIT', :file => 'LICENSE.md' }
   s.author       = { 'Evgeny Aleksandrov' => 'evgeny@aleksandrov.ws' }
   s.social_media_url = 'https://twitter.com/ealeksandrov'
 
