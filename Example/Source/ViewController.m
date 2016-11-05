@@ -331,9 +331,12 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 
 #pragma mark - EAIntroView delegate
 
-- (void)introDidFinish:(EAIntroView *)introView {
-    NSLog(@"introDidFinish callback");
-    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+- (void)introDidFinish:(EAIntroView *)introView wasSkipped:(BOOL)wasSkipped {
+    if(wasSkipped) {
+        NSLog(@"Intro skipped");
+    } else {
+        NSLog(@"Intro finished");
+    }
 }
 
 #pragma mark - Custom actions
