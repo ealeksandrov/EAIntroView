@@ -9,6 +9,11 @@
 
 #define EA_EMPTY_PROPERTY 9999.f
 
+#define SKIP_BTN_DEFAULT_WIDTH 100.f
+#define SKIP_BTN_DEFAULT_HEIGHT 40.f
+#define PAGE_CTRL_DEFAULT_HEIGHT 36.f
+
+
 enum EAIntroViewTags {
     kTitleLabelTag = 1,
     kDescLabelTag,
