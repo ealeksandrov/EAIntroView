@@ -378,6 +378,8 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
         // show custom intro
         [self showCustomIntro];
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
