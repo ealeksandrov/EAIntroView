@@ -316,6 +316,8 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     pageControl.pageIndicatorImage = [UIImage imageNamed:@"pageDot"];
     pageControl.currentPageIndicatorImage = [UIImage imageNamed:@"selectedPageDot"];
     [pageControl sizeToFit];
+    
+    // This is a hack - not recommended for Swift, more information: https://github.com/ealeksandrov/EAIntroView/issues/161
     intro.pageControl = (UIPageControl *)pageControl;
     intro.pageControlY = 130.f;
     
