@@ -5,8 +5,10 @@
 * Adds "Tap to next" support on custom views
 * Adds delegate method `introWillFinish:wasSkipped:`
 * Adds delegate method `intro:didScrollWithOffset:`
-* Fixes crash when removing EAIntroView from the view hierarchy (#168)
-* Fixes bug when tapping a page to advance does not call the delegate method `pageAppeared` (#174)
+* Fixes crash when removing EAIntroView from the view hierarchy ([#168](https://github.com/ealeksandrov/EAIntroView/issues/168))
+* Fixes bug when tapping a page to advance does not call the delegate method `pageAppeared` ([#174](https://github.com/ealeksandrov/EAIntroView/issues/174))
+* Fixes constraints for `skipButton` and `pageControl` ([#185](https://github.com/ealeksandrov/EAIntroView/issues/185))
+* Fixes layout issue on rotation for iPad ([#149](https://github.com/ealeksandrov/EAIntroView/issues/149))
 
 ## Version 2.9.0
 
