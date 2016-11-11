@@ -656,6 +656,16 @@ CGFloat easeOutValue(CGFloat value) {
             [self.skipButton setAlpha:alphaValue];
         }
     }
+    
+    if(self.pageControl && self.hidePageControlOnLastPage) {
+        if(page < (long)[self.pages count] - 2) {
+            [self.pageControl setAlpha:1];
+        } else if(page == [self.pages count] - 1) {
+            [self.pageControl setAlpha:0];
+        } else {
+            [self.pageControl setAlpha:1 - alphaValue];
+        }
+    }
 }
 
 #pragma mark - UIView lifecycle calls
