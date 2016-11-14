@@ -12,8 +12,8 @@
 @property (nonatomic, strong) UIImageView *pageBgBack;
 @property (nonatomic, strong) UIImageView *pageBgFront;
 
-@property (nonatomic, strong) NSMutableArray *footerConstraints;
-@property (nonatomic, strong) NSMutableArray *titleViewConstraints;
+@property (nonatomic, strong) NSMutableArray<NSLayoutConstraint *> *footerConstraints;
+@property (nonatomic, strong) NSMutableArray<NSLayoutConstraint *> *titleViewConstraints;
 
 @property (nonatomic, assign) BOOL skipped;
 
@@ -49,7 +49,7 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andPages:(NSArray *)pagesArray {
+- (id)initWithFrame:(CGRect)frame andPages:(NSArray<EAIntroPage *> *)pagesArray {
     self = [super initWithFrame:frame];
     if (self) {
         [self applyDefaultsToSelfDuringInitializationWithFrame:self.frame pages:pagesArray];
@@ -59,7 +59,7 @@
 
 #pragma mark - Private
 
-- (void)applyDefaultsToSelfDuringInitializationWithFrame:(CGRect)frame pages:(NSArray *)pagesArray {
+- (void)applyDefaultsToSelfDuringInitializationWithFrame:(CGRect)frame pages:(NSArray<EAIntroPage *> *)pagesArray {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.swipeToExit = YES;
     self.easeOutCrossDisolves = YES;
@@ -724,7 +724,7 @@ CGFloat easeOutValue(CGFloat value) {
     _scrollingEnabled = scrollingEnabled;
 }
 
-- (void)setPages:(NSArray *)pages {
+- (void)setPages:(NSArray<EAIntroPage *> *)pages {
     _pages = [pages copy];
     [self.scrollView removeFromSuperview];
     self.scrollView = nil;

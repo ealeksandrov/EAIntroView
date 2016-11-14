@@ -45,7 +45,7 @@ typedef void (^VoidBlock)();
 @property (nonatomic, assign) CGFloat descSideMargin;
 @property (nonatomic, assign) NSTextAlignment descAlignment;
 
-@property (nonatomic, strong) NSArray *subviews;
+@property (nonatomic, strong) NSArray<__kindof UIView *> *subviews;
 
 @property (nonatomic, assign) CGFloat alpha;
 
