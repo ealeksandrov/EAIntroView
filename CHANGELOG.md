@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+* Adds obj-c lightweight generics
+
 ## Version 2.10.0
 
 * Adds "Tap to next" support on custom views
