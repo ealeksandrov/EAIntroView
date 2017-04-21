@@ -33,6 +33,58 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 
 #pragma mark - Demo
 
+- (void)showIntroWithHidePageControl {
+    EAIntroPage *page1 = [EAIntroPage page];
+    page1.title = @"Hello world";
+    page1.desc = sampleDescription1;
+    page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
+    
+    EAIntroPage *page2 = [EAIntroPage page];
+    page2.title = @"This is page 2";
+    page2.titlePositionY = self.view.bounds.size.height/2 - 10;
+    page2.desc = sampleDescription2;
+    page2.descPositionY = self.view.bounds.size.height/2 - 50;
+    page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title2"]];
+    page2.titleIconPositionY = 70;
+    
+    EAIntroPage *page3 = [EAIntroPage page];
+    page3.title = @"This is page 3";
+    page3.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:20];
+    page3.titlePositionY = 220;
+    page3.desc = sampleDescription2;
+    page3.descFont = [UIFont fontWithName:@"Georgia-Italic" size:18];
+    page3.descPositionY = 200;
+    page3.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title3"]];
+    page3.titleIconPositionY = 100;
+    
+    EAIntroPage *page4 = [EAIntroPage page];
+    page4.title = @"This is page 4";
+    page4.desc = sampleDescription4;
+    page4.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title4"]];
+    
+    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
+    intro.bgImage = [UIImage imageNamed:@"bg2"];
+    
+    intro.pageControlY = 250.f;
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [btn setFrame:CGRectMake(0, 0, 230, 40)];
+    [btn setTitle:@"SKIP NOW" forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    btn.layer.borderWidth = 2.f;
+    btn.layer.cornerRadius = 10;
+    btn.layer.borderColor = [[UIColor whiteColor] CGColor];
+    intro.skipButton = btn;
+    intro.skipButtonY = 60.f;
+    intro.skipButtonAlignment = EAViewAlignmentCenter;
+    
+    intro.showSkipButtonOnlyOnLastPage = YES;
+    intro.hidePageControlOnLastPage = YES;
+    
+    [intro setDelegate:self];
+    [intro showInView:rootView animateDuration:0.3];
+}
+
 - (void)showIntroWithCrossDissolve {
     EAIntroPage *page1 = [EAIntroPage page];
     page1.title = @"Hello world";
@@ -363,23 +415,26 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
         // all settings are basic, pages with custom packgrounds, title image on each page
-        [self showIntroWithCrossDissolve];
+        [self showIntroWithHidePageControl];
     } else if (indexPath.row == 1) {
+        // all settings are basic, pages with custom packgrounds, title image on each page
+        [self showIntroWithCrossDissolve];
+    } else if (indexPath.row == 2) {
         // all settings are basic, introview with colored background, fixed title image
         [self showIntroWithFixedTitleView];
-    } else if (indexPath.row == 2) {
+    } else if (indexPath.row == 3) {
         // basic pages with custom settings
         [self showIntroWithCustomPages];
-    } else if (indexPath.row == 3) {
+    } else if (indexPath.row == 4) {
         // using page with custom view
         [self showIntroWithCustomView];
-    } else if (indexPath.row == 4) {
+    } else if (indexPath.row == 5) {
         // using page with custom view from nib
         [self showIntroWithCustomViewFromNib];
-    } else if (indexPath.row == 5) {
+    } else if (indexPath.row == 6) {
         // pages separate init and using block callback in one of pages
         [self showIntroWithSeparatePagesInitAndPageCallback];
-    } else if (indexPath.row == 6) {
+    } else if (indexPath.row == 7) {
         // show custom intro
         [self showCustomIntro];
     }

@@ -73,7 +73,7 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 @property (nonatomic, assign) CGFloat skipButtonSideMargin;
 @property (nonatomic, assign) EAViewAlignment skipButtonAlignment;
 @property (nonatomic, assign) BOOL showSkipButtonOnlyOnLastPage;
-
+@property (nonatomic, assign) BOOL hidePageControlOnLastPage;
 @property (nonatomic, assign) NSInteger limitPageIndex;
 
 @property (nonatomic, strong) EARestrictedScrollView *scrollView;
