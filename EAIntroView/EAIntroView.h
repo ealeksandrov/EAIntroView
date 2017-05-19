@@ -90,6 +90,7 @@ typedef NS_ENUM(NSUInteger, EAViewAlignment) {
 - (void)showInView:(UIView *)view animateDuration:(CGFloat)duration withInitialPageIndex:(NSUInteger)initialPageIndex;
 
 - (void)hideWithFadeOutDuration:(CGFloat)duration;
+- (void)buildScrollView;
 
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex;
 - (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated;
