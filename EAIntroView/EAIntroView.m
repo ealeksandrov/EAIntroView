@@ -67,6 +67,7 @@
     self.bgViewContentMode = UIViewContentModeScaleAspectFill;
     self.motionEffectsRelativeValue = 40.f;
     self.backgroundColor = [UIColor blackColor];
+    self.pageControl.userInteractionEnabled = NO;
     _scrollingEnabled = YES;
     _titleViewY = 20.f;
     _pageControlY = 70.f;
