@@ -2,7 +2,12 @@
 
 ## Upcoming
 
+
+
+## Version 2.11.0
+
 * Adds obj-c lightweight generics
+* Adds autolayout constraints to keep titleIconView inside page frame ([#212](https://github.com/ealeksandrov/EAIntroView/issues/212))
 
 ## Version 2.10.0
 
