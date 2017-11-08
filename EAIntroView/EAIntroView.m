@@ -1048,6 +1048,7 @@ CGFloat easeOutValue(CGFloat value) {
     
     if(!animated) {
         [self scrollViewDidScroll:self.scrollView];
+        [self scrollViewDidEndScrollingAnimation:self.scrollView];
     }
 }
 
