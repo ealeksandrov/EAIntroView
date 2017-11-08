@@ -143,7 +143,7 @@
 - (void)showPanelAtPageControl {
     [self makePanelVisibleAtIndex:self.currentPageIndex];
     
-    [self setCurrentPageIndex:self.pageControl.currentPage animated:YES];
+    [self scrollToPageForIndex:self.pageControl.currentPage animated:YES];
 }
 
 - (void)checkIndexForScrollView:(EARestrictedScrollView *)scrollView {
@@ -987,7 +987,7 @@ CGFloat easeOutValue(CGFloat value) {
     }
 
 	self.skipped = NO;
-    self.currentPageIndex = initialPageIndex;
+    _currentPageIndex = initialPageIndex;
     self.alpha = 0;
 
     if(self.superview != view) {
@@ -1018,21 +1018,6 @@ CGFloat easeOutValue(CGFloat value) {
     } completion:^(BOOL finished){
 		[self finishIntroductionAndRemoveSelf];
 	}];
-}
-
-- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex {
-    [self setCurrentPageIndex:currentPageIndex animated:NO];
-}
-
-- (void)setCurrentPageIndex:(NSUInteger)currentPageIndex animated:(BOOL)animated {
-    if(![self pageForIndex:currentPageIndex]) {
-        NSLog(@"Wrong currentPageIndex received: %ld",(long)currentPageIndex);
-        return;
-    }
-    
-    _currentPageIndex = currentPageIndex;
-    
-    [self scrollToPageForIndex:currentPageIndex animated:animated];
 }
 
 - (void)scrollToPageForIndex:(NSUInteger)newPageIndex animated:(BOOL)animated
