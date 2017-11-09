@@ -7,6 +7,5 @@
 
 @interface ViewController : UITableViewController
 
-
 @end
 
