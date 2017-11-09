@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/cocoapods/l/EAIntroView.svg?style=flat)](http://cocoadocs.org/docsets/EAIntroView)
 [![Platform](https://img.shields.io/cocoapods/p/EAIntroView.svg?style=flat)](http://cocoadocs.org/docsets/EAIntroView)
 
-![BackgroundImage](https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png)
-![BackgroundImage](https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot02.png)
+![ExampleImage1](https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot01.png)
+![ExampleImage2](https://raw.githubusercontent.com/ealeksandrov/EAIntroView/master/Screenshot02.png)
 
 This is highly customizable drop-in solution for introduction views.
 Some features (remember, most features are optional and can be turned off):
@@ -123,4 +123,4 @@ Created and maintained by Evgeny Aleksandrov ([@EAleksandrov](https://twitter.co
 
 ## License
 
-`EAIntroView` is available under the MIT license. See the [LICENSE.md](https://github.com/ealeksandrov/EAIntroView/blob/master/LICENSE.md) file for more info.
+`EAIntroView` is available under the MIT license. See the [LICENSE.md](LICENSE.md) file for more info.
