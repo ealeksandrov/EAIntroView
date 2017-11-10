@@ -2,6 +2,7 @@
 
 [![CI Status](http://img.shields.io/travis/ealeksandrov/EAIntroView.svg?style=flat)](https://travis-ci.org/ealeksandrov/EAIntroView)
 [![Version](https://img.shields.io/cocoapods/v/EAIntroView.svg?style=flat)](http://cocoadocs.org/docsets/EAIntroView)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/EAIntroView.svg?style=flat)](http://cocoadocs.org/docsets/EAIntroView)
 [![Platform](https://img.shields.io/cocoapods/p/EAIntroView.svg?style=flat)](http://cocoadocs.org/docsets/EAIntroView)
 
@@ -12,54 +13,96 @@ This is highly customizable drop-in solution for introduction views.
 Some features (remember, most features are optional and can be turned off):
 
 * beautiful demo project to look on some examples
-	* customizability is unlimited, one can make complex introView with animations and interactive pages, so do not limit yourself with existing examples
+    * customizability is unlimited, one can make complex introView with animations and interactive pages, so do not limit yourself with existing examples
 * for each basic page:
-	* background (with cross-dissolve transition between pages)
-	* custom iOS7 motion effects (parallax) on background
-	* title view (+ Y position)
-	* title text (+ font, color and Y position)
-	* description text (+ font, color, width and Y position)
-	* subviews array (added to page after building default layout)
+    * background (with cross-dissolve transition between pages)
+    * custom iOS7 motion effects (parallax) on background
+    * title view (+ Y position)
+    * title text (+ font, color and Y position)
+    * description text (+ font, color, width and Y position)
+    * subviews array (added to page after building default layout)
 * possibility to set your own custom view for page:
-	* pageWithCustomView:
-	* pageWithCustomViewFromNibNamed:
+    * pageWithCustomView:
+    * pageWithCustomViewFromNibNamed:
 * possibility to set block action on page events:
-	* pageDidLoad
-	* pageDidAppear
-	* pageDidDisappear
+    * pageDidLoad
+    * pageDidAppear
+    * pageDidDisappear
 * many options to customize parent view:
-	* swipe from last page to close
-	* switching pages with one simple tap
-	* custom background image or color
-	* custom page control
-	* custom skip button
-	* pinned titleView (+ Y position, can be hidden on some pages)
+    * swipe from last page to close
+    * switching pages with one simple tap
+    * custom background image or color
+    * custom page control
+    * custom skip button
+    * pinned titleView (+ Y position, can be hidden on some pages)
 * delegate protocol to listen:
-	* introDidFinish:
-	* intro:pageAppeared:withIndex:
+    * introDidFinish:
+    * intro:pageAppeared:withIndex:
 * actions on IntroView:
-	* setPages:
-	* showInView:animateDuration:
-	* hideWithFadeOutDuration:
-	* setCurrentPageIndex:animated:
+    * setPages:
+    * showInView:animateDuration:
+    * hideWithFadeOutDuration:
+    * setCurrentPageIndex:animated:
 * storyboard/IB support
 * and many more...
 
-## CocoaPods
+## Installation
 
-[CocoaPods](http://cocoapods.org/) is the recommended way to use EAIntroView in your project.
+You can setup `EAIntroView` using [Carthage](https://github.com/Carthage/Carthage), [CocoaPods](http://github.com/CocoaPods/CocoaPods) or [completely manually](#setting-up-manually).
 
-* Simply add this line to your `Podfile`: `pod 'EAIntroView'`
-* Run `pod install`.
-* Include with `#import "EAIntroView.h"` to use it wherever you need.
-* Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
+### Carthage
 
-## Manual installation
+1. Add `EAIntroView` to your project's `Cartfile`:
 
-* Add `EAIntroPage` and `EAIntroView` headers and implementations to your project (4 files total).
-* Add [EARestrictedScrollView](https://github.com/ealeksandrov/EARestrictedScrollView) header and implementation to your project (2 files total).
-* Include with `#import "EAIntroView.h"` to use it wherever you need.
-* Subscribe to the `EAIntroDelegate` to enable delegate/callback interaction.
+    ```ruby
+    github "ealeksandrov/EAIntroView"
+    ```
+
+2. Run `carthage update` in your project directory.
+3. On your application targets’ “General” settings tab, in the “Linked Frameworks and Libraries” section, drag and drop **EAIntroView.framework** and **EARestrictedScrollView.framework** from the `Carthage/Build/iOS/` folder on disk.
+4. On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase”. Create a Run Script with the following contents:
+
+    ```shell
+    /usr/local/bin/carthage copy-frameworks
+    ```
+    
+    add the paths to the frameworks under “Input Files”:
+    
+    ```shell
+    $(SRCROOT)/Carthage/Build/iOS/EAIntroView.framework
+    $(SRCROOT)/Carthage/Build/iOS/EARestrictedScrollView.framework
+    ```
+    
+    and the paths to the copied frameworks to the “Output Files”:
+    
+    ```shell
+    $(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/EAIntroView.framework
+    $(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/EARestrictedScrollView.framework
+    ```
+
+### CocoaPods
+
+1. Add EAIntroView to your project's `Podfile`:
+
+    ```ruby
+    pod 'EAIntroView'
+    ```
+
+2. Run `pod update` or `pod install` in your project directory.
+
+### Setting Up Manually
+
+1. Add [EARestrictedScrollView](https://github.com/ealeksandrov/EARestrictedScrollView) header and implementation to your project (2 files total).
+2. Add `EAIntroPage` and `EAIntroView` headers and implementations to your project (4 files total).
+3. You can now use `EAIntroView` by adding the following import:
+
+    ```swift
+    import EAIntroView
+    ```
+
+    ```obj-c
+    #import <EAIntroView/EAIntroView.h>
+    ```
 
 ## How To Use It
 
