@@ -141,6 +141,10 @@
 }
 
 - (void)showPanelAtPageControl {
+    if (self.scrollView.tracking || self.scrollView.dragging) {
+        return;
+    }
+
     [self makePanelVisibleAtIndex:self.currentPageIndex];
 
     [self scrollToPageForIndex:self.pageControl.currentPage animated:YES];

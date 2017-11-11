@@ -5,6 +5,7 @@
 * Adds Carthage compatibility ([#204](https://github.com/ealeksandrov/EAIntroView/issues/204))
 * Removes `setCurrentPageIndex:` and `setCurrentPageIndex:animated:` (see discussion in [#213](https://github.com/ealeksandrov/EAIntroView/issues/213))
 * Fixes `scrollToPageForIndex:animated:` not triggering lifecycle actions for `animated:NO` ([#213](https://github.com/ealeksandrov/EAIntroView/issues/213))
+* Fixes unintended behavior for `pageControl` action while manually swiping pages ([#201](https://github.com/ealeksandrov/EAIntroView/issues/201))
 
 ## Version 2.11.0
 
