@@ -147,7 +147,14 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
 - (void)showIntroWithCustomView {
     EAIntroPage *page1 = [EAIntroPage page];
     page1.title = @"Hello world";
-    page1.desc = sampleDescription1;
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    //paragraphStyle.headIndent = 15;
+    //paragraphStyle.firstLineHeadIndent = 15;
+    paragraphStyle.lineSpacing = 7;
+    NSDictionary *attrsDictionary = @{ NSParagraphStyleAttributeName: paragraphStyle }; // <-- there are many more attrs, e.g NSFontAttributeName
+    page1.attributedDesc = [[NSAttributedString alloc] initWithString:sampleDescription1 attributes:attrsDictionary];
+    
     page1.bgImage = [UIImage imageNamed:@"bg1"];
     page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
 
