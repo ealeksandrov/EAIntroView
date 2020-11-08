@@ -39,6 +39,7 @@ typedef void (^VoidBlock)(void);
 @property (nonatomic, assign) NSTextAlignment titleAlignment;
 
 @property (nonatomic, strong) NSString *desc;
+@property (nonatomic, strong) NSAttributedString *attributedDesc;
 @property (nonatomic, strong) UIFont *descFont;
 @property (nonatomic, strong) UIColor *descColor;
 @property (nonatomic, assign) CGFloat descPositionY;

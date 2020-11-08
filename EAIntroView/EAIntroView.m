@@ -438,9 +438,9 @@
     }
 
     UITextView *descLabel;
-    if (page.desc.length) {
+    if (page.desc.length || page.attributedDesc.length) {
         descLabel = [[UITextView alloc] init];
-        descLabel.text = page.desc;
+        
         descLabel.scrollEnabled = NO;
         descLabel.font = page.descFont;
         descLabel.textColor = page.descColor;
@@ -450,6 +450,12 @@
         descLabel.tag = kDescLabelTag;
         descLabel.translatesAutoresizingMaskIntoConstraints = NO;
         descLabel.isAccessibilityElement = NO;
+
+        if (page.desc.length) {
+            descLabel.text = page.desc;
+        } else {
+            descLabel.attributedText = page.attributedDesc;
+        }
 
         [descLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
 

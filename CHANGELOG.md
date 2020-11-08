@@ -2,7 +2,7 @@
 
 ## Upcoming
 
-
+* Adds `attributedDesc` property to pages ([#220](https://github.com/ealeksandrov/EAIntroView/pull/220))
 
 ## Version 2.12.0
 

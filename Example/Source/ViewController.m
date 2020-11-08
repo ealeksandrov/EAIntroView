@@ -272,7 +272,17 @@ static NSString * const sampleDescription4 = @"Nam libero tempore, cum soluta no
     EAIntroPage *page1 = [EAIntroPage page];
     page1.title = @"Hello world";
     page1.titlePositionY = 240;
-    page1.desc = sampleDescription1;
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.lineSpacing = 7;
+    NSDictionary *attrsDictionary = @{ NSParagraphStyleAttributeName: paragraphStyle,
+                                       NSFontAttributeName: [UIFont systemFontOfSize:14],
+                                       NSForegroundColorAttributeName: UIColor.whiteColor };
+    NSMutableAttributedString *mutableAttrString = [[NSMutableAttributedString alloc] initWithString:sampleDescription1 attributes:attrsDictionary];
+    [mutableAttrString addAttribute:NSForegroundColorAttributeName value:[UIColor systemRedColor] range:NSMakeRange(0, 11)];
+    page1.attributedDesc = [mutableAttrString copy];
+
     page1.descPositionY = 220;
     page1.bgImage = [UIImage imageNamed:@"bg1"];
     page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
