@@ -86,7 +86,6 @@
 - (void)applyDefaultsToBackgroundImageView:(UIImageView *)backgroundImageView {
     backgroundImageView.backgroundColor = [UIColor clearColor];
     backgroundImageView.contentMode = self.bgViewContentMode;
-    backgroundImageView.autoresizesSubviews = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
 
