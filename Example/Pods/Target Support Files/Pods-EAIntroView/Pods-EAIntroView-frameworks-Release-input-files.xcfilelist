@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-EAIntroView/Pods-EAIntroView-frameworks.sh
+${BUILT_PRODUCTS_DIR}/EAIntroView/EAIntroView.framework
+${BUILT_PRODUCTS_DIR}/EARestrictedScrollView/EARestrictedScrollView.framework
+${BUILT_PRODUCTS_DIR}/SMPageControl/SMPageControl.framework

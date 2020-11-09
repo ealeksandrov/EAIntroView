@@ -1,5 +1,8 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
+install! 'cocoapods', :share_schemes_for_development_pods => true
+
+platform :ios, '8.1'
 
 target 'EAIntroView' do
   pod 'EAIntroView', :path => '../'

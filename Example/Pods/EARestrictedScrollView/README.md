@@ -1,4 +1,4 @@
-# EARestrictedScrollView
+#EARestrictedScrollView
 
 [![CI Status](http://img.shields.io/travis/ealeksandrov/EARestrictedScrollView.svg?style=flat)](https://travis-ci.org/ealeksandrov/EARestrictedScrollView)
 [![Version](https://img.shields.io/cocoapods/v/EARestrictedScrollView.svg?style=flat)](http://cocoadocs.org/docsets/EARestrictedScrollView)
@@ -62,7 +62,7 @@ You can setup EARestrictedScrollView using [Carthage](https://github.com/Carthag
 	#import "EARestrictedScrollView.h"
 	```
 
-## How To Use It
+##How To Use It
 
 Can be created from code as usual:
 
@@ -104,7 +104,7 @@ To access subviews use `containedSubviews` property. It was added in version 0.2
 NSArray *subviews = restrictedScrollView.containedSubviews;
 ```
 
-## Author
+##Author
 
 Created and maintained by Evgeny Aleksandrov ([@EAleksandrov](https://twitter.com/EAleksandrov)).
 
