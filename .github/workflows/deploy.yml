@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  release:
+    types: [ published ]
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_11.7.app/Contents/Developer
+
+jobs:
+  carthage:
+    runs-on: macOS-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          carthage build --no-skip-current
+          carthage archive EAIntroView
+
+      - name: Upload
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./EAIntroView.framework.zip
+          asset_name: EAIntroView.framework.zip
+          asset_content_type: application/zip

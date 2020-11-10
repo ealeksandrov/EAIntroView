@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: macOS-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install pods
+        run: pod install --project-directory=Example
+
+      - name: Build example project
+        run: set -o pipefail && xcodebuild -workspace Example/EAIntroView.xcworkspace -scheme EAIntroView-Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty
+
+      - name: Lint pod
+        run: pod lib lint
