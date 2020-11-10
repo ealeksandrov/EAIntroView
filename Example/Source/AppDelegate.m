@@ -1,7 +1,5 @@
 //
 //  AppDelegate.m
-//
-//  Copyright (c) 2013-2017 Evgeny Aleksandrov. License: MIT.
 
 #import "AppDelegate.h"
 #import "ViewController.h"

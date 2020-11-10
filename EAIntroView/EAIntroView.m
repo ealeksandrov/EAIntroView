@@ -1,7 +1,7 @@
 //
 //  EAIntroView.m
 //
-//  Copyright (c) 2013-2017 Evgeny Aleksandrov. License: MIT.
+//  Copyright (c) 2013-2020 Evgeny Aleksandrov. License: MIT.
 
 #import "EAIntroView.h"
 #import "EARestrictedScrollView.h"

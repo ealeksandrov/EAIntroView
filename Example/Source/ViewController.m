@@ -1,7 +1,5 @@
 //
 //  ViewController.m
-//
-//  Copyright (c) 2013-2017 Evgeny Aleksandrov. License: MIT.
 
 #import <EAIntroView/EAIntroView.h>
 #import <SMPageControl/SMPageControl.h>

@@ -162,7 +162,7 @@ Since 1.3.0 `EAIntroView` supports init from IB. Since 2.0.0 `EAIntroPage` suppo
 
 ## Author
 
-Created and maintained by Evgeny Aleksandrov ([@EAleksandrov](https://twitter.com/EAleksandrov)).
+Created and maintained by Evgeny Aleksandrov ([@ealeksandrov](https://twitter.com/ealeksandrov)).
 
 ## License
 

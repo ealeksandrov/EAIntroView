@@ -2,6 +2,11 @@
 
 ## Upcoming
 
+
+
+## Version 2.13.0
+
+* Adds explicit mention of `self` in block ([#218](https://github.com/ealeksandrov/EAIntroView/pull/218))
 * Adds `attributedDesc` property to pages ([#220](https://github.com/ealeksandrov/EAIntroView/pull/220))
 
 ## Version 2.12.0
