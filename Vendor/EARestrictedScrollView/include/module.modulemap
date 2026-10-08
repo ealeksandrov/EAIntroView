@@ -1,0 +1,5 @@
+module EARestrictedScrollView {
+    header "EARestrictedScrollView/EARestrictedScrollView.h"
+    header "EARestrictedScrollView.h"
+    export *
+}
